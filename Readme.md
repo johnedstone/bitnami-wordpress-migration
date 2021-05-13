@@ -34,4 +34,5 @@ sudo shutdown -r now
 sudo mkdir /opt/bitnami/apps
 sudo chgrp daemon /opt/bitnami/apps
 sudo chmod 0775 /opt/bitnami/apps
+ln -s /opt/bitnami/apps ~/apps
 ```
