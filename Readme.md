@@ -1,6 +1,8 @@
 ## Migrating Wordpress to the lates Bitnami 13-May-2021
 
-Either the Bitnami Nginx or the Bitnami Wordpress ami is being used.
+Either the Bitnami Nginx or the Bitnami Wordpress AMI could be used, as they
+are essentially the same.  The Wordpress AMI might have a few more clues, and then
+one could just remove the config/files/db for the default Wordpress.
 
 * ![bitnami images](screenshots/nginx_bitnami.png) 
 
