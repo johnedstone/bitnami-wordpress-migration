@@ -58,4 +58,6 @@ sudo mv /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf{
 # At some point
 sudo find /opt/bitnami/apps/ -type d -exec chown bitnami:daemon {} \; -exec chmod 0775 {} \;
 sudo find /opt/bitnami/apps/ -type f -exec chown bitnami:daemon {} \; -exec chmod 0664 {} \;
+
+# Switch IPs, not DNS
 ```
