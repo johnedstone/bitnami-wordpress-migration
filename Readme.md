@@ -32,7 +32,30 @@ sudo apt full-upgrade
 sudo shutdown -r now
 
 sudo mkdir /opt/bitnami/apps
-sudo chgrp daemon /opt/bitnami/apps
+sudo chown bitnami:daemon /opt/bitnami/apps
 sudo chmod 0775 /opt/bitnami/apps
 ln -s /opt/bitnami/apps ~/apps
+
+# Setting up each app
+mkdir -p /opt/bitnami/apps/<app-name>/
+# Migrate files and dirs to app directory
+# Migrate db data to new db
+
+# Setting up config
+sudo rsync -a /opt/bitnami/nginx/conf/server_blocks/{wordpress,<app-name>}-server-block.conf
+# Edit new file: add server name, root, default server
+# Disable default wordpress, and delete wordpress files if desired sudo rm -rf /opt/bitnami/wordpress
+sudo mv /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf{,.disabled}
+
+# Setting up https config
+sudo rsync -a /opt/bitnami/nginx/conf/server_blocks/{wordpress,<app-name>}-https-server-block.conf 
+sudo mv /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf{,.disabled}
+# Edit new file: add server name, root, default server
+
+# Setting up certs
+
+
+# At some point
+sudo find /opt/bitnami/apps/ -type d -exec chown bitnami:daemon {} \; -exec chmod 0775 {} \;
+sudo find /opt/bitnami/apps/ -type f -exec chown bitnami:daemon {} \; -exec chmod 0664 {} \;
 ```
