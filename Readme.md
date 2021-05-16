@@ -50,12 +50,13 @@ sudo rsync -a /opt/bitnami/nginx/conf/server_blocks/{wordpress,<app-name>}-serve
 sudo mv /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf{,.disabled}
 # and drop default bitnami_wordpress database
 
+#Don't do this: mysql_user_installation  --> dropped root user
+#Instead consider this: https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
+
 # Setting up https config
 sudo rsync -a /opt/bitnami/nginx/conf/server_blocks/{wordpress,<app-name>}-https-server-block.conf 
 sudo mv /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf{,.disabled}
 # Edit new file: add server name, root, default server
-
-# Setting up certs
 
 
 # At some point
@@ -63,6 +64,8 @@ sudo find /opt/bitnami/apps/ -type d -exec chown bitnami:daemon {} \; -exec chmo
 sudo find /opt/bitnami/apps/ -type f -exec chown bitnami:daemon {} \; -exec chmod 0664 {} \;
 
 # Switch IPs, not DNS, using Elastic IPs
+
+# Setting up certs
 ```
 
 #### Alternate approach - lego -worked
