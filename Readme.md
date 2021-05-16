@@ -11,7 +11,7 @@ one could just remove the config/files/db for the default Wordpress.
 #### References
 * https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
 * https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
-* [Let's encyrpt - nginx](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
+* [Let's encyrpt - nginx - avoid with bitnami as it tried to install nginx](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
 
 ### Initial setup
 
