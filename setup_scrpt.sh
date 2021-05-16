@@ -25,6 +25,8 @@ sudo mkdir /opt/bitnami/nginx/conf/server_blocks/disabled
 sudo rsync /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf /opt/bitnami/nginx/conf/server_blocks/disabled/wordpress-server-block.conf.disabled
 sudo rsync /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf /opt/bitnami/nginx/conf/server_blocks/disabled/wordpress-https-server-block.conf.disabled
 
+# secure db
+# drop wordpress db
 # set up sample configurations
 # set up sample hello world
 # set up certs
