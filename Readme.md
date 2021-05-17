@@ -22,6 +22,8 @@ Approach A: Using system packages.
 ### Use ansible to set up and to add additional apps
 
 ```
-sudo apt install -y ansible git python-apt python-pymysql
+sudo apt install -y ansible git python-apt python3-pymysql
+sudo apt install python3-pip
+sudo pip3 install ansible 
 ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 ```

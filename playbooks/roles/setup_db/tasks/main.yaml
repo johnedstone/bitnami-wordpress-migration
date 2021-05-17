@@ -1,7 +1,37 @@
 ---
+# https://docs.ansible.com/ansible/2.9/modules/mysql_db_module.html
 - name: Drop initial Worpress database
   mysql_db:
     name: bitnami_wordpress
+    state: absent
+    config_file: /opt/bitnami/mariadb/conf/my.cnf
+    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_user: root
+
+# https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_user_module.html
+# https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
+
+- name: Removes anonymous user account for localhost
+  community.mysql.mysql_user:
+    name: ''
+    host: localhost
+    state: absent
+    config_file: /opt/bitnami/mariadb/conf/my.cnf
+    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_user: root
+
+- name: Removes all anonymous user accounts
+  community.mysql.mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    config_file: /opt/bitnami/mariadb/conf/my.cnf
+    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_user: root
+
+- name: Drop test database
+  mysql_db:
+    name: test
     state: absent
     config_file: /opt/bitnami/mariadb/conf/my.cnf
     login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
