@@ -1,0 +1,12 @@
+---
+HOSTNAME: "your-hostname-not-too-critical"
+MariaDB_Root_Password: 'look in bitname_credentials file'
+APP:
+  one:
+    - bees
+    - honey
+  two:
+    - bees_two
+    - honey_two
+
+# vim: ai et ts=2 sw=2 sts=2 nu

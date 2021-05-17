@@ -20,10 +20,18 @@ Approach A: Using system packages.
 ```
 
 ### Use ansible to set up and to add additional apps
+First update ~/configurations/bitnami-wordpress-migration/private_vars.yaml with your private information.
+See sample file here.
 
 ```
-sudo apt install -y ansible git python-apt python3-pymysql
-sudo apt install python3-pip
+sudo apt install -y git python-apt python3-pymysql python3-pip
 sudo pip3 install ansible 
-ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
+/usr/local/bin/ansible-galaxy collection install community.mysql
+git clone git@github.com:johnedstone/bitnami-wordpress-migration.git
+
+cd bitnami-wordpress-migration
+git config user.name "yourname"
+git config user.email "youremail@email.com"
+cd playbooks
+/usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 ```
