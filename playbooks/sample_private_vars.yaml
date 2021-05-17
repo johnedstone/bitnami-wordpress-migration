@@ -1,0 +1,12 @@
+---
+HOSTNAME: value
+MariaDB_Root_Password: value
+APP:
+  one:
+    - bees
+    - honey
+  two:
+    - bees_two
+    - honey_two
+
+# vim: ai et ts=2 sw=2 sts=2 nu

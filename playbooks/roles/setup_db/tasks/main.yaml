@@ -1,0 +1,10 @@
+---
+- name: Drop initial Worpress database
+  mysql_db:
+    name: bitnami_wordpress
+    state: absent
+    config_file: /opt/bitnami/mariadb/conf/my.cnf
+    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_user: root
+
+# vim: ai et ts=2 sw=2 sts=2 nu

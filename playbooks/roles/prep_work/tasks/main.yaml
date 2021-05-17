@@ -21,6 +21,7 @@
 
 # https://www.cyberciti.biz/faq/ansible-apt-update-all-packages-on-ubuntu-debian-linux/
 - name: Update apt repo and cache on all Debian/Ubuntu boxes
+  become: yes
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
 - name: Upgrade all packages on servers
@@ -45,7 +46,8 @@
 - name: install apt packages
   become: yes
   apt:
-    name: ["rsync", "nmap"]
+    # do not need python3-pymysql
+    name: ["rsync", "nmap", "python3-pymysql", "python-pymysql"]
     state: present
     update-cache: yes
  
