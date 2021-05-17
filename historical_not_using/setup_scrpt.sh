@@ -1,3 +1,8 @@
+echo ""
+echo "not using, simply here for original ideas prior to Ansible"
+echo ""
+exit
+
 Done: HOSTNAME=${NEW_HOSTNAME:?'First run: export NEW_HOSTHAME=xxxxxx.  Exiting'}
 Done: DB_PASSWD=${DB_PASSWD:?'First run: export DB_PASSWD=xxxxxx.  Exiting'}
 
