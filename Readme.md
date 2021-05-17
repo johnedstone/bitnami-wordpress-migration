@@ -1,6 +1,6 @@
 ## Migrating Wordpress to the lates Bitnami 13-May-2021
 
-Using the Bitnami Wordpress Nginx AMI
+Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
 
 * ![bitnami images](screenshots/nginx_bitnami.png) 
 
@@ -20,9 +20,8 @@ Approach A: Using system packages.
 ```
 
 ### Use ansible to set up and to add additional apps
-* [loading private variables](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html#examples)
 
 ```
-sudo apt install ansible git python-apt
+sudo apt install -y ansible git python-apt python-pymysql
 ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 ```

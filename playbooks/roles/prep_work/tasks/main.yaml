@@ -46,8 +46,7 @@
 - name: install apt packages
   become: yes
   apt:
-    # do not need python3-pymysql
-    name: ["rsync", "nmap", "python3-pymysql", "python-pymysql"]
+    name: ["rsync", "nmap"]
     state: present
     update-cache: yes
  
