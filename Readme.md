@@ -10,18 +10,19 @@ Using the Bitnami Wordpress Nginx AMI
 * https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
 * https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
 * https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#altern
+* https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
 * [Let's encyrpt - nginx - *Avoid with bitnami as it tried to install nginx*](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
 
-### Initial setup
-
-* Using Approach A: Bitnami installations using system packages
+### Using Approach A: Bitnami installations using system packages
 ```
 test ! -f "/opt/bitnami/common/bin/openssl" && echo "Approach A: Using system packages." || echo "Approach B: Self-contained installation."
 Approach A: Using system packages.
 ```
 
-* Run setup script
+### Use ansible to set up and to add additional apps
+* [loading private variables](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html#examples)
+
 ```
-export DB_PASSWD="xxxx"
-bash ./setup_scritp
+sudo apt install ansible git 
+ansible-playbook --check --diff --flush-cache -i inventory.yaml playbook.yaml
 ```

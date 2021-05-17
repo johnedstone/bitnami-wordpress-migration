@@ -1,0 +1,14 @@
+---
+- name: setup vimrc
+  copy:
+    src: vimrc
+    dest: "{{ HOME }}/.vimrc"
+
+- name: install apt packages
+  become: yes
+  apt:
+    name: ["rsync", "nmap"]
+    state: present
+    update-cache: yes
+ 
+# vim: ai et ts=2 sw=2 sts=2 nu

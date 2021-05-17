@@ -1,6 +1,7 @@
 HOSTNAME=${NEW_HOSTNAME:?'First run: export NEW_HOSTHAME=xxxxxx.  Exiting'}
 DB_PASSWD=${DB_PASSWD:?'First run: export DB_PASSWD=xxxxxx.  Exiting'}
 APP_NAME=${APP_NAME:?'First run: export APP_NAME=xxxxxx.  Exiting'}
+IP=${PUBLIC_IP:?'First run: export PUBLIC_IP=xxxxxx.  Exiting'}
 
 sudo apt update
 sudo apt install -y git rsync nmap
@@ -30,4 +31,10 @@ sudo rsync /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.co
 # set up sample configurations
 # set up sample hello world
 # set up certs
+
+/opt/bitnami/ctrlscript restart
+/opt/bitnami/ctrlscript status
+curl
+curl
+sudo shutdown -r now
 
