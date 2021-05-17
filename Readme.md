@@ -23,6 +23,6 @@ Approach A: Using system packages.
 * [loading private variables](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html#examples)
 
 ```
-sudo apt install ansible git 
-ansible-playbook --check --diff --flush-cache -i inventory.yaml playbook.yaml
+sudo apt install ansible git python-apt
+ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 ```
