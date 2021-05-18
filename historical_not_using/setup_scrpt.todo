@@ -1,13 +1,5 @@
 
-sudo mkdir /opt/bitnami/apps
-sudo chown bitnami:daemon /opt/bitnami/apps
-sudo chmod 0775 /opt/bitnami/apps
-ln -s /opt/bitnami/apps ~/apps
 mkdir /opt/bitnami/apps/$APP_NAME
-
-mkdir /opt/bitnami/apps/wordpress_orig
-sudo rsync /opt/bitname/wordpress/wp-conf.php /opt/bitname/apps/wordpress_org/
-sudo rm -rf /opt/bitname/wordress
 
 sudo find /opt/bitnami/apps/ -type d -exec chown bitnami:daemon {} \; -exec chmod 0775 {} \;
 sudo find /opt/bitnami/apps/ -type f -exec chown bitnami:daemon {} \; -exec chmod 0664 {} \;
@@ -24,5 +16,4 @@ sudo rsync /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.co
 /opt/bitnami/ctrlscript status
 curl
 curl
-sudo shutdown -r now
 

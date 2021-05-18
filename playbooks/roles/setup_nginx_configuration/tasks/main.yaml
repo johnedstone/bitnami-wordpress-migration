@@ -1,0 +1,38 @@
+---
+- name: check if original wordpress installation still exists
+  stat:
+    path: /opt/bitnami/wordpress/wp-config.php
+  register: wp_config
+
+- name: save orig wordpress config part one
+  become: yes
+  ansible.builtin.file:
+    path: /opt/bitnami/apps/wordpress_original
+    state: directory
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+
+- name: save orig wordpress config part two
+  become: yes
+  ansible.builtin.copy:
+    src: /opt/bitnami/wordpress/wp-config.php
+    dest: /opt/bitnami/apps/wordpress_original/wp-config.php
+    owner: bitnami
+    group: daemon
+    mode: '0440'
+  when: wp_config.stat.exists
+
+- name: remove original wordpress directory
+  become: yes
+  ansible.builtin.file:
+    path: /opt/bitnami/wordpress
+    state: absent
+
+- name: create symbolic link for apps dir
+  ansible.builtin.file:
+    src: /opt/bitnami/apps
+    dest: /home/bitnami/apps
+    state: link
+
+# vim: ai et ts=2 sw=2 sts=2 nu

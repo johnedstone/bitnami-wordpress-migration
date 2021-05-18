@@ -48,4 +48,13 @@ See `sample_private_vars_yaml` in this repository.
 ```
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
+
+# If this check runs as expected, then ...
+/usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 ```
+
+After successful initial installation:
+```
+sudo shutdown -r now
+```
+
