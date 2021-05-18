@@ -1,6 +1,8 @@
 ---
-- name: Set up nginx and wordpress
-  hosts: nginx_hosts
+
+- hosts: nginx_hosts
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   connection: local
   roles:
     - prep_work
