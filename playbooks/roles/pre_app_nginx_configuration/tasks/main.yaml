@@ -1,0 +1,89 @@
+---
+- name: check if original wordpress installation still exists
+  stat:
+    path: /opt/bitnami/wordpress/wp-config.php
+  register: wp_config
+
+- name: save orig wordpress config part one
+  become: yes
+  ansible.builtin.file:
+    path: /opt/bitnami/apps/wordpress_original
+    state: directory
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+
+- name: save orig wordpress config part two
+  become: yes
+  ansible.builtin.copy:
+    src: /opt/bitnami/wordpress/wp-config.php
+    dest: /opt/bitnami/apps/wordpress_original/wp-config.php
+    owner: bitnami
+    group: daemon
+    mode: '0440'
+  when: wp_config.stat.exists
+
+- name: remove original wordpress directory
+  become: yes
+  ansible.builtin.file:
+    path: /opt/bitnami/wordpress
+    state: absent
+
+- name: create symbolic link for apps dir
+  ansible.builtin.file:
+    src: /opt/bitnami/apps
+    dest: /home/bitnami/apps
+    state: link
+
+- name: create disabled conf directory
+  become: yes
+  ansible.builtin.file:
+    path: /opt/bitnami/nginx/conf/server_blocks/disabled
+    state: directory
+    mode: '0775'
+    owner: bitnami
+
+- stat:
+    path: /opt/bitnami/nginx/conf/server_blocks/default-https-server-block.conf
+  register: default_conf
+
+- stat:
+    path: /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf
+  register: default_wp_http
+
+- stat:
+    path: /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf
+  register: default_wp_https
+
+- name: move default http conf
+  become: yes
+  ansible.builtin.copy:
+    src: /opt/bitnami/nginx/conf/server_blocks/default-https-server-block.conf
+    dest: /opt/bitnami/nginx/conf/server_blocks/disabled/default-https-server-block.conf.disabled
+  when: default_conf.stat.exists
+
+- name: move default wp conf
+  become: yes
+  ansible.builtin.copy:
+    src: /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf
+    dest: /opt/bitnami/nginx/conf/server_blocks/disabled/wordpress-server-block.conf.disabled
+  when: default_wp_http.stat.exists
+
+- name: move default wp conf https
+  become: yes
+  ansible.builtin.copy:
+    src: /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf
+    dest: /opt/bitnami/nginx/conf/server_blocks/disabled/wordpress-https-server-block.conf.disabled
+  when: default_wp_https.stat.exists
+
+- name: remove orig nginx conf
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /opt/bitnami/nginx/conf/server_blocks/default-https-server-block.conf
+    - /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf
+    - /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf
+
+# vim: ai et ts=2 sw=2 sts=2 nu
