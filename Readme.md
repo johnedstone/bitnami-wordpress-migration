@@ -34,7 +34,8 @@ cd /home/bitnami && git clone git@github.com:johnedstone/bitnami-wordpress-migra
 cd /home/bitnami/bitnami-wordpress-migration && git config user.name "yourname"
 cd /home/bitnami/bitnami-wordpress-migration && git config user.email "youremail@email.com"
 
-mkdir -p /home/bitnami/configurations/bitnami-wordpress-migration/private_vars.yaml
+mkdir -p /home/bitnami/configurations/bitnami-wordpress-migration
+touch /home/bitnami/configurations/bitnami-wordpress-migration/private_vars.yaml
 ```
 
 ### Use ansible to set up your first application
