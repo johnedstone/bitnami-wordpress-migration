@@ -1,0 +1,41 @@
+---
+- name: check directories permissions
+  ansible.builtin.file:
+      state: directory
+      path: /opt/bitnami/apps
+      recurse: yes
+      owner: bitnami
+      group: daemon
+      mode: '0775'
+
+- name: register files
+  ansible.builtin.find:
+    path: /opt/bitnami/apps
+    file_type: file
+    exclude: wp-config.php
+    recurse: yes
+  register: find_result
+
+- name: check file permissions
+  file:
+    path: "{{ item.path }}"
+    owner: bitnami
+    group: daemon
+    mode: 0664
+  with_items: "{{ find_result.files }}"
+
+- name: register wp_config
+  ansible.builtin.find:
+    path: /opt/bitnami/apps
+    file_type: file
+    #contains: '.*/wp-config\.php'
+    contains: '*wp-config.php'
+    #recurse: yes
+    use_regex: yes
+  register: find_wp_config
+
+- debug:
+    msg: "{{ find_wp_config }}"
+
+# vim: ai et ts=4 sw=4 sts=4 nu
+
