@@ -1,0 +1,36 @@
+---
+- name: register dirs
+  become: yes
+  ansible.builtin.find:
+    path: /opt/bitnami/nginx/conf/server_blocks
+    file_type: directory
+    recurse: yes
+  register: find_dir_result
+
+- name: set dir permissions
+  become: yes
+  file:
+    path: "{{ item.path }}"
+    owner: bitnami
+    group: daemon
+    mode: '0775'
+  with_items: "{{ find_dir_result.files }}"
+
+- name: register files
+  become: yes
+  ansible.builtin.find:
+    path: /opt/bitnami/nginx/conf/server_blocks
+    file_type: file
+    recurse: yes
+  register: find_files_result
+
+- name: set file permissions
+  become: yes
+  file:
+    path: "{{ item.path }}"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  with_items: "{{ find_files_result.files }}"
+
+# vim: ai et ts=4 sw=4 sts=4 nu
