@@ -1,0 +1,9 @@
+---
+- name: install poohbear default conf
+  become: yes
+  copy:
+    src: files/poohbear.conf
+    dest: /opt/bitnami/nginx/conf/server_blocks/poohbear.conf
+    owner: bitnami
+    group: daemon
+    mode: '0664'
