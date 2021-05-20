@@ -1,12 +1,7 @@
 ---
-- name: include private variables
-  include_vars:
-    file: "{{ HOME }}/configurations/bitnami-wordpress-migration/private_vars.yaml"
-    name: private_vars
-
 - name: Check hostame variable
   debug:
-    msg: "hostname: {{ private_vars['HOSTNAME'] }}"
+    msg: "hostname: {{ HOSTNAME }}"
 
 - name: setup vimrc
   copy:

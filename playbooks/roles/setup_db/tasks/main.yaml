@@ -5,7 +5,7 @@
     name: bitnami_wordpress
     state: absent
     config_file: /opt/bitnami/mariadb/conf/my.cnf
-    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
 
 # https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_user_module.html
@@ -17,7 +17,7 @@
     host: localhost
     state: absent
     config_file: /opt/bitnami/mariadb/conf/my.cnf
-    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
 
 - name: Removes all anonymous user accounts
@@ -26,7 +26,7 @@
     host_all: yes
     state: absent
     config_file: /opt/bitnami/mariadb/conf/my.cnf
-    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
 
 - name: Drop test database
@@ -34,7 +34,7 @@
     name: test
     state: absent
     config_file: /opt/bitnami/mariadb/conf/my.cnf
-    login_password: "{{ private_vars['MariaDB_Root_Password'] }}"
+    login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
 
 # vim: ai et ts=2 sw=2 sts=2 nu

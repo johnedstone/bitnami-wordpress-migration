@@ -7,3 +7,26 @@
     owner: bitnami
     group: daemon
     mode: '0664'
+  when: install_poohbear_default
+
+- name: install poohbear app dir
+  become: yes
+  file:
+    state: directory
+    path: /opt/bitnami/apps/poohbear
+    owner: bitnami
+    group: daemon
+    mode: '0775'
+  when: install_poohbear_default
+
+- name: install poohhbear app index.php
+  become: yes
+  copy:
+    src: files/index.php
+    dest: /opt/bitnami/apps/poohbear/index.php
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  when: install_poohbear_default
+
+# vim: ai et ts=2 sw=2 sts=2 nu
