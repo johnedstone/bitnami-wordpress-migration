@@ -1,12 +1,6 @@
 
-# set up sample configurations
-# set up sample hello world
 # set up certs
 
-/opt/bitnami/ctrlscript restart
-/opt/bitnami/ctrlscript status
-curl
-curl
 
 #### Switch IPs, not DNS, using Elastic IPs
 #### Alternate approach - lego -worked

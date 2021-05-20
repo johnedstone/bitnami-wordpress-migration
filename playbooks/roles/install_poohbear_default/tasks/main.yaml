@@ -1,8 +1,8 @@
 ---
 - name: install poohbear default conf
   become: yes
-  copy:
-    src: files/poohbear.conf
+  template:
+    src: templates/poohbear.conf.j2
     dest: /opt/bitnami/nginx/conf/server_blocks/poohbear.conf
     owner: bitnami
     group: daemon
