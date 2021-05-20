@@ -1,0 +1,39 @@
+---
+- name: restart bitnami services
+  listen: "Restart bitnami"
+  become: yes
+  service:
+    name: bitnami
+    state: restarted
+  when: not ansible_check_mode
+
+- name: check bitnami status
+  listen: "Restart bitnami"
+  become: yes
+  command: "{{ item }}"
+  register: bitnami_status
+  changed_when: False
+  args:
+    warn: false
+  with_list:
+    - systemctl is-active bitnami.service
+    - systemctl status bitnami.service
+    - /opt/bitnami/ctlscript.sh status
+    - curl --head http://0.0.0.0
+    - curl --head -k https://0.0.0.0
+    - curl -k https://0.0.0.0
+  when: not ansible_check_mode
+
+- name: output bitnami status
+  listen: "Restart bitnami"
+  debug:
+    var: "{{ item }}"
+  with_list:
+    - bitnami_status['results'][0]['stdout']
+    - bitnami_status['results'][1]['stdout_lines']
+    - bitnami_status['results'][2]['stdout_lines']
+    - bitnami_status['results'][3]['stdout_lines']
+    - bitnami_status['results'][4]['stdout_lines']
+    - bitnami_status['results'][5]['stdout_lines']
+  when: not ansible_check_mode
+# vim: ai et ts=2 sw=2 sts=2 nu
