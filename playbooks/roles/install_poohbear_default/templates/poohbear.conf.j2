@@ -1,4 +1,6 @@
 server {
+    # the default server, in case user arrives with 
+    # an unrecognized host name
     listen {{ listen_poohbear_IP | default("", true) }}80 default_server;
 
     root /opt/bitnami/apps/poohbear;
@@ -21,3 +23,5 @@ server {
 
     include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
 }
+
+# vim: ai et ts=4 sw=4 sts=4 nu
