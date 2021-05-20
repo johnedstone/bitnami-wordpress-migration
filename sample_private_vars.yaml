@@ -1,6 +1,13 @@
 ---
 HOSTNAME: "your-hostname-not-too-critical"
 MariaDB_Root_Password: 'look in bitname_credentials file'
+install_poohbear_default: yes
+
+# This is experimental, for 2 IPs in Aws
+# It can be omitted or left blank or 'internal_ip:'
+#listen_poohbear_IP: 'int.ern.al.ip:'
+#listen_poohbear_IP: '172.xx.xx.xxx:'
+
 APP:
   one:
     - bees
