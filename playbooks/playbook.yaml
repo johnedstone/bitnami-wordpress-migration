@@ -11,6 +11,7 @@
     - pre_app_nginx_configuration
     - setup_db
     - install_poohbear_default
+    - install_apps
     - check_apps_permissions
     - check_nginx_conf_permissions
 
