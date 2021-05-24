@@ -1,19 +1,31 @@
 ---
 HOSTNAME: "your-hostname-not-too-critical"
 MariaDB_Root_Password: 'look in bitname_credentials file'
+
+# poohbear is a default_server to catch no Host in the request (optional)
 install_poohbear_default: yes
 
-# This is experimental, for 2 IPs in Aws
-# It can be omitted or left blank or 'internal_ip:'
-#listen_poohbear_IP: 'int.ern.al.ip:'
-#listen_poohbear_IP: '172.xx.xx.xxx:'
+# This 'listen' variable is experimental - for 2 IPs on an ec2
+# It can be omitted or left blank or 'internal_ip'
+# listen_poohbear_IP: '172.xx.xx.xxx'
 
-APP:
-  one:
-    - bees
-    - honey
-  two:
-    - bees_two
-    - honey_two
+# APPs: if the app is redirected elsewhere, then port port 80 and 443 redierect elsewhere
+# APPs: set 'enable: no' for ansible to disregard this app key (block)
+# APPs: if redirect_elsewhere: no, then port 80 redirects to 443
+
+APPs:
+  domain.org:
+      enable: yes 
+      redirect_elsewhere: yes 
+      redirect_path: 'https://elsewhere.net/'
+      redirect_permanent: no
+      use_lets_encrypt: no
+      default_server: no
+      # listen_IP: 172.x.x.x # experimental
+  www.domain.org:
+      enable: yes 
+      redirect_elsewhere: no 
+      use_lets_encrypt: no
+      default_server: no
 
 # vim: ai et ts=2 sw=2 sts=2 nu
