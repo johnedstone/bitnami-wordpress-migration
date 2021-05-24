@@ -1,12 +1,14 @@
 server {
     # the default server, in case user arrives with 
     # an unrecognized host name
-    listen {{ listen_poohbear_IP | default("", true) }}80 default_server;
+    {# https://www.shellhacks.com/jinja2-check-if-variable-empty-exists-defined-true/ #}
+
+    listen {% if listen_poohbear_IP is defined and listen_poohbear_IP|length %}{{ listen_poohbear_IP }}:{% endif %}80 default_server;
 
     root /opt/bitnami/apps/poohbear;
     server_name _;
 
-    listen {{ listen_poohbear_IP | default("", true) }}443 ssl default_server;
+    listen {% if listen_poohbear_IP is defined and listen_poohbear_IP|length %}{{ listen_poohbear_IP }}:{% endif %}443 ssl default_server;
 
     ssl_certificate      bitnami/certs/server.crt;
     ssl_certificate_key  bitnami/certs/server.key;
