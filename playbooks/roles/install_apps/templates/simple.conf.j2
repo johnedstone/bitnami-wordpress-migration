@@ -1,4 +1,5 @@
 server {
+    # Simplest configuration
     {# https://www.shellhacks.com/jinja2-check-if-variable-empty-exists-defined-true/ #}
 
     listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}80{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};

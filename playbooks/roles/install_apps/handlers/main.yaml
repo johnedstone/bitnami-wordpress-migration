@@ -33,7 +33,7 @@
 
 - name: curl app http endpoints
   listen: "Restart bitnami apps"
-  command: "curl --head -H 'Host: {{ item.key }}' http://{{ item.value.listen_IP | default('0.0.0.0', true) }}"
+  command: "curl --head -H 'Host: {{ item.key }}' http://{{ item.value.listen_IP | default('0.0.0.0', true) }}/"
   register: curl_app_http_status
   changed_when: False
   args:
@@ -52,7 +52,7 @@
 
 - name: curl app https endpoints
   listen: "Restart bitnami apps"
-  command: "curl --head -k -H 'Host: {{ item.key }}' https://{{ item.value.listen_IP | default('0.0.0.0', true) }}"
+  command: "curl --head -k -H 'Host: {{ item.key }}' https://{{ item.value.listen_IP | default('0.0.0.0', true) }}/"
   register: curl_app_https_status
   changed_when: False
   args:

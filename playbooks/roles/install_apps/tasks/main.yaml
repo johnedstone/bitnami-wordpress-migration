@@ -38,7 +38,20 @@
     group: daemon
     mode: '0664'
   loop: "{{ APPs | dict2items }}"
-  when: not item.value.redirect_elsewhere
+  when: not item.value.redirect_elsewhere and item.value.enable
+  notify:
+    - Restart bitnami apps
+
+- name: create redirect nginx config
+  become: yes
+  template:
+    src: templates/redirect.conf.j2
+    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.redirect_elsewhere and item.value.enable
   notify:
     - Restart bitnami apps
 
