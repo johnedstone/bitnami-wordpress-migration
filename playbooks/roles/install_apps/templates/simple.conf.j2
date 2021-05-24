@@ -1,10 +1,8 @@
 server {
-    # the default server, in case user arrives with 
-    # an unrecognized host name
     listen {{ listen_IP | default("", true) }}80 default_server;
 
-    root /opt/bitnami/apps/{{ domain_name }};
-    server_name {{ domain_name }};
+    root /opt/bitnami/apps/{{ item.key }};
+    server_name {{ item.key }};
 
     listen {{ listen_IP | default("", true) }}443 ssl default_server;
 

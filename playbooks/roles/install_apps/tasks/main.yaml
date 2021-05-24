@@ -15,5 +15,17 @@
     label: "{{ item.key }}"
   when: item.value.enable
 
+- name: create simple nginx config
+  become: yes
+  template:
+    src: templates/simple.conf.j2
+    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  loop: "{{ APPs | dict2items }}"
+  when: not item.value.redirect_elsewhere
+  #notify:
+  #  - Restart bitnami
 
 # vim: ai et ts=2 sw=2 sts=2 nu
