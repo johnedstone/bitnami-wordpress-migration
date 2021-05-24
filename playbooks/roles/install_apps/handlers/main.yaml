@@ -1,0 +1,71 @@
+---
+- name: restart bitnami apps services
+  listen: "Restart bitnami apps"
+  become: yes
+  service:
+    name: bitnami
+    state: restarted
+  when: not ansible_check_mode
+
+- name: check bitnami status
+  listen: "Restart bitnami apps"
+  become: yes
+  command: "{{ item }}"
+  register: bitnami_app_status
+  changed_when: False
+  args:
+    warn: false
+  with_list:
+    - systemctl is-active bitnami.service
+    - systemctl status bitnami.service
+    - /opt/bitnami/ctlscript.sh status
+  when: not ansible_check_mode
+
+- name: output bitnami status
+  listen: "Restart bitnami apps"
+  debug:
+    var: "{{ item }}"
+  with_list:
+    - bitnami_app_status['results'][0]['stdout']
+    - bitnami_app_status['results'][1]['stdout_lines']
+    - bitnami_app_status['results'][2]['stdout_lines']
+  when: not ansible_check_mode
+
+- name: curl app http endpoints
+  listen: "Restart bitnami apps"
+  command: "curl --head -H 'Host: {{ item.key }}' http://{{ item.value.listen_IP | default('0.0.0.0', true) }}"
+  register: curl_app_http_status
+  changed_when: False
+  args:
+    warn: false
+  loop: "{{ APPs | dict2items }}"
+  #when: item.value.enable
+  when: not ansible_check_mode and item.value.enable
+
+- name: output curl app http status
+  listen: "Restart bitnami apps"
+  debug:
+    #var: "{{ item.cmd }}"
+    msg: "{{ item.stdout_lines }}"
+  when: not ansible_check_mode and item.cmd is defined
+  loop: "{{ curl_app_http_status.results }}"
+
+- name: curl app https endpoints
+  listen: "Restart bitnami apps"
+  command: "curl --head -k -H 'Host: {{ item.key }}' https://{{ item.value.listen_IP | default('0.0.0.0', true) }}"
+  register: curl_app_https_status
+  changed_when: False
+  args:
+    warn: false
+  loop: "{{ APPs | dict2items }}"
+  when: not ansible_check_mode and item.value.enable
+
+- name: output curl apps http status
+  listen: "Restart bitnami apps"
+  debug:
+    msg: "{{ item.stdout_lines }}"
+  when: not ansible_check_mode and item.cmd is defined
+  loop: "{{ curl_app_https_status.results }}"
+
+
+# vim: ai et ts=2 sw=2 sts=2 nu

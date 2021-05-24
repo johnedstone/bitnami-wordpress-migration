@@ -15,6 +15,20 @@
     label: "{{ item.key }}"
   when: item.value.enable
 
+- name: touch index.html for each app to check curl status
+  become: yes
+  changed_when: False
+  file:
+    state: touch
+    path: "/opt/bitnami/apps/{{ item.key }}/index.html"
+    mode: '0664'
+    owner: bitnami
+    group: daemon
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+
 - name: create simple nginx config
   become: yes
   template:
@@ -25,7 +39,7 @@
     mode: '0664'
   loop: "{{ APPs | dict2items }}"
   when: not item.value.redirect_elsewhere
-  #notify:
-  #  - Restart bitnami
+  notify:
+    - Restart bitnami apps
 
 # vim: ai et ts=2 sw=2 sts=2 nu
