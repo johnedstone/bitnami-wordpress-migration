@@ -55,4 +55,21 @@
   notify:
     - Restart bitnami apps
 
+- name: set cron shell
+  cron:
+    name: SHELL
+    env: yes
+    value: /usr/bin/bash
+
+- name: install lego cron renew
+  cron:
+    name: {{ item.key }} lego renew
+    hour: "{{ LOG_HOURS }}"
+    minute: "{{ LOG_MIN }}"
+    job: "sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt/ --tls --domains www.johnedstone.net --email '{{ item.value.lego_email }}' renew --renew-hook '/opt/bitnami/nginx/sbin/nginx -s reload' >/dev/null 2>&1"
+    state: present
+    disabled: "{{ DISABLE_LEGO_CRON }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.install_lego_cron and item.value.enable
+
 # vim: ai et ts=2 sw=2 sts=2 nu
