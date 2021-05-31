@@ -12,12 +12,13 @@ install_poohbear_default: yes
 # APPs: if the app is redirected elsewhere, then port port 80 and 443 redierect elsewhere
 # APPs: set 'enable: no' for ansible to disregard this app key (block)
 # APPs: if redirect_elsewhere: no, then port 80 redirects to 443
+# Note assumption: 80 and 443 will be the same domain
 
 APPs:
   domain.org:
       enable: yes 
       redirect_elsewhere: yes 
-      redirect_path: 'https://elsewhere.net/'
+      redirect_path: 'https://elsewhere.net'
       redirect_permanent: no
       use_lets_encrypt: no
       default_server: no

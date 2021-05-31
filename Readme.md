@@ -23,16 +23,14 @@ Approach A: Using system packages.
 
 ### Initial setup
 Do the following on a new image.
-After that, there is no need to run these commands
+After this, there is no need to run these commands
 
 ```
 sudo apt install -y git python-apt python3-pymysql python3-pip
 sudo pip3 install ansible 
 /usr/local/bin/ansible-galaxy collection install community.mysql
 
-cd /home/bitnami && git clone git@github.com:johnedstone/bitnami-wordpress-migration.git
-cd /home/bitnami/bitnami-wordpress-migration && git config user.name "yourname"
-cd /home/bitnami/bitnami-wordpress-migration && git config user.email "youremail@email.com"
+cd /home/bitnami && git clone  https://github.com/johnedstone/bitnami-wordpress-migration.git
 
 mkdir -p /home/bitnami/configurations/bitnami-wordpress-migration
 touch /home/bitnami/configurations/bitnami-wordpress-migration/private_vars.yaml
