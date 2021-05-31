@@ -4,7 +4,7 @@
 
 #### Switch IPs, not DNS, using Elastic IPs
 #### Alternate approach - lego -worked
-* Reference: https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#altern
+* Reference: https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
 
 ```
 cd /tmp
