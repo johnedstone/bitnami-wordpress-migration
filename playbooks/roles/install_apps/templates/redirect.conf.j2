@@ -1,0 +1,26 @@
+server {
+    
+    listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}80{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
+
+    server_name {{ item.key }};
+    access_log off;
+
+
+    listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}443 ssl{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
+
+    ssl_certificate      bitnami/certs/server.crt;
+    ssl_certificate_key  bitnami/certs/server.key;
+
+    location / {
+        return {% if item.value.redirect_permanent is defined and item.value.redirect_permanent is sameas true %}301{% else %}302{% endif %} {{ item.value.redirect_path }}$request_uri;
+    }
+
+    location = /favicon.ico {
+        log_not_found off;
+        access_log off;
+    }
+
+    include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+}
+
+# vim: ai et ts=4 sw=4 sts=4 nu
