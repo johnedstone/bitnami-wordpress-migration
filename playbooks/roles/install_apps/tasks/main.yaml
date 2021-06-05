@@ -63,13 +63,14 @@
 
 - name: install lego cron renew
   cron:
-    name: {{ item.key }} lego renew
-    hour: "{{ LOG_HOURS }}"
-    minute: "{{ LOG_MIN }}"
-    job: "sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt/ --tls --domains www.johnedstone.net --email '{{ item.value.lego_email }}' renew --renew-hook '/opt/bitnami/nginx/sbin/nginx -s reload' >/dev/null 2>&1"
+    name: "{{ item.key }} lego renew"
+    hour: "{{ item.value.lego_cron_hour }}"
+    minute: "{{ item.value.lego_cron_min }}"
+    weekday: "{{ item.value.lego_cron_weekday }}"
+    job: "sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt/ --tls --domains {{ item.key }}  --email '{{ item.value.lego_email }}' renew --renew-hook '/opt/bitnami/nginx/sbin/nginx -s reload' >/dev/null 2>&1"
     state: present
-    disabled: "{{ DISABLE_LEGO_CRON }}"
+    disabled: "{{ item.value.lego_cron_disable }}"
   loop: "{{ APPs | dict2items }}"
-  when: item.value.install_lego_cron and item.value.enable
+  when: item.value.enable and item.value.lego_cron_install is defined and item.value.lego_cron_install
 
 # vim: ai et ts=2 sw=2 sts=2 nu
