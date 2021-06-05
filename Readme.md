@@ -9,7 +9,7 @@ Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian
 #### References
 * https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
 * https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
-* https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#altern
+* https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
 * https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
 * [Let's encyrpt - nginx - *Avoid with bitnami as it tried to install nginx*](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
 
@@ -56,3 +56,41 @@ After successful initial installation:
 sudo shutdown -r now
 ```
 
+### Wordpress files
+* copy over your wordpress files
+* push data into database
+
+### Lets Encyrpt
+* Installed using this link: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
+* This playbook will install lego. Once this is installed one must then manually install the certs for each domain manually as described below
+* This playbook will install the cronjobs to renew the Let's Encrypt certs 
+* see the sample yaml file for setting up the cron
+* doing first installation of lets-encrypt with script
+* Let's Encrypt here is configured using --tls which means the DNS entry must be correct
+* If one chooses not to use Let's Encrypt certs, then this ansible playbook will use the server certs which may work until Let's Encrypt is set up
+
+### Switching IPs
+* If one is using Elastic IPs that would be preferred over changing DNS entires
+### Things not to do
+
+**These approaches failed**
+
+#### Don't do this: mysql_user_installation  --> dropped root user
+Instead consider this: https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
+
+##### bncert -Did not work
+*Did not work - currently only supported on _Apache_*
+* Reference: https://docs.bitnami.com/aws/how-to/understand-bncert/
+
+```
+# Did not work - currently only supported on Apache
+wget -O bncert-linux-x64.run https://downloads.bitnami.com/files/bncert/latest/bncert-linux-x64.run
+sudo mkdir /opt/bitnami/bncert
+sudo mv bncert-linux-x64.run /opt/bitnami/bncert/
+sudo chmod +x /opt/bitnami/bncert/bncert-linux-x64.run
+sudo ln -s /opt/bitnami/bncert/bncert-linux-x64.run /opt/bitnami/bncert-tool
+```
+
+#### nginx lets-encrypt: did not work
+
+* [Let's encyrpt - nginx - *Avoid with bitnami as it tried to install nginx*](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)

@@ -1,13 +1,4 @@
 
-# set up certs
-
-
-#### Switch IPs, not DNS, using Elastic IPs
-#### Alternate approach - lego -worked
-* Reference: https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
-
-Next: get cronjobs
-
 ```
 cd /tmp
 curl -Ls https://api.github.com/repos/xenolf/lego/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4 | wget -i -
