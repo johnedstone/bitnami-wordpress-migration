@@ -28,5 +28,11 @@ APPs:
       redirect_elsewhere: no 
       use_lets_encrypt: no
       default_server: no
+      lego_cron_install: yes
+      lego_cron_disable: yes
+      lego_cron_hour: 2
+      lego_cron_min: 10
+      lego_cron_weekday: 6
+      lego_email: 'johnedstone@gmail.com'
 
 # vim: ai et ts=2 sw=2 sts=2 nu
