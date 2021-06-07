@@ -14,6 +14,8 @@ install_poohbear_default: yes
 # APPs: if redirect_elsewhere: no, then port 80 redirects to 443
 # Note assumption: 80 and 443 will be the same domain
 
+install_lego: yes
+
 APPs:
   domain.org:
       enable: yes 
