@@ -73,12 +73,6 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.enable and item.value.lego_cron_install is defined and item.value.lego_cron_install
 
-- name: install lego binary if it does not exist
-  become: yes
-  script: scripts/install_lego.sh
-  args:
-    creates: /opt/bitnami/letsencrypt/lego
-
 - name: create letsencrypt directory
   become: yes
   file:
@@ -93,8 +87,15 @@
   become: yes
   file:
     state: absent
-    path: "/tmp/lego*"
+    path: '/tmp/lego'
   when: install_lego
+
+  #- name: install lego binary if it does not exist
+  #become: yes
+  #script: scripts/install_lego.sh
+  #args:
+  #  creates: /opt/bitnami/letsencrypt/lego
+  #when: install_lego
 
 
 # vim: ai et ts=2 sw=2 sts=2 nu
