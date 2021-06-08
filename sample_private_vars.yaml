@@ -19,17 +19,17 @@ install_lego: yes
 APPs:
   domain.org:
       enable: yes 
+      default_server: no
       redirect_elsewhere: yes 
       redirect_path: 'https://elsewhere.net'
       redirect_permanent: no
       use_lets_encrypt: no
-      default_server: no
       # listen_IP: 172.x.x.x # experimental
   www.domain.org:
       enable: yes 
+      default_server: no
       redirect_elsewhere: no 
       use_lets_encrypt: no
-      default_server: no
       lego_cron_install: yes
       lego_cron_disable: yes
       lego_cron_hour: 2
