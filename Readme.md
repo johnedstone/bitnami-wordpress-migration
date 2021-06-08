@@ -61,13 +61,21 @@ sudo shutdown -r now
 * push data into database
 
 ### Lets Encyrpt
-* Installed using this link: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
-* This playbook will install lego. Once this is installed one must then manually install the certs for each domain manually as described below
-* This playbook will install the cronjobs to renew the Let's Encrypt certs 
-* see the sample yaml file for setting up the cron
-* doing first installation of lets-encrypt with script
 * Let's Encrypt here is configured using --tls which means the DNS entry must be correct
-* If one chooses not to use Let's Encrypt certs, then this ansible playbook will use the server certs which may work until Let's Encrypt is set up
+* Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
+* This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
+* To update lego, simply remove `/opt/bitnami/letsencrypt/lego` and rerun the playbook.
+* `private_vars.yaml` allows one to use the server certs or Let's Encrypt certs
+* The Let's Encrypt certs must be manually installed the first time for each domain as described below:
+
+```
+sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
+sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.key /opt/bitnami/nginx/conf/bitnami/certs/www.xyz.net.key
+sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.crt /opt/bitnami/nginx/conf/bitnami/certs/www.xyz.net.crt
+sudo chown -R root:root /opt/bitnami/nginx/conf/bitnami/certs/
+sudo chmod -R 0600 /opt/bitnami/nginx/conf/bitnami/certs/
+
+```
 
 ### Switching IPs
 * If one is using Elastic IPs that would be preferred over changing DNS entires
