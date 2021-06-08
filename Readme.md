@@ -65,6 +65,7 @@ sudo shutdown -r now
 ### Wordpress files
 * copy over your wordpress files
 * push data into database
+* **Need commands to create user and database here**
 
 ### Lets Encyrpt
 * Let's Encrypt here is configured using --tls which means the DNS entry must be correct
