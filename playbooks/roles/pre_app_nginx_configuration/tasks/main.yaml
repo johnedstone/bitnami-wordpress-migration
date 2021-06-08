@@ -39,6 +39,7 @@
     src: /opt/bitnami/apps
     dest: /home/bitnami/apps
     state: link
+  when: not ansible_check_mode
 
 - stat:
     path: /opt/bitnami/nginx/conf/server_blocks/default-https-server-block.conf

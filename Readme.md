@@ -26,10 +26,6 @@ Do the following on a new image.
 After this, there is no need to run these commands
 
 ```
-sudo echo "my-custom-hostname" > /etc/hostname
-sudo shutdown -r now
-sudo apt update
-sudo apt full-upgrade
 sudo apt install -y git python-apt python3-pymysql python3-pip
 sudo apt autoremove
 sudo apt autoclean
