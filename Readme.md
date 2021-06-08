@@ -72,11 +72,14 @@ sudo shutdown -r now
 * The Let's Encrypt certs must be manually installed the first time for each domain as described below:
 
 ```
+sudo systemctl stop bitnami.service
 sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
 sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.key /opt/bitnami/nginx/conf/bitnami/certs/www.xyz.net.key
 sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.crt /opt/bitnami/nginx/conf/bitnami/certs/www.xyz.net.crt
 sudo chown -R root:root /opt/bitnami/nginx/conf/bitnami/certs/
 sudo chmod -R 0600 /opt/bitnami/nginx/conf/bitnami/certs/
+sudo systemctl start bitnami.service
+sudo systemctl status bitnami.service
 
 ```
 
