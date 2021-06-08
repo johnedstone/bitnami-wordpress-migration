@@ -30,6 +30,16 @@ sudo apt install -y git python-apt python3-pymysql python3-pip
 sudo apt autoremove
 sudo apt autoclean
 sudo pip3 install ansible 
+
+# Current ansible version
+/usr/local/bin/ansible --version
+ansible 2.10.9
+  config file = None
+  configured module search path = ['/home/bitnami/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/local/lib/python3.7/dist-packages/ansible
+  executable location = /usr/local/bin/ansible
+  python version = 3.7.3 (default, Jan 22 2021, 20:04:44) [GCC 8.3.0]
+
 /usr/local/bin/ansible-galaxy collection install community.mysql
 
 cd /home/bitnami && git clone  https://github.com/johnedstone/bitnami-wordpress-migration.git
@@ -46,15 +56,6 @@ You can use multiple applications in the private_vars.yaml file.
 See `sample_private_vars_yaml` in this repository.
 
 ```
-# Current ansible version
-/usr/local/bin/ansible --version
-ansible 2.10.9
-  config file = None
-  configured module search path = ['/home/bitnami/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /usr/local/lib/python3.7/dist-packages/ansible
-  executable location = /usr/local/bin/ansible
-  python version = 3.7.3 (default, Jan 22 2021, 20:04:44) [GCC 8.3.0]
-
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 
