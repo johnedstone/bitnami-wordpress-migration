@@ -81,6 +81,10 @@ sudo chmod -R 0600 /opt/bitnami/nginx/conf/bitnami/certs/
 sudo systemctl start bitnami.service
 sudo systemctl status bitnami.service
 
+# Verify certs
+openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
+openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
+
 ```
 
 ### Switching IPs
