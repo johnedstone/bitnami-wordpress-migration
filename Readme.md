@@ -2,7 +2,7 @@
 
 Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
 
-* ![bitnami images](screenshots/nginx_bitnami.png) 
+* ![bitnami images](screenshots/nginx_bitnami_2.png) 
 
 *Note: vim is used below.  Feel free to use nano, etc*
 
