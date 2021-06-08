@@ -8,8 +8,8 @@ server {
 
     listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}443 ssl{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
 
-    ssl_certificate      bitnami/certs/server.crt;
-    ssl_certificate_key  bitnami/certs/server.key;
+    ssl_certificate      bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.crt;
+    ssl_certificate_key  bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.key;
 
     location / {
         return {% if item.value.redirect_permanent is defined and item.value.redirect_permanent is sameas true %}301{% else %}302{% endif %} {{ item.value.redirect_path }}$request_uri;
