@@ -78,24 +78,26 @@
   file:
     state: directory
     path: "/opt/bitnami/letsencrypt"
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root
   when: install_lego
 
-- name: remove tmp lego.tar.gz
+- name: remove tmp lego glob files
   become: yes
   file:
     state: absent
-    path: '/tmp/lego'
+    path: "{{ item }}"
+  with_fileglob:
+    - '/tmp/lego*'
   when: install_lego
 
-  #- name: install lego binary if it does not exist
-  #become: yes
-  #script: scripts/install_lego.sh
-  #args:
-  #  creates: /opt/bitnami/letsencrypt/lego
-  #when: install_lego
+- name: install lego binary if it does not exist
+  become: yes
+  script: scripts/install_lego.sh
+  args:
+    creates: /opt/bitnami/letsencrypt/lego
+  when: install_lego
 
 
 # vim: ai et ts=2 sw=2 sts=2 nu
