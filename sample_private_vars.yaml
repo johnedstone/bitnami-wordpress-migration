@@ -24,7 +24,7 @@ APPs:
       redirect_path: 'https://elsewhere.net'
       redirect_permanent: no
       use_lets_encrypt: no
-      # listen_IP: 172.x.x.x # experimental
+      # listen_IP: 172.x.x.x # experimental, use internal IP
   www.domain.org:
       enable: yes 
       default_server: no
