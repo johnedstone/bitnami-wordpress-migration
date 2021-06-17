@@ -44,6 +44,22 @@ aws --profile some_provile --output yaml --region us-west-2 ec2  assign-private-
 
 #### Configure the operating system on your instance to recognize secondary private IPv4 addresses
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/MultipleIP.html#StepTwoConfigOS
+* [no: this is for another interface: debian](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-network-interface/)
+* [using this](https://www.simplyhosting.cloud/knowledgebase/operating-systems/configuring-an-additional-ip-address-on-linux-server)
+
+```
+# for secondary ip in same subnet
+shell> cat /etc/network/interfaces.d/51-ens5.cfg
+auto ens5:1
+iface ens5:1 inet static 
+   address <example: 172.31.27.160>
+   netmask <example: 255.255.240.0>
+   broadcast <example: 172.31.31.255>
+   network <first ip, see https://www.ipaddressguide.com/cidr, example: 172.31.16.0>
+   gateway <see ip route show>
+```
+
+
 
 ### Background reference for installing zabbix server on debian
 Not following exactly, as nginx is installed, etc.
