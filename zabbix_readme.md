@@ -46,6 +46,9 @@ aws --profile some_provile --output yaml --region us-west-2 ec2  assign-private-
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/MultipleIP.html#StepTwoConfigOS
 * [no: this is for another interface: debian](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-network-interface/)
 * [using this](https://www.simplyhosting.cloud/knowledgebase/operating-systems/configuring-an-additional-ip-address-on-linux-server)
+* https://community.bitnami.com/t/assigns-second-private-ip-to-ec2-instance-running-bitnami-lamp/72576
+
+check /etc/network/interfaces, and /etc/systemd/network and/etc/network/interfaces.d/*
 
 **Note: for Secondary IP in same subnet**
 ```
