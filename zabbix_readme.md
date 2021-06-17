@@ -1,8 +1,9 @@
 ### Configure Zabbix on separate IP (Elastic IP)
-* prep: rerun playbook with listen_IP for existing internal IP
-* add a 2nd interface
-* assign a 2nd Elastic IP
+* prep: rerun playbook with listen_IP value for existing internal IP to separate out the two IPs
+* add a secondary ip address to the existing interface, which will be in the same subnet as the first IP
 * enable this role in private_vars.yaml: configure_zabbix: yes
+* rerun the playbook so that the running OS will add the secondary ip to the existing interface  
+* assign a 2nd Elastic IP
 
 ### References on adding a 2nd IPO
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/MultipleIP.html
@@ -42,26 +43,15 @@ Add secondary private IP:
 aws --profile some_provile --output yaml --region us-west-2 ec2  assign-private-ip-addresses --network-interface-id eni-from-above --secondary-private-ip-address-count 1 
 ```
 
-#### Configure the operating system on your instance to recognize secondary private IPv4 addresses
+### Configure the operating system on your instance to recognize secondary private IPv4 addresses
+Mostly these references only pointed the way.  It took several attempts to work out the details
+Check the playbook for the configuration for /etc/network/interfaces.d/file-alphanumeric-dashes-underscore
+
+#### References
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/MultipleIP.html#StepTwoConfigOS
 * [no: this is for another interface: debian](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-network-interface/)
 * [using this](https://www.simplyhosting.cloud/knowledgebase/operating-systems/configuring-an-additional-ip-address-on-linux-server)
 * https://community.bitnami.com/t/assigns-second-private-ip-to-ec2-instance-running-bitnami-lamp/72576
-
-check /etc/network/interfaces, and /etc/systemd/network and/etc/network/interfaces.d/*
-
-**Note: for Secondary IP in same subnet**
-```
-shell> cat /etc/network/interfaces.d/51-ens5.cfg
-auto ens5:1
-iface ens5:1 inet static 
-   address <example: 172.31.27.160>
-   netmask <example: 255.255.240.0>
-   broadcast <example: 172.31.31.255>
-   network <first ip, see https://www.ipaddressguide.com/cidr, example: 172.31.16.0>
-   gateway <see ip route show>
-```
-
 
 
 ### Background reference for installing zabbix server on debian
