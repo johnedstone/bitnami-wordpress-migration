@@ -47,8 +47,8 @@ aws --profile some_provile --output yaml --region us-west-2 ec2  assign-private-
 * [no: this is for another interface: debian](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ubuntu-secondary-network-interface/)
 * [using this](https://www.simplyhosting.cloud/knowledgebase/operating-systems/configuring-an-additional-ip-address-on-linux-server)
 
+**Note: for Secondary IP in same subnet**
 ```
-# for secondary ip in same subnet
 shell> cat /etc/network/interfaces.d/51-ens5.cfg
 auto ens5:1
 iface ens5:1 inet static 
