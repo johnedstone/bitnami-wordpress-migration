@@ -1,0 +1,16 @@
+---
+- name: add secondary ip to running OS
+  become: yes
+  template:
+    src: templates/secondary-ip.j2
+    dest: /etc/network/interfaces.d/secondary-ip
+    owner: root
+    group: root
+    mode: '0644'
+  when: configure_2nd_ip
+  notify:
+    - Restart networking
+
+
+
+# vim: ai et ts=2 sw=2 sts=2 nu

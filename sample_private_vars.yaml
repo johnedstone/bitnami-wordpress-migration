@@ -37,4 +37,9 @@ APPs:
       lego_cron_weekday: 6
       lego_email: 'johnedstone@gmail.com'
 
+configure_2nd_ip: no
+secondary_ip_cidr: '172.xx.xx.xx/20'
+interface_name: something-like-ens5
+install_zabbix: no
+
 # vim: ai et ts=2 sw=2 sts=2 nu

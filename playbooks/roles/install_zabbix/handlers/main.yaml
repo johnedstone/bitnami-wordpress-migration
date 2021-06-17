@@ -1,0 +1,32 @@
+---
+- name: restart networking
+  become: yes
+  listen: "Restart networking"
+  service:
+    name: networking
+    state: restarted
+  when: not ansible_check_mode
+
+- name: run ip addr show
+  listen: "Restart networking"
+  command: "{{ item }}"
+  register: "networking_status"
+  changed_when: False
+  args:
+    warn: false
+  with_list:
+    - "ip addr show"
+    - "ip route show"
+  when: not ansible_check_mode
+
+- name: output ip addr show
+  listen: "Restart networking"
+  when: not ansible_check_mode
+  debug:
+    var: "{{ item }}"
+  with_list:
+    - networking_status['results'][0]['stdout_lines']
+    - networking_status['results'][1]['stdout_lines']
+  when: not ansible_check_mode
+
+# vim: ai et ts=2 sw=2 sts=2 nu
