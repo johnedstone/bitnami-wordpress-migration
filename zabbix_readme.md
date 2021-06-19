@@ -4,7 +4,7 @@
 * set `configure_2nd_ip: yes` in private_vars.yaml and rerun the playbook so that the running OS will add the secondary ip to the existing interface  
 * assign a 2nd Elastic IP on the AWS Console to the secondary ip
 
-### References on adding a 2nd IPO
+### References on adding a 2nd IP address
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/MultipleIP.html
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/MultipleIP.html#MultipleIPReqs
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI

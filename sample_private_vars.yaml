@@ -41,5 +41,6 @@ configure_2nd_ip: no
 secondary_ip_cidr: '172.xx.xx.xx/20'
 interface_name: something-like-ens5
 install_zabbix: no
+zabbix_version: 5.4
 
 # vim: ai et ts=2 sw=2 sts=2 nu

@@ -11,6 +11,31 @@
   notify:
     - Restart networking
 
+- name: install gpg key for zabbix repo
+  # https://github.com/dj-wasabi/ansible-zabbix-agent/blob/master/tasks/Debian.yml
+  become: yes
+  apt_key:
+    url: http://repo.zabbix.com/zabbix-official-repo.key
+    state: present
+  when: install_zabbix
 
+- name: install zabix repo
+  become: yes
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop:
+    - "deb-src http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ansible_distribution_release }} main"
+    - "deb http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ansible_distribution_release }} main"
+  when: install_zabbix
+
+
+- name: install zabbix-server
+  become: yes
+  apt:
+    name: zabbix-server-mysql
+    update_cache: yes
+    state: absent
+  when: install_zabbix
 
 # vim: ai et ts=2 sw=2 sts=2 nu
