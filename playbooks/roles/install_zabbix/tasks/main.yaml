@@ -29,13 +29,14 @@
     - "deb http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ansible_distribution_release }} main"
   when: install_zabbix
 
-
-- name: install zabbix-server
+- name: do not install zabbix-server
+  # No need for this, as mariadb is install in /opt by bitnami
   become: yes
   apt:
     name: zabbix-server-mysql
     update_cache: yes
     state: absent
   when: install_zabbix
+
 
 # vim: ai et ts=2 sw=2 sts=2 nu

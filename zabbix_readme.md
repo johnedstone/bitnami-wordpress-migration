@@ -1,3 +1,7 @@
+## Abandoning
+Abandoning this line of inquery.  Will keep zabbix on it's on server.
+See for instance:
+* [FreeBSD 12/Zabbix: AWS AMI by NUVYM](https://aws.amazon.com/marketplace/pp/prodview-ziih5mkm7ngfi)
 ## Configure Zabbix on separate IP (Elastic IP)
 * prep: rerun playbook with listen_IP value for existing internal IP to separate out the two IPs
 * add a secondary ip address to the existing interface, which will be in the same subnet as the first IP, using cli (below)
@@ -55,4 +59,5 @@ Check the playbook for the configuration for /etc/network/interfaces.d/secondary
 
 ## Background reference for installing zabbix server on debian
 Not following exactly, as nginx is installed, etc.
+* https://www.zabbix.com/documentation/current/manual/installation
 * https://computingforgeeks.com/install-and-configure-zabbix-server-lts-on-debian/

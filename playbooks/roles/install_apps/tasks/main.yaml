@@ -99,5 +99,15 @@
     creates: /opt/bitnami/letsencrypt/lego
   when: install_lego
 
+- name: update php.ini with tz for zabbix
+  become: yes
+  lineinfile:
+    path: /opt/bitnami/php/etc/php.ini
+    regexp: '^date.timezone ='
+    line: 'date.timezone = America/New_York'
+  notify:
+    - Restart bitnami apps
+  when: install_zabbix is defined and install_zabbix
+
 
 # vim: ai et ts=2 sw=2 sts=2 nu
