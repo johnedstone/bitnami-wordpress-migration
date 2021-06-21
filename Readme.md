@@ -26,7 +26,7 @@ Do the following on a new image.
 After this, there is no need to run these commands
 
 ```
-sudo apt install -y git python-apt python3-pymysql python3-pip
+sudo apt install -y rsync git python-apt python3-pymysql python3-pip
 sudo apt autoremove
 sudo apt autoclean
 sudo pip3 install ansible 

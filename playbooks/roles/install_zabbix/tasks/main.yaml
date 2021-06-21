@@ -7,7 +7,7 @@
     owner: root
     group: root
     mode: '0644'
-  when: configure_2nd_ip
+  when: configure_2nd_ip is defined and configure_2nd_ip
   notify:
     - Restart networking
 
@@ -17,7 +17,7 @@
   apt_key:
     url: http://repo.zabbix.com/zabbix-official-repo.key
     state: present
-  when: install_zabbix
+  when: install_zabbix is defined and install_zabbix
 
 - name: install zabix repo
   become: yes
@@ -27,7 +27,7 @@
   loop:
     - "deb-src http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ansible_distribution_release }} main"
     - "deb http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ansible_distribution_release }} main"
-  when: install_zabbix
+  when: install_zabbix is defined and install_zabbix
 
 - name: do not install zabbix-server
   # No need for this, as mariadb is install in /opt by bitnami
@@ -36,7 +36,7 @@
     name: zabbix-server-mysql
     update_cache: yes
     state: absent
-  when: install_zabbix
+  when: install_zabbix is defined and install_zabbix
 
 
 # vim: ai et ts=2 sw=2 sts=2 nu
