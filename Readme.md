@@ -1,4 +1,4 @@
-## Migrating Wordpress to the lates Bitnami 13-May-2021
+## Migrating Wordpress to the latest Bitnami 13-May-2021
 
 Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
 

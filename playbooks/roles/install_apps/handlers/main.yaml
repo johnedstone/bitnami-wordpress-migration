@@ -60,7 +60,7 @@
   loop: "{{ APPs | dict2items }}"
   when: not ansible_check_mode and item.value.enable
 
-- name: output curl apps http status
+- name: output curl apps https status
   listen: "Restart bitnami apps"
   debug:
     msg: "{{ item.stdout_lines }}"
