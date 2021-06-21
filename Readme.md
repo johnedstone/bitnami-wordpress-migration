@@ -87,8 +87,8 @@ sudo shutdown -r now
 ```
 sudo systemctl stop bitnami.service
 sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
-sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.key /opt/bitnami/nginx/conf/bitnami/certs/www.xyz.net.key
-sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.crt /opt/bitnami/nginx/conf/bitnami/certs/www.xyz.net.crt
+sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.key /opt/bitnami/nginx/conf/bitnami/certs/
+sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.crt /opt/bitnami/nginx/conf/bitnami/certs/
 sudo chown -R root:root /opt/bitnami/nginx/conf/bitnami/certs/
 sudo chmod -R 0600 /opt/bitnami/nginx/conf/bitnami/certs/
 sudo systemctl start bitnami.service
