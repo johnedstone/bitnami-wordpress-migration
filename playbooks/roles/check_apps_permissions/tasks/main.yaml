@@ -1,58 +1,119 @@
 ---
-- name: register dirs
+# The commented tasks are too intensive for large directories and fail
+- name: check app directories and files owner and group
   become: yes
-  ansible.builtin.find:
-    path: /opt/bitnami/apps
-    file_type: directory
-    recurse: yes
-  register: find_dir_result
+  command: find /opt/bitnami/apps/{{ item.key }} -exec chown bitnami:daemon {} \;
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
 
-- name: set dir permissions
+- name: check file permissions
   become: yes
-  file:
-    path: "{{ item.path }}"
-    owner: bitnami
-    group: daemon
-    mode: '0775'
-  with_items: "{{ find_dir_result.files }}"
+  command: find /opt/bitnami/apps/{{ item.key }} -type f -exec chmod 0664 {} \;
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
 
-- name: register files
+- name: check directory permissions
   become: yes
-  ansible.builtin.find:
-    path: /opt/bitnami/apps
-    file_type: file
-    exclude: wp-config.php
-    recurse: yes
-  register: find_files_result
+  command: find /opt/bitnami/apps/{{ item.key }} -type d -exec chmod 0775 {} \;
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
 
-- name: set file permissions
+- name: does any wp-config.php files exist
+  ansible.builtin.stat:
+    path: "/opt/bitnami/apps/{{ item.key }}/wp-config.php"
+  register: wp_config_php_stat
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+
+- name: Create and add wp_config.php to dictionary
+  set_fact: 
+      wp_config_php_present: "{{ wp_config_php_present | default({}) | combine ({ item.item.key : item.stat.exists }) }}"
+  loop: "{{ wp_config_php_stat.results }}"
+
+- name: Display the wp_config_php_present dictionary
+  debug: var=wp_config_php_present
+
+- name: check wp-config permissions
   become: yes
-  file:
-    path: "{{ item.path }}"
-    owner: bitnami
-    group: daemon
-    mode: '0664'
-  with_items: "{{ find_files_result.files }}"
+  command: find /opt/bitnami/apps/{{ item.key }}/wp-config.php -type f -exec chmod 0440 {} \;
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and wp_config_php_present[item.key]
 
-- name: register wp_config
-  become: yes
-  ansible.builtin.find:
-    path: /opt/bitnami/apps
-    file_type: file
-    patterns: '*wp-config.php'
-    recurse: yes
-    use_regex: no
-  register: find_wp_config
-
-- name: set wp_config.php permissions
-  become: yes
-  file:
-    path: "{{ item.path }}"
-    owner: bitnami
-    group: daemon
-    mode: '0440'
-  with_items: "{{ find_wp_config.files }}"
-
-
-# vim: ai et ts=4 sw=4 sts=4 nu
-
+#- name: register dirs
+#  become: yes
+#  ansible.builtin.find:
+#    path: /opt/bitnami/apps
+#    file_type: directory
+#    recurse: yes
+#  register: find_dir_result
+#
+#- name: set dir permissions
+#  become: yes
+#  file:
+#    path: "{{ item.path }}"
+#    owner: bitnami
+#    group: daemon
+#    mode: '0775'
+#  with_items: "{{ find_dir_result.files }}"
+#
+#- name: register files
+#  become: yes
+#  ansible.builtin.find:
+#    path: /opt/bitnami/apps
+#    file_type: file
+#    exclude: wp-config.php
+#    recurse: yes
+#  register: find_files_result
+#
+#- name: set file permissions
+#  become: yes
+#  file:
+#    path: "{{ item.path }}"
+#    owner: bitnami
+#    group: daemon
+#    mode: '0664'
+#  with_items: "{{ find_files_result.files }}"
+#
+#- name: register wp_config
+#  become: yes
+#  ansible.builtin.find:
+#    path: /opt/bitnami/apps
+#    file_type: file
+#    patterns: '*wp-config.php'
+#    recurse: yes
+#    use_regex: no
+#  register: find_wp_config
+#
+#- name: set wp_config.php permissions
+#  become: yes
+#  file:
+#    path: "{{ item.path }}"
+#    owner: bitnami
+#    group: daemon
+#    mode: '0440'
+#  with_items: "{{ find_wp_config.files }}"
+#
+#
+## vim: ai et ts=4 sw=4 sts=4 nu
