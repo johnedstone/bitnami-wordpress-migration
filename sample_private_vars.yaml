@@ -25,9 +25,6 @@ APPs:
       redirect_permanent: no
       use_lets_encrypt: no
       # listen_IP: 172.x.x.x # experimental, use internal IP
-      database_name: somename
-      database_user: someuser
-      database_password: somepassword
   www.domain.org:
       enable: yes 
       default_server: no
@@ -38,7 +35,10 @@ APPs:
       lego_cron_hour: 2
       lego_cron_min: 10
       lego_cron_weekday: 6
-      lego_email: 'johnedstone@gmail.com'
+      lego_email: 'someemail@somewhere.com'
+      database_name: somename
+      database_user: someuser
+      database_password: somepassword
 
 configure_2nd_ip: no
 #secondary_ip_cidr: '172.xx.xx.xx/20'

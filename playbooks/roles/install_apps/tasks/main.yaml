@@ -134,24 +134,28 @@
     - Restart bitnami apps
   when: install_zabbix is defined and install_zabbix
 
-- name: create databases for ea apps
+- name: create databases for ea app
   mysql_db:
     config_file: /opt/bitnami/mariadb/conf/my.cnf
     state: present
-    name: zabbixdb
+    name: "{{ item.value.database_name }}"
     collation: utf8_bin
     encoding: utf8
     login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_name is defined
 
 - name: Create user with password, all database privileges and WITH GRANT OPTION for each app
   community.mysql.mysql_user:
     login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
     state: present
-    name: userzabbix
-    password: zabbixpasswd
-    priv: 'zabbixdb.*:ALL,GRANT'
+    name: "{{ item.value.database_user }}"
+    password: "{{ item.value.database_password }}"
+    priv: "{{ item.value.database_name }}.*:ALL,GRANT"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
 
 
 # vim: ai et ts=2 sw=2 sts=2 nu
