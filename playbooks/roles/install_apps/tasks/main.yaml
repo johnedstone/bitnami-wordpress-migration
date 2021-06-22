@@ -15,7 +15,24 @@
     label: "{{ item.key }}"
   when: item.value.enable
 
-- name: touch index.html for each app to check curl status
+- name: does a index.php file exist
+  ansible.builtin.stat:
+    path: "/opt/bitnami/apps/{{ item.key }}/index.php"
+  register: index_php_stat
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+
+- name: Create and Add items to dictionary
+  set_fact: 
+      index_php_present: "{{ index_php_present | default({}) | combine ({ item.item.key : item.stat.exists }) }}"
+  loop: "{{ index_php_stat.results }}"
+
+- name: Display the Dictionary
+  debug: var=index_php_present
+
+- name: touch index.html unless index.php exists, so user can safely remove index.html
   become: yes
   changed_when: False
   file:
@@ -24,6 +41,14 @@
     mode: '0664'
     owner: bitnami
     group: daemon
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not index_php_present[item.key]
+
+- name: debug index_php_present var
+  debug:
+    msg: "{{ item.key }} - {{ index_php_present[item.key] }}"
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
