@@ -60,6 +60,8 @@ See `sample_private_vars_yaml` in this repository.
 
 ```
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
+
+# Read below first, one may want to add --skip-tags "app_perms"
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 
 # If this check runs as expected, then ...
