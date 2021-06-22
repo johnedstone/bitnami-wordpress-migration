@@ -103,10 +103,38 @@
   file:
     state: directory
     path: "/opt/bitnami/letsencrypt"
-    mode: "0755"
+    mode: "0750"
     owner: root
     group: root
   when: install_lego
+
+- name: confirm certs directory permissions
+  become: yes
+  file:
+    state: directory
+    path: /opt/bitnami/nginx/conf/bitnami/certs
+    mode: "0600"
+    owner: root
+    group: root
+
+- name: find exisitng lego crt and key file
+  become: yes
+  register: cert_files
+  find:
+    file_type: file
+    path: /opt/bitnami/letsencrypt/certificates
+    patterns: '*.crt,*.key'
+    excludes: '*issuer*'
+
+- debug: var=cert_files
+
+- name: Create symlinks to /opt/bitnami/letsencrypt/certificates
+  become: yes
+  file:
+    src: "{{ item.path }}"
+    path: "/opt/bitnami/nginx/conf/bitnami/certs/{{ item.path | basename }}"
+    state: link
+  with_items: "{{ cert_files.files }}"
 
 - name: remove tmp lego glob files
   become: yes

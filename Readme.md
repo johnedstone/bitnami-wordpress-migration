@@ -87,15 +87,9 @@ sudo shutdown -r now
 ```
 sudo systemctl stop bitnami.service
 sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
-sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.key /opt/bitnami/nginx/conf/bitnami/certs/
-sudo ln -sf /opt/bitnami/letsencrypt/certificates/www.xyz.net.crt /opt/bitnami/nginx/conf/bitnami/certs/
-sudo chown -R root:root /opt/bitnami/nginx/conf/bitnami/certs/
-sudo chmod -R 0600 /opt/bitnami/nginx/conf/bitnami/certs/
-sudo systemctl start bitnami.service
-sudo systemctl status bitnami.service
 
 # After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and rerun playbook
-# Then verify certs
+#  Besides the playbook, on can manually verify the certs as follows:
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
 ```
