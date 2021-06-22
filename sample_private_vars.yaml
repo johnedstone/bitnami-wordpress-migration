@@ -40,6 +40,11 @@ APPs:
       database_name: somename
       database_user: someuser
       database_password: somepassword
+      wp_cron_install: yes
+      wp_cron_disable: no
+      wp_cron_hour: 3
+      wp_cron_min: 10
+      wp_cron_weekday: 2
 
 configure_2nd_ip: no
 #secondary_ip_cidr: '172.xx.xx.xx/20'
