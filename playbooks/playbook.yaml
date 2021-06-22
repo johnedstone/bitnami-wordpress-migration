@@ -12,7 +12,8 @@
     - setup_db
     - install_poohbear_default
     - install_apps
-    - check_apps_permissions
+    - role: check_apps_permissions
+      tags: [app_perms]
     - check_nginx_conf_permissions
     - install_zabbix
 
