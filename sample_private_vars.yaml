@@ -1,6 +1,7 @@
 ---
 HOSTNAME: "your-hostname-not-too-critical"
 MariaDB_Root_Password: 'look in bitname_credentials file'
+local_timezone: 'America/New_York'
 
 # poohbear is a default_server to catch no Host in the request (optional)
 install_poohbear_default: yes

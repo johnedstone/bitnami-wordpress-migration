@@ -66,7 +66,7 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 ```
 
-After successful initial installation:
+After successful initial installation, __reboot__ in order to correctly set the hostname and the timezone
 ```
 sudo shutdown -r now
 ```

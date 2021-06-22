@@ -14,6 +14,14 @@
     src: hostname.j2
     dest: /etc/hostname
 
+- name: set timezone correctly
+  become: yes
+  file:
+    src: "/usr/share/zoneinfo/{{ local_timezone }}"
+    path: /etc/localtime
+    state: link
+
+
 # https://www.cyberciti.biz/faq/ansible-apt-update-all-packages-on-ubuntu-debian-linux/
 - name: Update apt repo and cache on all Debian/Ubuntu boxes
   become: yes
