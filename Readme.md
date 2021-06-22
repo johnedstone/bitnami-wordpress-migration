@@ -72,7 +72,6 @@ sudo shutdown -r now
 ```
 
 ### Wordpress files
-* [Create databases and users](https://docs.bitnami.com/aws/apps/wordpress/configuration/create-database/)
 * copy over your wordpress files
 * push data into database
 
@@ -89,7 +88,9 @@ sudo systemctl stop bitnami.service
 sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
 
 # After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and rerun playbook
-#  Besides the playbook, on can manually verify the certs as follows:
+# This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
+
+#  Besides the playbook, one can manually verify the certs as follows:
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
 ```
