@@ -1,8 +1,41 @@
 ---
-# The commented tasks are too intensive for large directories and fail
-- name: check app directories and files owner and group
+#- name: check app directories and files owner and group
+#  become: yes
+#  command: find /opt/bitnami/apps/{{ item.key }} -exec chown bitnami:daemon {} \;
+#  args:
+#    warn: false
+#  changed_when: False
+#  loop: "{{ APPs | dict2items }}"
+#  loop_control:
+#    label: "{{ item.key }}"
+#  when: item.value.enable
+#
+#- name: check file permissions
+#  become: yes
+#  command: find /opt/bitnami/apps/{{ item.key }} -type f -exec chmod 0664 {} \;
+#  args:
+#    warn: false
+#  changed_when: False
+#  loop: "{{ APPs | dict2items }}"
+#  loop_control:
+#    label: "{{ item.key }}"
+#  when: item.value.enable
+#
+#- name: check directory permissions
+#  become: yes
+#  command: find /opt/bitnami/apps/{{ item.key }} -type d -exec chmod 0775 {} \;
+#  args:
+#    warn: false
+#  changed_when: False
+#  loop: "{{ APPs | dict2items }}"
+#  loop_control:
+#    label: "{{ item.key }}"
+#  when: item.value.enable
+#
+
+- name: check wp-config permissions in ansible_check_mode
   become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -exec chown bitnami:daemon {} \;
+  command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -print
   args:
     warn: false
   changed_when: False
@@ -10,62 +43,34 @@
   loop_control:
     label: "{{ item.key }}"
   when: item.value.enable
-
-- name: check file permissions
-  become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -type f -exec chmod 0664 {} \;
-  args:
-    warn: false
-  changed_when: False
-  loop: "{{ APPs | dict2items }}"
-  loop_control:
-    label: "{{ item.key }}"
-  when: item.value.enable
-
-- name: check directory permissions
-  become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -type d -exec chmod 0775 {} \;
-  args:
-    warn: false
-  changed_when: False
-  loop: "{{ APPs | dict2items }}"
-  loop_control:
-    label: "{{ item.key }}"
-  when: item.value.enable
-
-- name: does any wp-config.php files exist
-  ansible.builtin.stat:
-    path: "/opt/bitnami/apps/{{ item.key }}/wp-config.php"
-  register: wp_config_php_stat
-  loop: "{{ APPs | dict2items }}"
-  loop_control:
-    label: "{{ item.key }}"
-  when: item.value.enable
-
-- name: Create and add wp_config.php to dictionary
-  set_fact: 
-      wp_config_php_present: "{{ wp_config_php_present | default({}) | combine ({ item.item.key : item.stat.exists }) }}"
-  loop: "{{ wp_config_php_stat.results }}"
-
-- name: Display the wp_config_php_present dictionary
-  debug: var=wp_config_php_present
-
-- name: check wp-config permissions
-  become: yes
-  command: find /opt/bitnami/apps/{{ item.key }}/wp-config.php -type f ! -perm 0440 -exec chmod 0440 {} \; -print
-  args:
-    warn: false
-  changed_when: False
-  loop: "{{ APPs | dict2items }}"
-  loop_control:
-    label: "{{ item.key }}"
-  when: item.value.enable and wp_config_php_present[item.key]
   register: wp_config_chmod
+  check_mode: no
 
-- name: display wp-config.php chmod changed
+- name: display which wp-config.php chmod would be changed
   debug:
-    msg: "{{ wp_config_chmod }}"
+    msg: "Needs chmod updating: {{ item.stdout }}"
+  with_items: "{{ wp_config_chmod.results }}"
+  when: item.stdout is defined and item.stdout and ansible_check_mode
 
+- name: update wp-config permissions if needed
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -exec chmod 0440 {} \; -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: wp_config_chmod_changed
+
+- name: display which wp-config.php chmod changed
+  debug:
+    msg: "chmod updated: {{ item.stdout }}"
+  with_items: "{{ wp_config_chmod_changed.results }}"
+  when: item.stdout is defined and item.stdout and not ansible_check_mode
+
+###### The commented tasks are too intensive for large directories and fail
 #- name: register dirs
 #  become: yes
 #  ansible.builtin.find:
@@ -121,4 +126,4 @@
 #  with_items: "{{ find_wp_config.files }}"
 #
 #
-## vim: ai et ts=4 sw=4 sts=4 nu
+# vim: ai et ts=4 sw=4 sts=4 nu
