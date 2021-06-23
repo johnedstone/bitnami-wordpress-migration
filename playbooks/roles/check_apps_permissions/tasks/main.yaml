@@ -2,7 +2,8 @@
 - name: check app dir and files owner and group in ansible_check_mode
   become: yes
   #command: 'find /opt/bitnami/apps/{{ item.key }}/ ! \(-user bitnami -a -group daemon \) -print'
-  command: find /opt/bitnami/apps/{{ item.key }} -ls
+  #command: find /opt/bitnami/apps/{{ item.key }} ! -user bitnami -o ! -group daemon -print
+  command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print
   args:
     warn: false
   changed_when: False
@@ -15,7 +16,7 @@
 
 - name: display which app dir and files need chown updating
   debug:
-    msg: "Needs chown updating: {{ item.stdout }}"
+    msg: "Needs chown updating: {{ item.stdout_lines }}"
   with_items: "{{ need_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
 #
