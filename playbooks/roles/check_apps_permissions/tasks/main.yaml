@@ -1,5 +1,5 @@
 ---
-- name: check app dir and files owner and group in ansible_check_mode
+- name: Check needed owner,group app dir and files chown updates
   become: yes
   command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print
   args:
@@ -12,12 +12,68 @@
   register: need_chown_updating
   check_mode: no
 
-- name: display which app dir and files need chown updating
+- name: Display needed owner,group app dir and files chown updates
   debug:
     msg: "Needs chown updating: {{ item.stdout_lines }}"
   with_items: "{{ need_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
-  #
+
+- name: Update owner,group app dir and files chown as needed
+  become: yes
+  #command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -exec chmod 0440 {} \; -print
+  command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: actual_chown_updating
+
+- name: Display actual owner,group app dir and files chown updates
+  debug:
+    msg: "chmod updated: {{ item.stdout }}"
+  with_items: "{{ acutal_chown_updating.results }}"
+  when: item.stdout is defined and item.stdout and not ansible_check_mode
+
+- name: Check needed wp-config.php chmod updates
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: need_wp_config_chmod_updating
+  check_mode: no
+
+- name: Display needed wp-config.php chmod updates
+  debug:
+    msg: "Needs chmod updating: {{ item.stdout }}"
+  with_items: "{{ need_wp_config_chmod_updating.results }}"
+  when: item.stdout is defined and item.stdout and ansible_check_mode
+
+- name: Update wp-config chmod as needed
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -exec chmod 0440 {} \; -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: wp_config_chmod_changed
+
+- name: Display actual wp-config.php chmod updates
+  debug:
+    msg: "chmod updated: {{ item.stdout }}"
+  with_items: "{{ wp_config_chmod_changed.results }}"
+  when: item.stdout is defined and item.stdout and not ansible_check_mode
+
 #
 #- name: check file permissions
 #  become: yes
@@ -41,44 +97,6 @@
 #    label: "{{ item.key }}"
 #  when: item.value.enable
 #
-
-- name: check wp-config permissions in ansible_check_mode
-  become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -print
-  args:
-    warn: false
-  changed_when: False
-  loop: "{{ APPs | dict2items }}"
-  loop_control:
-    label: "{{ item.key }}"
-  when: item.value.enable
-  register: need_wp_config_chmod_updating
-  check_mode: no
-
-- name: display which wp-config.php need chmod updating
-  debug:
-    msg: "Needs chmod updating: {{ item.stdout }}"
-  with_items: "{{ need_wp_config_chmod_updating.results }}"
-  when: item.stdout is defined and item.stdout and ansible_check_mode
-
-- name: update wp-config permissions if needed
-  become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -exec chmod 0440 {} \; -print
-  args:
-    warn: false
-  changed_when: False
-  loop: "{{ APPs | dict2items }}"
-  loop_control:
-    label: "{{ item.key }}"
-  when: item.value.enable
-  register: wp_config_chmod_changed
-
-- name: display which wp-config.php chmod changed
-  debug:
-    msg: "chmod updated: {{ item.stdout }}"
-  with_items: "{{ wp_config_chmod_changed.results }}"
-  when: item.stdout is defined and item.stdout and not ansible_check_mode
-
 ###### The commented tasks are too intensive for large directories and fail
 #- name: register dirs
 #  become: yes
