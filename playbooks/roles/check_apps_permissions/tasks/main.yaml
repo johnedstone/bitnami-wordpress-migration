@@ -1,14 +1,23 @@
 ---
-#- name: check app directories and files owner and group
-#  become: yes
-#  command: find /opt/bitnami/apps/{{ item.key }} -exec chown bitnami:daemon {} \;
-#  args:
-#    warn: false
-#  changed_when: False
-#  loop: "{{ APPs | dict2items }}"
-#  loop_control:
-#    label: "{{ item.key }}"
-#  when: item.value.enable
+- name: check app dir and files owner and group in ansible_check_mode
+  become: yes
+  #command: 'find /opt/bitnami/apps/{{ item.key }}/ ! \(-user bitnami -a -group daemon \) -print'
+  command: find /opt/bitnami/apps/{{ item.key }} -ls
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: need_chown_updating
+  check_mode: no
+
+- name: display which app dir and files need chown updating
+  debug:
+    msg: "Needs chown updating: {{ item.stdout }}"
+  with_items: "{{ need_chown_updating.results }}"
+  when: item.stdout is defined and item.stdout and ansible_check_mode
 #
 #- name: check file permissions
 #  become: yes
@@ -43,13 +52,13 @@
   loop_control:
     label: "{{ item.key }}"
   when: item.value.enable
-  register: wp_config_chmod
+  register: need_wp_config_chmod_updating
   check_mode: no
 
-- name: display which wp-config.php chmod would be changed
+- name: display which wp-config.php need chmod updating
   debug:
     msg: "Needs chmod updating: {{ item.stdout }}"
-  with_items: "{{ wp_config_chmod.results }}"
+  with_items: "{{ need_wp_config_chmod_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
 
 - name: update wp-config permissions if needed
