@@ -17,6 +17,7 @@
     msg: "Needs chown updating: {{ item.stdout_lines }}"
   with_items: "{{ need_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
+  #
 #
 #- name: check file permissions
 #  become: yes
