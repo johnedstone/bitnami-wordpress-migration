@@ -1,5 +1,6 @@
 ---
-- debug:
+- name: display private_vars.yaml
+  debug:
     msg: "{{ APPs }}"
 
 - name: create app directories
@@ -137,7 +138,9 @@
     patterns: '*.crt,*.key'
     excludes: '*issuer*'
 
-- debug: var=cert_files
+- name: display cert files
+  debug:
+    var: cert_files
 
 - name: Create symlinks to /opt/bitnami/letsencrypt/certificates
   become: yes
