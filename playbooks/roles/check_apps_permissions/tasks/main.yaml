@@ -1,8 +1,6 @@
 ---
 - name: check app dir and files owner and group in ansible_check_mode
   become: yes
-  #command: 'find /opt/bitnami/apps/{{ item.key }}/ ! \(-user bitnami -a -group daemon \) -print'
-  #command: find /opt/bitnami/apps/{{ item.key }} ! -user bitnami -o ! -group daemon -print
   command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print
   args:
     warn: false
