@@ -62,12 +62,20 @@ See `sample_private_vars_yaml` in this repository.
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 
+# Or, to look more closely at dir and file permissions ...
+/usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
+
+# Or, to look at all but dir and file permissions ....
+/usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+
 # If this check runs as expected, then ...
 /usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 
-# Note: checking apps dir and files owners can be opted in or out with the following commands
-/usr/local/bin/ansible-playbook --check --skip-tags "app_perms" --flush-cache -i inventory.ini --diff playbook.yaml 
-/usr/local/bin/ansible-playbook --check --tags "app_perms" --flush-cache -i inventory.ini --diff playbook.yaml 
+# Or, just do the dir and file permissions:
+/usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
+
+# Or, do all but the dir and file permissions:
+/usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
 
 After successful initial installation, __reboot__ in order to correctly set the hostname and the timezone
