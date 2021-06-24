@@ -1,7 +1,18 @@
 ---
+#- name: register app dirs
+#  become: yes
+#  ansible.builtin.find:
+#    path: /opt/bitnami/apps
+#    file_type: directory
+#  register: app_dirs_that_exist
+#
+#- debug:
+#    msg: "{{ item.path }}"
+#  with_items: "{{ do_app_dirs_exist.files.path }}"
+
 - name: Check needed owner,group app dir and files chown updates
   become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print
+  command: '[ -d /opt/bitnami/apps/{{ item.key }} ] && find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print'
   args:
     warn: false
   changed_when: False

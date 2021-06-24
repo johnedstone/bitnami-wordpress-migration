@@ -14,7 +14,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and not item.value.redirect_elsewhere
 
 - name: does a index.php file exist
   ansible.builtin.stat:
@@ -23,12 +23,13 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and not item.value.redirect_elsewhere
 
 - name: Create and Add items to dictionary
   set_fact: 
       index_php_present: "{{ index_php_present | default({}) | combine ({ item.item.key : item.stat.exists }) }}"
   loop: "{{ index_php_stat.results }}"
+  when: item.stat is defined
 
 - name: Display the Dictionary
   debug: var=index_php_present
@@ -45,7 +46,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and not index_php_present[item.key]
+  when: item.value.enable and not item.value.redirect_elsewhere and not index_php_present[item.key]
 
 - name: debug index_php_present var
   debug:
@@ -53,7 +54,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and index_php_present[item.key] is defined
 
 - name: create simple nginx config
   become: yes
