@@ -1,33 +1,51 @@
 ---
-#- name: register app dirs
-#  become: yes
-#  ansible.builtin.find:
-#    path: /opt/bitnami/apps
-#    file_type: directory
-#  register: app_dirs_that_exist
-#
-#- debug:
-#    msg: "{{ item.path }}"
-#  with_items: "{{ do_app_dirs_exist.files.path }}"
+- name: register app dirs
+  become: yes
+  ansible.builtin.find:
+    path: /opt/bitnami/apps
+    file_type: directory
+  register: app_dirs_that_exist
+  tags:
+    - test_tag
+
+- debug:
+    msg: "{{ item|basename }}"
+  loop: "{{ app_dirs_that_exist.files | map(attribute='path') }}"
+  register: existing_app_dir_basename
+  tags:
+    - test_tag
+
+- debug:
+    msg: "{{ existing_app_dir_basename }}"
+  tags: test_tag
 
 - name: Check needed owner,group app dir and files chown updates
   become: yes
-  command: '[ -d /opt/bitnami/apps/{{ item.key }} ] && find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print'
+  command: 'find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print'
   args:
     warn: false
   changed_when: False
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: need_chown_updating
   check_mode: no
+  tags:
+    - test_tag
+
+- debug:
+    msg: 'boo'
+  tags:
+    test_tag
 
 - name: Display needed owner,group app dir and files chown updates
   debug:
     msg: "Needs chown updating: {{ item.stdout_lines }}"
   with_items: "{{ need_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
+  tags:
+    - test_tag
 
 - name: Update owner,group app dir and files chown as needed
   become: yes
@@ -237,4 +255,4 @@
 #  with_items: "{{ find_wp_config.files }}"
 #
 #
-# vim: ai et ts=4 sw=4 sts=4 nu
+# vim: ai et ts=2 sw=2 sts=2 nu
