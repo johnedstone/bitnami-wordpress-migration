@@ -49,7 +49,7 @@
 - name: install apt packages
   become: yes
   apt:
-    name: ["rsync", "nmap"]
+    name: ["rsync", "nmap", "htop"]
     state: present
     update-cache: yes
  
