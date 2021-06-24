@@ -5,19 +5,12 @@
     path: /opt/bitnami/apps
     file_type: directory
   register: app_dirs_that_exist
-  tags:
-    - test_tag
 
-- debug:
+- name: creating variable with existing app dirs
+  debug:
     msg: "{{ item|basename }}"
   loop: "{{ app_dirs_that_exist.files | map(attribute='path') }}"
   register: existing_app_dir_basename
-  tags:
-    - test_tag
-
-- debug:
-    msg: "{{ existing_app_dir_basename }}"
-  tags: test_tag
 
 - name: Check needed owner,group app dir and files chown updates
   become: yes
@@ -31,21 +24,12 @@
   when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: need_chown_updating
   check_mode: no
-  tags:
-    - test_tag
-
-- debug:
-    msg: 'boo'
-  tags:
-    test_tag
 
 - name: Display needed owner,group app dir and files chown updates
   debug:
     msg: "Needs chown updating: {{ item.stdout_lines }}"
   with_items: "{{ need_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
-  tags:
-    - test_tag
 
 - name: Update owner,group app dir and files chown as needed
   become: yes
@@ -56,7 +40,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: actual_chown_updating
 
 - name: Display actual owner,group app dir and files chown updates
@@ -74,7 +58,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: dir_need_chmod_updating
   check_mode: no
 
@@ -93,7 +77,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: actual_dir_chmod_updating
 
 - name: Display actual app dir chmod updates
@@ -111,7 +95,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: file_need_chmod_updating
   check_mode: no
 
@@ -130,7 +114,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: actual_file_chmod_updating
 
 - name: Display actual file dir chmod updates
@@ -148,7 +132,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: need_wp_config_chmod_updating
   check_mode: no
 
@@ -167,7 +151,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
   register: wp_config_chmod_changed
 
 - name: Display actual wp-config.php chmod updates
