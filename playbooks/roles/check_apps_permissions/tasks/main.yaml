@@ -20,8 +20,7 @@
 
 - name: Update owner,group app dir and files chown as needed
   become: yes
-  #command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -exec chmod 0440 {} \; -print
-  command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print
+  command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -exec chown bitnami:daemon {} \; -print
   args:
     warn: false
   changed_when: False
@@ -33,8 +32,8 @@
 
 - name: Display actual owner,group app dir and files chown updates
   debug:
-    msg: "chmod updated: {{ item.stdout }}"
-  with_items: "{{ acutal_chown_updating.results }}"
+    msg: "chown updated: {{ item.stdout }}"
+  with_items: "{{ actual_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and not ansible_check_mode
 
 - name: Check needed wp-config.php chmod updates
