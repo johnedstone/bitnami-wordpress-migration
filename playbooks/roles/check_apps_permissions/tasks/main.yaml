@@ -36,6 +36,80 @@
   with_items: "{{ actual_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and not ansible_check_mode
 
+- name: Check needed app dir chmod updates
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -type d ! -perm 0775 -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: dir_need_chmod_updating
+  check_mode: no
+
+- name: Display needed app dir chmod updates
+  debug:
+    msg: "Dir needing chmod updating: {{ item.stdout_lines }}"
+  with_items: "{{ dir_need_chmod_updating.results }}"
+  when: item.stdout is defined and item.stdout and ansible_check_mode
+
+- name: Update app dir chmod as needed
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -type d ! -perm 0775 -exec chmod 0775 {} \; -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: actual_dir_chmod_updating
+
+- name: Display actual app dir chmod updates
+  debug:
+    msg: "Dir chmod updated: {{ item.stdout }}"
+  with_items: "{{ actual_dir_chmod_updating.results }}"
+  when: item.stdout is defined and item.stdout and not ansible_check_mode
+
+- name: Check needed app file chmod updates
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -type f ! -name wp-config.php ! -perm 0664 -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: file_need_chmod_updating
+  check_mode: no
+
+- name: Display needed app file chmod updates
+  debug:
+    msg: "File needing chmod updating: {{ item.stdout_lines }}"
+  with_items: "{{ file_need_chmod_updating.results }}"
+  when: item.stdout is defined and item.stdout and ansible_check_mode
+
+- name: Update app file chmod as needed
+  become: yes
+  command: find /opt/bitnami/apps/{{ item.key }} -type f ! -name wp-config.php ! -perm 0664 -exec chmod 0664 {} \; -print
+  args:
+    warn: false
+  changed_when: False
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable
+  register: actual_file_chmod_updating
+
+- name: Display actual file dir chmod updates
+  debug:
+    msg: "File chmod updated: {{ item.stdout }}"
+  with_items: "{{ actual_file_chmod_updating.results }}"
+  when: item.stdout is defined and item.stdout and not ansible_check_mode
+
 - name: Check needed wp-config.php chmod updates
   become: yes
   command: find /opt/bitnami/apps/{{ item.key }} -maxdepth 1 -type f -name wp-config.php ! -perm 0440 -print

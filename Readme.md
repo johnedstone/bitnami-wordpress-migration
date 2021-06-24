@@ -65,14 +65,22 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 # Or, to look more closely at dir and file permissions ...
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 
+# Or, for more verbosity
+/usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+
 # Or, to look at all but dir and file permissions ....
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
-# If this check runs as expected, then ...
+__If the above checks runs as expected, then ...__
+
+```
 /usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 
 # Or, just do the dir and file permissions:
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
+
+# Or, for more verbosity
+/usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
 # Or, do all but the dir and file permissions:
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
