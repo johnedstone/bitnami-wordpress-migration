@@ -96,6 +96,14 @@ sudo shutdown -r now
 ### Wordpress files
 * copy over your wordpress files
 * push data into database
+* Feel free to remove the 0 byte index.html file that ansible installed to check the first curl
+* Rerun the ansible playbook to check permissions
+
+```
+cd /home/bitnami/bitnami-wordpress-migration/playbooks
+/usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
+/usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
+```
 
 ### Lets Encyrpt
 * Let's Encrypt here is configured using --tls which means the DNS entry must be correct
