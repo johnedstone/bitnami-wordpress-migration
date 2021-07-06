@@ -1,7 +1,7 @@
 ---
-- name: Check hostame variable
-  debug:
-    msg: "hostname: {{ HOSTNAME }}"
+#- name: Check hostame variable
+#  debug:
+#    msg: "hostname: {{ HOSTNAME }}"
 
 - name: setup vimrc
   copy:
