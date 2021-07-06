@@ -43,6 +43,7 @@ APPs:
       wp_cron_install: yes
       wp_cron_disable: no
       wp_cron_min: '10,40'
+      custom_nginx_conf: '/path/to/custom/conf/suchas/redirects' # optional
 
 configure_2nd_ip: no
 #secondary_ip_cidr: '172.xx.xx.xx/20'

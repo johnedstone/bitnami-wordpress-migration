@@ -14,8 +14,10 @@ server {
     location / {
         return {% if item.value.redirect_permanent is defined and item.value.redirect_permanent is sameas true %}301{% else %}302{% endif %} {{ item.value.redirect_path }}$request_uri;
     }
+    {% if item.value.custom_nginx_conf is defined and item.value.custom_nginx_conf|length %}include "{{ item.value.custom_nginx_conf }}";{% endif %}
 
     include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+
 }
 
 # vim: ai et ts=4 sw=4 sts=4 nu
