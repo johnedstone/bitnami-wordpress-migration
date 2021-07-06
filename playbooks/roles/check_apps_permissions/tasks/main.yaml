@@ -30,6 +30,9 @@
     msg: "Needs chown updating: {{ item.stdout_lines }}"
   with_items: "{{ need_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Update owner,group app dir and files chown as needed
   become: yes
@@ -48,6 +51,9 @@
     msg: "chown updated: {{ item.stdout }}"
   with_items: "{{ actual_chown_updating.results }}"
   when: item.stdout is defined and item.stdout and not ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Check needed app dir chmod updates
   become: yes
@@ -67,6 +73,9 @@
     msg: "Dir needing chmod updating: {{ item.stdout_lines }}"
   with_items: "{{ dir_need_chmod_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Update app dir chmod as needed
   become: yes
@@ -85,6 +94,9 @@
     msg: "Dir chmod updated: {{ item.stdout }}"
   with_items: "{{ actual_dir_chmod_updating.results }}"
   when: item.stdout is defined and item.stdout and not ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Check needed app file chmod updates
   become: yes
@@ -104,6 +116,9 @@
     msg: "File needing chmod updating: {{ item.stdout_lines }}"
   with_items: "{{ file_need_chmod_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Update app file chmod as needed
   become: yes
@@ -122,6 +137,9 @@
     msg: "File chmod updated: {{ item.stdout }}"
   with_items: "{{ actual_file_chmod_updating.results }}"
   when: item.stdout is defined and item.stdout and not ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Check needed wp-config.php chmod updates
   become: yes
@@ -141,6 +159,9 @@
     msg: "Needs chmod updating: {{ item.stdout }}"
   with_items: "{{ need_wp_config_chmod_updating.results }}"
   when: item.stdout is defined and item.stdout and ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 - name: Update wp-config chmod as needed
   become: yes
@@ -159,6 +180,9 @@
     msg: "chmod updated: {{ item.stdout }}"
   with_items: "{{ wp_config_chmod_changed.results }}"
   when: item.stdout is defined and item.stdout and not ansible_check_mode
+  changed_when:
+    - item.stdout is defined
+    - item.stdout
 
 #
 #- name: check file permissions
