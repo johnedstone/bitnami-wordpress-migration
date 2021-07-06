@@ -108,9 +108,14 @@ sudo shutdown -r now
 ```
 sudo systemctl stop bitnami.service
 sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
+sudo systemctl start bitnami.service
 
-# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and rerun playbook
+# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' rerun playbook
 # This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
+
+cd /home/bitnami/bitnami-wordpress-migration/playbooks
+/usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
+/usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 
 #  Besides the playbook, one can manually verify the certs as follows:
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
