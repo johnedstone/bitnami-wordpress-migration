@@ -17,7 +17,7 @@ server {
 
     {% if item.value.custom_nginx_conf is defined and item.value.custom_nginx_conf|length %}include "{{ item.value.custom_nginx_conf }}";{% endif %}
 
-    include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+    include "/opt/bitnami/nginx/conf/bitnami/*.conf";
 
 }
 
