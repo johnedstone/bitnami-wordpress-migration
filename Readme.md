@@ -146,6 +146,10 @@ sudo crontab -l
 ls -ltra /opt/bitnami/nginx/conf/server_blocks/
 more /opt/bitnami/nginx/conf/server_blocks/*
 
+# Check nginx config to see if it's syntax is correct
+sudo /opt/bitnami/nginx/sbin/nginx -t
+sudo /opt/bitnami/nginx/sbin/nginx -T
+
 ```
 
 ### Things not to do

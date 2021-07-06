@@ -1,11 +1,17 @@
 ---
-- name: register dirs
+- name: register nginx conf dirs
   become: yes
   ansible.builtin.find:
     path: /opt/bitnami/nginx/conf/server_blocks
     file_type: directory
     recurse: yes
   register: find_dir_result
+
+- name: creating variable with existing nginx dirs
+  debug:
+    msg: "{{ item|basename }}"
+  loop: "{{ find_dir_result.files | map(attribute='path') }}"
+  register: existing_nginx_dir_basename
 
 - name: set dir permissions
   become: yes
