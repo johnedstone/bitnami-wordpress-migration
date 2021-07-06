@@ -98,6 +98,7 @@ sudo shutdown -r now
 * push data into database
 * Feel free to remove the 0 byte index.html file that ansible installed to check the first curl
 * Rerun the ansible playbook to check permissions
+* Note: for this ansible playbook, it assumes that each database has a unique user and password
 
 ```
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
@@ -125,13 +126,23 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 /usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 
-#  Besides the playbook, one can manually verify the certs as follows:
-openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
-openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
 ```
 
 ### Switching IPs
 * If one is using Elastic IPs that would be preferred over changing DNS entires
+
+### Sanity Checks
+
+```
+#  Besides the playbook, one can manually verify the certs as follows:
+openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
+openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
+
+# Check cronjobs
+crontab -l
+sudo crontab -l
+```
+
 ### Things not to do
 
 **These approaches failed**
