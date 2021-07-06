@@ -141,6 +141,11 @@ openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/d
 # Check cronjobs
 crontab -l
 sudo crontab -l
+
+# View current nginx conf files (use spacebar to advance for 'more'
+ls -ltra /opt/bitnami/nginx/conf/server_blocks/
+more /opt/bitnami/nginx/conf/server_blocks/*
+
 ```
 
 ### Things not to do
