@@ -150,6 +150,9 @@ more /opt/bitnami/nginx/conf/server_blocks/*
 sudo /opt/bitnami/nginx/sbin/nginx -t
 sudo /opt/bitnami/nginx/sbin/nginx -T
 
+# Wordpress directories, i.e. not redirects
+ls -ltra /opt/bitnami/apps/
+
 ```
 
 ### Things not to do
