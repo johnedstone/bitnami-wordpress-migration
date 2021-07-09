@@ -161,7 +161,8 @@ sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt list
 #  add a meaningless line to conf file which will be removed
 #  and rerun ansible playbook to "fix" this which will restart bitnami.service
 #  which will recheck the urls by the handlers
-sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/www.johnedstone.net.conf
+#  Note: replace the phrase below <your-server.conf> file with an existing file
+sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/<your-server.conf>
 
 
 ```
