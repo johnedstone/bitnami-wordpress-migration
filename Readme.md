@@ -106,6 +106,14 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 ```
 
+### Changing the upload limits
+
+* change php.ini: see the two variables, `post_max_size` and `upload_max_filesize`.  The current default 80M in the bitnami image
+* also change the setting in the relevant app, `client_max_body_size`
+* remember, too, if necessary to change the Wordpress formidable setting if needed.
+* If needed for phpadmin, use the variable `phpadmin_client_max_body_size`
+
+
 ### Lets Encyrpt
 * Let's Encrypt here is configured using --tls which means the DNS entry must be correct
 * Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
