@@ -14,8 +14,7 @@
 
 - name: Check needed owner,group app dir and files chown updates
   become: yes
-  command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0664 -prune -o ! \( -user bitnami -group daemon \) -print'
-  #command: 'find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print'
+  command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0664 -prune -o -type f -user daemon -group daemon -perm 0644 -prune -o ! \( -user bitnami -group daemon \) -print'
   args:
     warn: false
   changed_when: False
@@ -37,8 +36,7 @@
 
 - name: Update owner,group app dir and files chown as needed
   become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0664 -prune -o ! \( -user bitnami -group daemon \) -exec chown bitnami:daemon {} \; -print
-  #command: find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -exec chown bitnami:daemon {} \; -print
+  command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0664 -prune -o -type f -user daemon -group daemon -perm 0644 -prune -o ! \( -user bitnami -group daemon \) -exec chown bitnami:daemon {} \; -print'
   args:
     warn: false
   changed_when: False
