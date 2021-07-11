@@ -22,9 +22,6 @@ install_poohbear_default: yes
 # Also for the relevant app nginx conf file, for the domain in question,
 # use client_max_body_size in the relevant app block (see below)
 
-# To update the upload limit for phpmyadmin, uncomment and set this variable
-#phpmyadmin_client_max_body_size: 80M  
-
 install_lego: yes
 
 APPs:
