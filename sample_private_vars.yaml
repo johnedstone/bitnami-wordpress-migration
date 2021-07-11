@@ -15,6 +15,11 @@ install_poohbear_default: yes
 # APPs: if redirect_elsewhere: no, then port 80 redirects to 443
 # Note assumption: 80 and 443 will be the same domain
 
+# Changing Upload Limit
+# The following variables are optional.  Uncomment and change the values if needed
+# post_max_size: '80M'
+# upload_max_filesize: '80M'
+
 install_lego: yes
 
 APPs:

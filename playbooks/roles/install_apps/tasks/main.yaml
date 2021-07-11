@@ -200,5 +200,31 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
 
+- name: Update post_max_size php.ini
+  become: yes
+  notify:
+    - Restart bitnami apps
+  lineinfile:
+    path: /opt/bitnami/php/etc/php.ini
+    regexp: '^post_max_size ='
+    line: "post_max_size = {{ post_max_size | default('80M') }}"
+    owner: bitnami
+    group: root
+    mode: '0664'
+    backup: yes
+
+- name: Update upload_max_filesize php.ini
+  become: yes
+  notify:
+    - Restart bitnami apps
+  lineinfile:
+    path: /opt/bitnami/php/etc/php.ini
+    regexp: '^upload_max_filesize ='
+    line: "upload_max_filesize = {{ upload_max_filesize | default('80M') }}"
+    owner: bitnami
+    group: root
+    mode: '0664'
+    backup: yes
+
 
 # vim: ai et ts=2 sw=2 sts=2 nu
