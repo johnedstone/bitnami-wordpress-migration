@@ -25,6 +25,12 @@ APPs:
       redirect_path: 'https://elsewhere.net'
       redirect_permanent: no
       use_lets_encrypt: no
+      lego_cron_install: yes
+      lego_cron_disable: no
+      lego_cron_hour: 2
+      lego_cron_min: 10
+      lego_cron_weekday: 6
+      lego_email: 'someemail@somewhere.com'
       # listen_IP: 172.x.x.x # experimental, use internal IP
   www.domain.org:
       enable: yes 

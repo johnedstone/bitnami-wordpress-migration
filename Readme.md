@@ -112,6 +112,7 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 * This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
 * To update lego, simply remove `/opt/bitnami/letsencrypt/lego` and rerun the playbook.
 * `private_vars.yaml` allows one to use the server certs or Let's Encrypt certs
+* This may be a good time to set `wp_cron_disable: no` in private_vars.yaml
 * The Let's Encrypt certs must be manually installed the first time for each domain as described below:
 
 ```
@@ -164,5 +165,7 @@ sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt list
 #  Note: replace the phrase below <your-server.conf> file with an existing file
 sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/<your-server.conf>
 
+# Manually removing an unneeded nginx config file
+sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>
 
 ```
