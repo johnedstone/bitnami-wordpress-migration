@@ -100,7 +100,7 @@
 
 - name: Check needed app file chmod updates
   become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -type f ! -name wp-config.php ! -perm 0664 -print
+  command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0644 -prune -o -type f ! -name wp-config.php ! -perm 0664 -print'
   args:
     warn: false
   changed_when: False
@@ -122,7 +122,7 @@
 
 - name: Update app file chmod as needed
   become: yes
-  command: find /opt/bitnami/apps/{{ item.key }} -type f ! -name wp-config.php ! -perm 0664 -exec chmod 0664 {} \; -print
+  command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0644 -prune -o -type f ! -name wp-config.php ! -perm 0664 -exec chmod 0664 {} \; -print'
   args:
     warn: false
   changed_when: False
