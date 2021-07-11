@@ -110,8 +110,8 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 
 * To update php.ini use the two variables in private_vars.yaml: `post_max_size` and `upload_max_filesize`.  The current bitnami default 80M for each.
 * To update the relevant app's nginx conf file use the private_vars.yaml variable: `client_max_body_size`.  The current nginx default is 1M
-* Remember too, if necessary, to change the Wordpress formidable setting if needed.
-* To update this limit for phpmyadmin use the private_vars.yaml variable `phpadmin_client_max_body_size`
+* Remember too, if necessary, to change the Wordpress Formidable setting if needed.
+* To update the limit for phpmyadmin use the private_vars.yaml variable `phpmyadmin_client_max_body_size`
 
 
 ### Lets Encyrpt

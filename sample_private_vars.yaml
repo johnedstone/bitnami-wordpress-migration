@@ -16,12 +16,14 @@ install_poohbear_default: yes
 # Note assumption: 80 and 443 will be the same domain
 
 # Changing php.ini upload Limit (80M is the default)
-#post_max_size: '80M'
-#upload_max_filesize: '80M'
+#post_max_size: 80M
+#upload_max_filesize: 80M
 
-# Also for the relevant nginx conf file, for the domain in question,
-# change the default 1M to match the above upload
-# see below client_max_body_size, which would change it for www.domain.org
+# Also for the relevant app nginx conf file, for the domain in question,
+# use client_max_body_size in the relevant app block (see below)
+
+# To update the upload limit for phpmyadmin, uncomment and set this variable
+#phpmyadmin_client_max_body_size: 80M  
 
 install_lego: yes
 
@@ -58,7 +60,7 @@ APPs:
       wp_cron_disable: no
       wp_cron_min: '10,40'
       custom_nginx_conf: '/path/to/custom/conf/suchas/redirects' # optional
-      client_max_body_size: '80M' # optional, nginx default is 1M
+      #client_max_body_size: '80M' # optional, nginx default is 1M
 
 configure_2nd_ip: no
 #secondary_ip_cidr: '172.xx.xx.xx/20'
