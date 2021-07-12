@@ -108,7 +108,7 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 
 ### Running the ansible-playbook after the initial copy of the Wordpress files from their previous source
 Because Wordpress is changing permissions and owner while it is running,
-it is not necessary to continue to check the permissions after the initial copy
+it is not necessary to continue to check and update the permissions after the initial copy
 of the Wordpress files from their source.  Wordpress will write files with the
 the correct owner, group and permissions after the initial copy.
 Therefore, one can run ansible as described below
