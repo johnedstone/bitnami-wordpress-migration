@@ -106,6 +106,17 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 ```
 
+### Running the ansible-playbook after the initial copy of the Wordpress files from their previous source
+Because Wordpress is changing permissions and owner while it is running,
+it is not necessary to continue to check the permissions after the initial copy
+of the Wordpress files from their source.  Therefore, one can run ansible in as described
+with these two commands after the initial copy and ansible-playbook run
+
+```
+/usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+/usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+```
+
 ### Changing the upload limits
 
 * To update php.ini use the two variables in private_vars.yaml: `post_max_size` and `upload_max_filesize`.  The current bitnami default 80M for each.
