@@ -113,6 +113,15 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 * Remember too, if necessary, to change the Wordpress Formidable setting if needed.
 * Not implemented, yet: To update the limit for phpmyadmin use the private_vars.yaml variable `phpmyadmin_client_max_body_size`
 
+### Adding a custom nginx conf file for an application
+
+```
+mkdir /opt/bitnami/apps/<your_app>/custom_nginx_conf
+
+# Add your custom configuration with the editor of your choice
+vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
+
+```
 
 ### Lets Encyrpt
 * Let's Encrypt here is configured using --tls which means the DNS entry must be correct

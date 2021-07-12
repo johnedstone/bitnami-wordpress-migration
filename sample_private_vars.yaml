@@ -56,7 +56,7 @@ APPs:
       wp_cron_install: yes
       wp_cron_disable: no
       wp_cron_min: '10,40'
-      custom_nginx_conf: '/path/to/custom/conf/suchas/redirects' # optional
+      custom_nginx_conf: '/opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf' # optional
       #client_max_body_size: '80M' # optional, nginx default is 1M
 
 configure_2nd_ip: no
