@@ -113,12 +113,22 @@ of the Wordpress files from their source.  Wordpress will write files with the
 the correct owner, group and permissions after the initial copy.
 Therefore, one can run ansible as described below
 with these two commands after the initial copy and ansible-playbook run
-
 ```
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
 
+### Running the ansible playbook on just one domain, one app
+It is possible to run the ansible playbook on only one domain.  This will decrease
+the verbosity of the output.  Simply set `enable: no` in private_vars.yaml for all of the apps except
+the app that you you'd like to check at the moment.  This does not effect the 
+configuration for the apps where `enable: no` is set - the configurations for these apps are simply ignored.
+Again, since this will probably be done long after the initial copy of the source Wordpress files
+you can use the tag `--skip-tags app_perms` as shown below
+```
+/usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+/usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+```
 ### Changing the upload limits
 
 * To update php.ini use the two variables in private_vars.yaml: `post_max_size` and `upload_max_filesize`.  The current bitnami default 80M for each.
