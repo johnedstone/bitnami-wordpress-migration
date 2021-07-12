@@ -144,6 +144,9 @@ mkdir /opt/bitnami/apps/<your_app>/custom_nginx_conf
 # Add your custom configuration with the editor of your choice
 vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 
+# And, update your private_vars.yaml variable custom_nginx_conf
+# with the path to your file
+
 ```
 
 ### Lets Encyrpt
