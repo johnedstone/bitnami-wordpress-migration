@@ -4,6 +4,8 @@ MariaDB_Root_Password: 'look in bitname_credentials file'
 local_timezone: 'America/New_York'
 
 # poohbear is a default_server to catch no Host in the request (optional)
+# if you set this to yes, then set default_server: no elsewhere or
+# nginx will fail to start
 install_poohbear_default: yes
 
 # This 'listen' variable is experimental - for 2 IPs on an ec2

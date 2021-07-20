@@ -93,6 +93,18 @@ After successful initial installation, __reboot__ in order to correctly set the 
 sudo shutdown -r now
 ```
 
+### Rebooting the ec2 instance
+If the ansible playbook says something
+```
+failed ... rebooting the server would shutdown the server
+```
+then, this means that the ansible playbook has updated the server and you know
+need to run the command:
+```
+sudo shutdown -r now
+```
+This will reboot the server and you can continue to run the ansible playbook
+
 ### Wordpress files
 * copy over your wordpress files
 * push data into database
