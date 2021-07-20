@@ -94,7 +94,7 @@ sudo shutdown -r now
 ```
 
 ### Rebooting the ec2 instance
-If the ansible playbook says something
+If the ansible playbook says something like ...
 ```
 failed ... rebooting the server would shutdown the server
 ```
