@@ -207,7 +207,7 @@
     minute: "{{ item.value.db_backup_cron_min }}"
     weekday: "{{ item.value.db_backup_cron_weekday }}"
     day: "{{ item.value.db_backup_cron_day }}"
-    job: "/opt/bitnami/mariadb/bin/mysqldump -u {{ item.value.database_user }}  --password={{ item.value.database_password }} {{ item.value.database_name }}  > /opt/bitnami/apps/db_backups/{{ item.value.database_name }}.backup.$(date +\\%d).sql 2>/dev/null"
+    job: "/opt/bitnami/mariadb/bin/mysqldump -u '{{ item.value.database_user | regex_replace('%', '\\%') }}'  --password='{{ item.value.database_password | regex_replace('%', '\\%') }}' '{{ item.value.database_name | regex_replace('%', '\\%') }}'  > /opt/bitnami/apps/db_backups/{{ item.value.database_name | regex_replace('%', '_') }}.backup.$(date +\\%d).sql 2>/dev/null"
     state: present
     disabled: "{{ item.value.db_backup_cron_disable }}"
   loop: "{{ APPs | dict2items }}"
