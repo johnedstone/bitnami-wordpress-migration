@@ -94,7 +94,7 @@
     hour: "{{ item.value.lego_cron_hour }}"
     minute: "{{ item.value.lego_cron_min }}"
     weekday: "{{ item.value.lego_cron_weekday }}"
-    job: "sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt/ --tls --domains {{ item.key }}  --email '{{ item.value.lego_email }}' renew --renew-hook '/opt/bitnami/nginx/sbin/nginx -s reload' >/dev/null 2>&1"
+    job: "sudo /opt/bitnami/apps/letsencrypt/lego --path /opt/bitnami/apps/letsencrypt/ --tls --domains {{ item.key }}  --email '{{ item.value.lego_email }}' renew --renew-hook '/opt/bitnami/nginx/sbin/nginx -s reload' >/dev/null 2>&1"
     state: present
     disabled: "{{ item.value.lego_cron_disable }}"
   loop: "{{ APPs | dict2items }}"
@@ -115,7 +115,7 @@
   become: yes
   file:
     state: directory
-    path: "/opt/bitnami/letsencrypt"
+    path: "/opt/bitnami/apps/letsencrypt"
     mode: "0750"
     owner: root
     group: root
@@ -135,7 +135,7 @@
   register: cert_files
   find:
     file_type: file
-    path: /opt/bitnami/letsencrypt/certificates
+    path: /opt/bitnami/apps/letsencrypt/certificates
     patterns: '*.crt,*.key'
     excludes: '*issuer*'
 
@@ -143,7 +143,7 @@
 #  debug:
 #    var: cert_files
 
-- name: Create symlinks to /opt/bitnami/letsencrypt/certificates
+- name: Create symlinks to /opt/bitnami/apps/letsencrypt/certificates
   become: yes
   file:
     src: "{{ item.path }}"
@@ -164,7 +164,7 @@
   become: yes
   script: scripts/install_lego.sh
   args:
-    creates: /opt/bitnami/letsencrypt/lego
+    creates: /opt/bitnami/apps/letsencrypt/lego
   when: install_lego
 
 - name: update php.ini with tz for zabbix
@@ -197,6 +197,19 @@
     name: "{{ item.value.database_user }}"
     password: "{{ item.value.database_password }}"
     priv: "{{ item.value.database_name }}.*:ALL,GRANT"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
+
+- name: create cronjobs to backup database
+  cron:
+    name: "{{ item.key }} database backup"
+    hour: "{{ item.value.db_backup_cron_hour }}"
+    minute: "{{ item.value.db_backup_cron_min }}"
+    weekday: "{{ item.value.db_backup_cron_weekday }}"
+    day: "{{ item.value.db_backup_cron_day }}"
+    job: "/opt/bitnami/mariadb/bin/mysqldump -u {{ item.value.database_user }}  --password={{ item.value.database_password }} {{ item.value.database_name }}  > /opt/bitnami/apps/db_backups/{{ item.value.database_name }}.backup.$(date +\\%d).sql 2>/dev/null"
+    state: present
+    disabled: "{{ item.value.db_backup_cron_disable }}"
   loop: "{{ APPs | dict2items }}"
   when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
 

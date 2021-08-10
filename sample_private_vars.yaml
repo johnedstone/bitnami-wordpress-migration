@@ -60,6 +60,11 @@ APPs:
       wp_cron_min: '10,40'
       custom_nginx_conf: '/opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf' # optional
       #client_max_body_size: '80M' # optional, nginx default is 1M
+      db_backup_cron_hour: 4
+      db_backup_cron_min: 20
+      db_backup_cron_day: '*/2' # every onther day
+      db_backup_cron_weekday: '*'
+      db_backup_cron_disable: no
 
 configure_2nd_ip: no
 #secondary_ip_cidr: '172.xx.xx.xx/20'

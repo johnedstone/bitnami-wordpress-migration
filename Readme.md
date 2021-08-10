@@ -47,14 +47,14 @@ ansible [core 2.11.1]
 
 cd /home/bitnami && git clone  https://github.com/johnedstone/bitnami-wordpress-migration.git
 
-mkdir -p /home/bitnami/configurations/bitnami-wordpress-migration
-touch /home/bitnami/configurations/bitnami-wordpress-migration/private_vars.yaml
+mkdir -p /opt/bitnami/apps/configuration
+touch /opt/bitnami/apps/configuration/private_vars.yaml
 ```
 
 ### Use ansible to set up your first application
-First update `/home/bitnami/configurations/bitnami-wordpress-migration/private_vars.yaml` with your private information.
+First update `/opt/bitnami/apps/configuration/private_vars.yaml` with your private information.
 This file will not be in the github respository as it's contains private information.
-You can use multiple applications in the private_vars.yaml file.
+You can use multiple appsi (domains) in the private_vars.yaml file.
 
 See `sample_private_vars_yaml` in this repository.
 
@@ -224,3 +224,5 @@ sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/<your-server
 sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>
 
 ```
+
+# vim: ai et ts=4 sw=4 sts=4 nu

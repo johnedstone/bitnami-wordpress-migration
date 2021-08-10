@@ -4,7 +4,7 @@
     ansible_python_interpreter: /usr/bin/python3
     HOME: "{{ lookup('env', 'HOME') }}"
   vars_files:
-    - "{{ HOME }}/configurations/bitnami-wordpress-migration/private_vars.yaml"
+    - /opt/bitnami/apps/configuration/private_vars.yaml
   connection: local
   roles:
     - prep_work

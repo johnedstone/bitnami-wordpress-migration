@@ -46,5 +46,13 @@
     login_password: "{{ MariaDB_Root_Password }}"
     login_user: root
 
+- name: create db backup directory
+  become: yes
+  file:
+    state: directory
+    path: /opt/bitnami/apps/db_backups
+    mode: '0775'
+    owner: bitnami
+    group: daemon
 
 # vim: ai et ts=2 sw=2 sts=2 nu
