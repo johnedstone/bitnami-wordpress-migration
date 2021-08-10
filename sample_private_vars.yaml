@@ -62,7 +62,7 @@ APPs:
       #client_max_body_size: '80M' # optional, nginx default is 1M
       db_backup_cron_hour: 4
       db_backup_cron_min: 20
-      db_backup_cron_day: '*/2' # every onther day
+      db_backup_cron_day: '1-31/2' # every on other odd day of the month
       db_backup_cron_weekday: '*'
       db_backup_cron_disable: no
 
