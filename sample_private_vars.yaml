@@ -52,6 +52,8 @@ APPs:
       lego_cron_min: 10
       lego_cron_weekday: 6
       lego_email: 'someemail@somewhere.com'
+      # This is where the database is created and
+      # where the username and password are created
       database_name: somename
       database_user: someuser
       database_password: somepassword

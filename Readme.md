@@ -106,26 +106,29 @@ sudo shutdown -r now
 This will reboot the server and you can continue to run the ansible playbook
 
 ### Wordpress files
+* Note: for this ansible playbook, it assumes that each database has a unique user and password
 * copy over your wordpress files
 * push data into database
 * Feel free to remove the 0 byte index.html file that ansible installed to check the first curl
-* Rerun the ansible playbook to check permissions
-* Note: for this ansible playbook, it assumes that each database has a unique user and password
-
+* Rerun the ansible playbook to check and update file permissions
 ```
+# This is how you check and update the file permissions.
+# Do this one time after you copy over the Wordpress files
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 ```
 
+
 ### Running the ansible-playbook after the initial copy of the Wordpress files from their previous source
-Because Wordpress is changing permissions and owner while it is running,
-it is not necessary to continue to check and update the permissions after the initial copy
-of the Wordpress files from their source.  Wordpress will write files with the
-the correct owner, group and permissions after the initial copy.
-Therefore, one can run ansible as described below
-with these two commands after the initial copy and ansible-playbook run
+Assuming that you've checked and updated the file permissions after copying the Wordpress files, then
+it is not necessary to continue to check and update file permissions.
+Wordpress is constantly changing permissions and owner while it is running, so we can skip cheking permissions.
+Therefore, one can run ansible as described below, and skip checking the file permissions
 ```
+# This is how to skip checking and updating the file permissions,
+# after you've checked/updated them the first time (see above)
+# This will be your most common ansible-playbook command after the file permissions are checked and updated.
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
@@ -172,15 +175,15 @@ vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 
 ```
 sudo systemctl stop bitnami.service
-sudo /opt/bitnami/letsencrypt/lego --tls --path /opt/bitnami/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
+sudo /opt/bitnami/apps/letsencrypt/lego --tls --path /opt/bitnami/apps/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
 sudo systemctl start bitnami.service
 
 # After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' rerun playbook
 # This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
 
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
-/usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
-/usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
+/usr/local/bin/ansible-playbook --check --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
+/usr/local/bin/ansible-playbook --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
 
 ```
 
