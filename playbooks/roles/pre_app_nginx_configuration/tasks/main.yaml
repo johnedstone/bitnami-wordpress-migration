@@ -45,4 +45,20 @@
     mode: '0644'
     backup: yes
 
+- name: set php-fpm.conf to tcp/ip not unix_sock
+  become: yes
+  template:
+    src: php-fpm.conf.j2
+    dest: /opt/bitnami/nginx/conf/bitnami/php-fpm.conf
+  notify:
+    - Restart bitnami apps
+
+- name: set www.conf to listen on tcp/ip not unix_sock
+  become: yes
+  template:
+    src: www.conf.j2
+    dest: /opt/bitnami/php/etc/php-fpm.d/www.conf
+  notify:
+    - Restart bitnami apps
+
 # vim: ai et ts=2 sw=2 sts=2 nu

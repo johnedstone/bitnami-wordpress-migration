@@ -1,0 +1,11 @@
+index index.php index.html index.htm;
+location ~ \.php$ {
+    fastcgi_read_timeout 300;
+    fastcgi_pass   {% if tcp_not_sock is sameas true %}127.0.0.1:9000{% else %}unix:/opt/bitnami/php/var/run/www.sock{% endif %};
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME $request_filename;
+    include        fastcgi_params;
+}
+{#
+# vim: ai et ts=4 sts=4 sw=4 nu
+#}

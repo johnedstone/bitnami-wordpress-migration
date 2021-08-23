@@ -3,6 +3,9 @@ HOSTNAME: "your-hostname-not-too-critical"
 MariaDB_Root_Password: 'look in bitname_credentials file'
 local_timezone: 'America/New_York'
 
+# Change php-fpm default to TCP/IP which scales better, but is not quite as fast
+tcp_not_sock: yes
+
 # poohbear is a default_server to catch no Host in the request (optional)
 # if you set this to yes, then set default_server: no elsewhere or
 # nginx will fail to start
