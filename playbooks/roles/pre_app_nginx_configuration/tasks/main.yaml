@@ -10,6 +10,7 @@
   with_items:
     - /opt/bitnami/nginx/conf/server_blocks
     - /opt/bitnami/apps
+    - /opt/bitnami/apps/acme_validation/.well-known/acme-challenge
 
 - name: remove original wordpress directory
   become: yes

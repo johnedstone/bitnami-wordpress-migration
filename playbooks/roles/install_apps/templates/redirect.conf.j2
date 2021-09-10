@@ -11,6 +11,11 @@ server {
     ssl_certificate      bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.crt;
     ssl_certificate_key  bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.key;
 
+    location ^~ /.well-known {
+        allow all;    
+        root /opt/bitnami/apps/acme_validation;
+    }
+
     location / {
         return {% if item.value.redirect_permanent is defined and item.value.redirect_permanent is sameas true %}301{% else %}302{% endif %} {{ item.value.redirect_path }}$request_uri;
     }

@@ -165,7 +165,6 @@ vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 ```
 
 ### Lets Encyrpt
-* Let's Encrypt here is configured using --tls which means the DNS entry must be correct
 * Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
 * This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
 * To update lego, simply remove `/opt/bitnami/letsencrypt/lego` and rerun the playbook.
@@ -174,13 +173,11 @@ vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 * The Let's Encrypt certs must be manually installed the first time for each domain as described below:
 
 ```
-sudo systemctl stop bitnami.service
-sudo /opt/bitnami/apps/letsencrypt/lego --tls --path /opt/bitnami/apps/letsencrypt --domains "www.xyz.net"  --email "johndoe@johndoe.com" run
-sudo systemctl start bitnami.service
+sudo /opt/bitnami/apps/letsencrypt/lego --path /opt/bitnami/apps/letsencrypt --http --http.webroot /opt/bitnami/apps/acme_validation --domains "www.xyz.net"  --email 'johndoe@johndoe.com' run
 
-# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' rerun playbook
+# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' and rerun playbook
 # This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
-
+# Use these commands
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
 /usr/local/bin/ansible-playbook --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml

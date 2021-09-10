@@ -51,6 +51,11 @@ server {
         deny all;
     }
     # END Prevent hacks
+    
+    location ^~ /.well-known {
+        allow all;    
+        root /opt/bitnami/apps/acme_validation;
+    }
 
     {% if item.value.client_max_body_size is defined and item.value.client_max_body_size|length %}client_max_body_size {{ item.value.client_max_body_size }};{% endif %}
 
