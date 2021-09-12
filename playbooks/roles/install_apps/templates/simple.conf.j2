@@ -44,11 +44,13 @@ server {
 
     # START Prevent hacks
     location ~* /.*xmlrpc\.php {
-        deny all;
+        #deny all;
+        return 444;
     }
 
     location ~* /wpad\.dat {
-        deny all;
+        #deny all;
+        return 444;
     }
     # END Prevent hacks
     

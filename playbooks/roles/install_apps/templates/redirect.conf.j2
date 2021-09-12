@@ -11,6 +11,18 @@ server {
     ssl_certificate      bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.crt;
     ssl_certificate_key  bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.key;
 
+    # START Prevent hacks
+    location ~* /.*xmlrpc\.php {
+        #deny all;
+        return 444;
+    }
+
+    location ~* /wpad\.dat {
+        #deny all;
+        return 444;
+    }
+    # END Prevent hacks
+
     location ^~ /.well-known {
         allow all;    
         root /opt/bitnami/apps/acme_validation;
