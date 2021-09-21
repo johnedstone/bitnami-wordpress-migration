@@ -3,7 +3,7 @@
 ### Updates
 * Sep 21, 2021: added files and paths so that W3TC plugin can write to the appropriate file.
 To use W3TC, after installing the plugin, then add the `define('...');` line to wp-config.php
-and restart the server.
+and restart the server: `sudo systemctl restart bitnami.service`
 * Sep 21, 2021: whitelisted JetPack's IPs for xmlrpc.php
 
 Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
