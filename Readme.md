@@ -1,5 +1,11 @@
 ## Migrating Wordpress to the latest Bitnami 13-May-2021
 
+### Updates
+* Sep 21, 2021: added files and paths so that W3TC plugin can write to the appropriate file.
+To use W3TC, after installing the plugin, then add the `define('...');` line to wp-config.php
+and restart the server.
+* Sep 21, 2021: whitelisted JetPack's IPs for xmlrpc.php
+
 Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
 
 * ![bitnami images](screenshots/nginx_bitnami_2.png) 

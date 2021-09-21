@@ -38,6 +38,7 @@
     owner: bitnami
     group: daemon
     create: yes
+    marker: "# {mark} W3TC Browser Cache file ANSIBLE MANAGED BLOCK"
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
