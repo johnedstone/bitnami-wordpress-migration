@@ -16,6 +16,50 @@
     label: "{{ item.key }}"
   when: item.value.enable and not item.value.redirect_elsewhere
 
+- name: create custom_nginx_conf directories
+  become: yes
+  file:
+    state: directory
+    path: "/opt/bitnami/apps/{{ item.key }}/custom_nginx_conf"
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere
+
+- name: Verify include line exists in nginx custom.conf file
+  become: yes
+  blockinfile:
+    path: "/opt/bitnami/apps/{{ item.key }}/custom_nginx_conf/custom.conf"
+    block: 'include "/opt/bitnami/apps/{{ item.key }}/nginx.conf";'
+    mode: '0664'
+    owner: bitnami
+    group: daemon
+    create: yes
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere
+  notify:
+    - Restart bitnami apps
+
+- name: Verify W3 Total Cache nginx.conf file exists, if needed
+  become: yes
+  blockinfile:
+    path: "/opt/bitnami/apps/{{ item.key }}/nginx.conf"
+    block: "# File created for W3T Cache to write nginx configurations"
+    mode: '0664'
+    owner: bitnami
+    group: daemon
+    create: yes
+    insertbefore: 'BOF'
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere
+
 - name: does a index.php file exist
   ansible.builtin.stat:
     path: "/opt/bitnami/apps/{{ item.key }}/index.php"

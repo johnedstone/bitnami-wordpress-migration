@@ -4,7 +4,8 @@ MariaDB_Root_Password: 'look in bitname_credentials file'
 local_timezone: 'America/New_York'
 
 # Change php-fpm default to TCP/IP which scales better, but is not quite as fast
-tcp_not_sock: yes
+# Not needed if other precautions are taken like caching
+tcp_not_sock: no
 
 # poohbear is a default_server to catch no Host in the request (optional)
 # if you set this to yes, then set default_server: no elsewhere or
@@ -63,7 +64,6 @@ APPs:
       wp_cron_install: yes
       wp_cron_disable: no
       wp_cron_min: '10,40'
-      custom_nginx_conf: '/opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf' # optional
       #client_max_body_size: '80M' # optional, nginx default is 1M
       db_backup_cron_hour: 4
       db_backup_cron_min: 20

@@ -14,7 +14,6 @@
 
 - name: Check needed owner,group app dir and files chown updates
   become: yes
-  #command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0664 -prune -o -type f -user daemon -group daemon -perm 0644 -prune -o ! \( -user bitnami -group daemon \) -print'
   command: 'find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -print'
   args:
     warn: false
@@ -37,7 +36,6 @@
 
 - name: Update owner,group app dir and files chown as needed
   become: yes
-  #command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0664 -prune -o -type f -user daemon -group daemon -perm 0644 -prune -o ! \( -user bitnami -group daemon \) -exec chown bitnami:daemon {} \; -print'
   command: 'find /opt/bitnami/apps/{{ item.key }} ! \( -user bitnami -group daemon \) -exec chown bitnami:daemon {} \; -print'
   args:
     warn: false
@@ -102,7 +100,6 @@
 
 - name: Check needed app file chmod updates
   become: yes
-  #command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0644 -prune -o -type f ! -name wp-config.php ! -perm 0664 -print'
   command: 'find /opt/bitnami/apps/{{ item.key }} -type f ! -name wp-config.php ! -perm 0664 -print'
   args:
     warn: false
@@ -125,7 +122,6 @@
 
 - name: Update app file chmod as needed
   become: yes
-  #command: 'find /opt/bitnami/apps/{{ item.key }} -type f -user daemon -group daemon -perm 0644 -prune -o -type f ! -name wp-config.php ! -perm 0664 -exec chmod 0664 {} \; -print'
   command: 'find /opt/bitnami/apps/{{ item.key }} -type f ! -name wp-config.php ! -perm 0664 -exec chmod 0664 {} \; -print'
   args:
     warn: false
@@ -188,83 +184,4 @@
     - item.stdout is defined
     - item.stdout
 
-#
-#- name: check file permissions
-#  become: yes
-#  command: find /opt/bitnami/apps/{{ item.key }} -type f -exec chmod 0664 {} \;
-#  args:
-#    warn: false
-#  changed_when: False
-#  loop: "{{ APPs | dict2items }}"
-#  loop_control:
-#    label: "{{ item.key }}"
-#  when: item.value.enable
-#
-#- name: check directory permissions
-#  become: yes
-#  command: find /opt/bitnami/apps/{{ item.key }} -type d -exec chmod 0775 {} \;
-#  args:
-#    warn: false
-#  changed_when: False
-#  loop: "{{ APPs | dict2items }}"
-#  loop_control:
-#    label: "{{ item.key }}"
-#  when: item.value.enable
-#
-###### The commented tasks are too intensive for large directories and fail
-#- name: register dirs
-#  become: yes
-#  ansible.builtin.find:
-#    path: /opt/bitnami/apps
-#    file_type: directory
-#    recurse: yes
-#  register: find_dir_result
-#
-#- name: set dir permissions
-#  become: yes
-#  file:
-#    path: "{{ item.path }}"
-#    owner: bitnami
-#    group: daemon
-#    mode: '0775'
-#  with_items: "{{ find_dir_result.files }}"
-#
-#- name: register files
-#  become: yes
-#  ansible.builtin.find:
-#    path: /opt/bitnami/apps
-#    file_type: file
-#    exclude: wp-config.php
-#    recurse: yes
-#  register: find_files_result
-#
-#- name: set file permissions
-#  become: yes
-#  file:
-#    path: "{{ item.path }}"
-#    owner: bitnami
-#    group: daemon
-#    mode: '0664'
-#  with_items: "{{ find_files_result.files }}"
-#
-#- name: register wp_config
-#  become: yes
-#  ansible.builtin.find:
-#    path: /opt/bitnami/apps
-#    file_type: file
-#    patterns: '*wp-config.php'
-#    recurse: yes
-#    use_regex: no
-#  register: find_wp_config
-#
-#- name: set wp_config.php permissions
-#  become: yes
-#  file:
-#    path: "{{ item.path }}"
-#    owner: bitnami
-#    group: daemon
-#    mode: '0440'
-#  with_items: "{{ find_wp_config.files }}"
-#
-#
 # vim: ai et ts=2 sw=2 sts=2 nu
