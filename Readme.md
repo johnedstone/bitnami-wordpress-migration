@@ -162,6 +162,11 @@ vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 # And, update your private_vars.yaml variable custom_nginx_conf
 # with the path to your file
 
+# In this custom.conf file you might have a path
+# to Jet Pack's nginx.conf file such as this
+include "/opt/bitnami/apps/<your_app>/nginx.conf";
+# Note: JetPack will also ask you to update wp-conf.php with a define('...') statement
+
 ```
 
 ### Lets Encyrpt
