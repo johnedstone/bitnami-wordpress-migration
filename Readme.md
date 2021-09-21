@@ -6,7 +6,7 @@ To use W3TC, after installing the plugin, then add the `define('...');` line (as
 to wp-config.php and restart the server: `sudo systemctl restart bitnami.service`
 * Sep 21, 2021: whitelisted JetPack's IPs for xmlrpc.php
 
-#### References
+#### References and Notes
 * https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
 * https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
 * https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
