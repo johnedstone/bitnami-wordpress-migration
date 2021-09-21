@@ -6,18 +6,18 @@ To use W3TC, after installing the plugin, then add the `define('...');` line (as
 to wp-config.php and restart the server: `sudo systemctl restart bitnami.service`
 * Sep 21, 2021: whitelisted JetPack's IPs for xmlrpc.php
 
-Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
-
-* ![bitnami images](screenshots/nginx_bitnami_2.png) 
-
-*Note: vim is used below.  Feel free to use nano, etc*
-
 #### References
 * https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
 * https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
 * https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
 * https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
 * [Let's encyrpt - nginx - *Avoid with bitnami as it tried to install nginx*](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
+
+Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
+
+* ![bitnami images](screenshots/nginx_bitnami_2.png) 
+
+*Note: vim is used below.  Feel free to use nano, etc*
 
 ### Using Approach A: Bitnami installations using system packages
 Do this check just to make sure your image is using the system packages
