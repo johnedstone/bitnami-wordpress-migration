@@ -6,12 +6,18 @@ To use W3TC, before installing the plugin, add the `define('...');` line
 (as you will be prompted to by W3TC) to wp-config.php, then add the plugin and
 restart the server: `sudo systemctl restart bitnami.service`
 * Sep 21, 2021: whitelisted JetPack's IPs for xmlrpc.php
-* Sep 23, 2021: adding command to check W3TC nginx.conf file
+* Sep 23, 2021: adding command to check W3TC nginx.conf file - *note that app07 is different*
 ```
-sha256sum /opt/bitnami/apps/app01/nginx.conf /opt/bitnami/apps/app02/nginx.conf /opt/bitnami/apps/app03/nginx.conf
+sha256sum /opt/bitnami/apps/*/nginx.conf
 c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app01/nginx.conf
 c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app02/nginx.conf
 c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app03/nginx.conf
+c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app04/nginx.conf
+c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app05/nginx.conf
+c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app06/nginx.conf
+874886350842768ef3df08f19ddf89997297813d5aae09e9553e85b98e896080  /opt/bitnami/apps/app07/nginx.conf
+c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app08/nginx.conf
+
 ```
 
 #### References and Notes
