@@ -33,7 +33,7 @@ Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian
 
 *Note: vim is used below.  Feel free to use nano, etc*
 
-### Using Approach A: Bitnami installations using system packages
+### Check that we will be using Approach A
 Do this check just to make sure your image is using the system packages
 
 ```
@@ -67,7 +67,9 @@ ansible [core 2.11.1]
 
 cd /home/bitnami && git clone  https://github.com/johnedstone/bitnami-wordpress-migration.git
 
-mkdir -p /opt/bitnami/apps/configuration
+sudo mkdir /opt/bitnami/apps
+sudo chown bitnami:daemon /opt/bitnami/apps
+mkdir /opt/bitnami/apps/configuration
 touch /opt/bitnami/apps/configuration/private_vars.yaml
 ```
 
