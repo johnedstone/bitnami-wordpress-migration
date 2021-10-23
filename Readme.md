@@ -115,6 +115,10 @@ After successful initial installation, __reboot__ in order to correctly set the 
 sudo shutdown -r now
 ```
 
+### 2nd Disk
+If a 2nd Disk has been added, now would be a good time to mount it, either
+before or after the above reboot
+
 ### Rebooting the ec2 instance
 If the ansible playbook says something like ...
 ```
