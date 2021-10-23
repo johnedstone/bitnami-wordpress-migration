@@ -33,6 +33,18 @@ Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian
 
 *Note: vim is used below.  Feel free to use nano, etc*
 
+### Attaching a second disk (optional)
+If a second disk has been added mount it before creating the app directory below
+```
+apt-get install xfsprogs
+shutdown -r now
+lsblk --fs
+sudo mkfs -t xfs /dev/<second disk>
+sudo mkdir /opt/bitnami/apps
+sudo cp /etc/fstab /etc/fstab.orig
+sudo echo "UUID=<the disk UUID> /opt/bitnami/apps xfs defaults,nofail  0  2" >> /etc/fstab
+sudo shutdown -r now
+
 ### Check that we will be using Approach A
 Do this check just to make sure your image is using the system packages
 
@@ -67,7 +79,7 @@ ansible [core 2.11.1]
 
 cd /home/bitnami && git clone  https://github.com/johnedstone/bitnami-wordpress-migration.git
 
-sudo mkdir /opt/bitnami/apps
+# If one hasn't added a second disk then run: sudo mkdir /opt/bitnami/apps
 sudo chown bitnami:daemon /opt/bitnami/apps
 mkdir /opt/bitnami/apps/configuration
 touch /opt/bitnami/apps/configuration/private_vars.yaml
@@ -114,10 +126,6 @@ After successful initial installation, __reboot__ in order to correctly set the 
 ```
 sudo shutdown -r now
 ```
-
-### 2nd Disk
-If a 2nd Disk has been added, now would be a good time to mount it, either
-before or after the above reboot
 
 ### Rebooting the ec2 instance
 If the ansible playbook says something like ...
