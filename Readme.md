@@ -264,6 +264,15 @@ sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>
 
 ```
 
+### Notes on Migration
+
+* On the new server: `grep database_name /opt/bitnami/apps/configuration/private_vars.yaml  | awk '{printf("%s "), $2}` and copy the database names
+
+* On the old server: `for db in <output of above, space separated>;do mysqldump -u root -p $db > $db.sql ;done`
+
+* After transfering the above files to the new server, then, on the new
+server: `for db in <space separated list of db names>;do mysql -u root -p $db < ${db}.sql;`
+
 <!--
 # vim: ai et ts=4 sw=4 sts=4 nu
 -->
