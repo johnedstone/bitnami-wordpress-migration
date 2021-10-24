@@ -63,7 +63,7 @@ sudo apt autoremove
 sudo apt autoclean
 sudo pip3 install ansible 
 
-# Current ansible version
+#Current ansible version
 /usr/local/bin/ansible --version
 ansible [core 2.11.1] 
   config file = None
@@ -79,7 +79,7 @@ ansible [core 2.11.1]
 
 cd /home/bitnami && git clone  https://github.com/johnedstone/bitnami-wordpress-migration.git
 
-# If one hasn't added a second disk then run: sudo mkdir /opt/bitnami/apps
+#If one hasn't added a second disk then run: sudo mkdir /opt/bitnami/apps
 sudo chown bitnami:daemon /opt/bitnami/apps
 mkdir /opt/bitnami/apps/configuration
 touch /opt/bitnami/apps/configuration/private_vars.yaml
@@ -96,10 +96,10 @@ See `sample_private_vars_yaml` in this repository.
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 
-# Or, to look more closely at dir and file permissions ...
+#Or, to look more closely at dir and file permissions ...
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 
-# Or, for more verbosity
+#Or, for more verbosity
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
 # Or, to look at all but dir and file permissions ....
