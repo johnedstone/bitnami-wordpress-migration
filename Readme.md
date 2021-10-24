@@ -187,21 +187,20 @@ you can use the tag `--skip-tags app_perms` as shown below
 * Not implemented, yet: To update the limit for phpmyadmin use the private_vars.yaml variable `phpmyadmin_client_max_body_size`
 
 ### Adding a custom nginx conf file for an application
+There is an emptly custom nginx conf file located at
+`/opt/bitnami/apps/employersforumindiana.org/custom_nginx_conf/custom.conf`
 
+Add your custom configuration with the editor of your choice
 ```
-mkdir /opt/bitnami/apps/<your_app>/custom_nginx_conf
-
-# Add your custom configuration with the editor of your choice
 vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
+```
 
-# And, update your private_vars.yaml variable custom_nginx_conf
-# with the path to your file
-
-# In this custom.conf file you might have a path
-# to Jet Pack's nginx.conf file such as this
+In this custom.conf file you might have an include path
+to files written by other plugins, such as W3Cache writes nginx.conf
+These plugins might require you to add a define statement, too,
+in wp-config.php
+```
 include "/opt/bitnami/apps/<your_app>/nginx.conf";
-# Note: JetPack will also ask you to update wp-conf.php with a define('...') statement
-
 ```
 
 ### Lets Encyrpt
