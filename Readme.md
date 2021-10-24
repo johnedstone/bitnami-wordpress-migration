@@ -161,9 +161,9 @@ it is not necessary to continue to check and update file permissions.
 Wordpress is constantly changing permissions and owner while it is running, so we can skip cheking permissions.
 Therefore, one can run ansible as described below, and skip checking the file permissions
 ```
-Comment: This is how to skip checking and updating the file permissions,
-Comment: after you've checked/updated them the first time (see above)
-Comment: This will be your most common ansible-playbook command after the file permissions are checked and updated.
+# This is how to skip checking and updating the file permissions,
+# after you've checked/updated them the first time (see above)
+# This will be your most common ansible-playbook command after the file permissions are checked and updated.
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
@@ -191,16 +191,16 @@ you can use the tag `--skip-tags app_perms` as shown below
 ```
 mkdir /opt/bitnami/apps/<your_app>/custom_nginx_conf
 
-Comment: Add your custom configuration with the editor of your choice
+# Add your custom configuration with the editor of your choice
 vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 
-Comment: And, update your private_vars.yaml variable custom_nginx_conf
-Comment: with the path to your file
+# And, update your private_vars.yaml variable custom_nginx_conf
+# with the path to your file
 
-Comment: In this custom.conf file you might have a path
-Comment: to Jet Pack's nginx.conf file such as this
+# In this custom.conf file you might have a path
+# to Jet Pack's nginx.conf file such as this
 include "/opt/bitnami/apps/<your_app>/nginx.conf";
-Comment: Note: JetPack will also ask you to update wp-conf.php with a define('...') statement
+# Note: JetPack will also ask you to update wp-conf.php with a define('...') statement
 
 ```
 
@@ -215,9 +215,9 @@ Comment: Note: JetPack will also ask you to update wp-conf.php with a define('..
 ```
 sudo /opt/bitnami/apps/letsencrypt/lego --path /opt/bitnami/apps/letsencrypt --http --http.webroot /opt/bitnami/apps/acme_validation --domains "www.xyz.net"  --email 'johndoe@johndoe.com' run
 
-Comment: After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' and rerun playbook
-Comment: This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
-Comment: Use these commands
+# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' and rerun playbook
+# This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
+# Use these commands
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
 /usr/local/bin/ansible-playbook --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
@@ -230,37 +230,37 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 ### Sanity Checks
 
 ```
-Comment:  Besides the playbook, one can manually verify the certs as follows:
+#  Besides the playbook, one can manually verify the certs as follows:
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
 
-Comment: Check cronjobs
+# Check cronjobs
 crontab -l
 sudo crontab -l
 
-Comment: View current nginx conf files (use spacebar to advance for 'more')
+# View current nginx conf files (use spacebar to advance for 'more')
 ls -ltra /opt/bitnami/nginx/conf/server_blocks/
 more /opt/bitnami/nginx/conf/server_blocks/&#42
 
-Comment: Check nginx config to see if it's syntax is correct
+# Check nginx config to see if it's syntax is correct
 sudo /opt/bitnami/nginx/sbin/nginx -t
 sudo /opt/bitnami/nginx/sbin/nginx -T
 
-Comment: List Wordpress directories, i.e. not redirects
+# List Wordpress directories, i.e. not redirects
 ls -ltra /opt/bitnami/apps/
 
-Comment: List certs (either of these works)
+# List certs (either of these works)
 sudo ls -ltra /opt/bitnami/letsencrypt/certificates/
 sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt list
 
-Comment: Force ansible playbook to restart bitnami:
-Comment:  add a meaningless line to conf file which will be removed
-Comment:  and rerun ansible playbook to "fix" this which will restart bitnami.service
-Comment:  which will recheck the urls by the handlers
-Comment:  Note: replace the phrase below <your-server.conf> file with an existing file
+# Force ansible playbook to restart bitnami:
+#  add a meaningless line to conf file which will be removed
+#  and rerun ansible playbook to "fix" this which will restart bitnami.service
+#  which will recheck the urls by the handlers
+#  Note: replace the phrase below <your-server.conf> file with an existing file
 sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/<your-server.conf>
 
-Comment: Manually removing an unneeded nginx config file
+# Manually removing an unneeded nginx config file
 sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>
 
 ```
