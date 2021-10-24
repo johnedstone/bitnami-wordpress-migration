@@ -97,13 +97,13 @@ See `sample_private_vars_yaml` in this repository.
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 
-Comment: Or, to look more closely at dir and file permissions ...
+# Or, to look more closely at dir and file permissions ...
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 
-Comment: Or, for more verbosity
+# Or, for more verbosity
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
-Comment: Or, to look at all but dir and file permissions ....
+# Or, to look at all but dir and file permissions ....
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
 
@@ -113,13 +113,13 @@ __If the above checks runs as expected, then ...__
 ```
 /usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 
-Comment: Or, just do the dir and file permissions:
+# Or, just do the dir and file permissions:
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 
-Comment: Or, for more verbosity
+# Or, for more verbosity
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
-Comment: Or, do all but the dir and file permissions:
+# Or, do all but the dir and file permissions:
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
 
