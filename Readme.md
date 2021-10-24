@@ -44,6 +44,7 @@ sudo mkdir /opt/bitnami/apps
 sudo cp /etc/fstab /etc/fstab.orig
 sudo echo "UUID=<the disk UUID> /opt/bitnami/apps xfs defaults,nofail  0  2" >> /etc/fstab
 sudo shutdown -r now
+```
 
 ### Check that we will be using Approach A
 Do this check just to make sure your image is using the system packages
@@ -63,7 +64,7 @@ sudo apt autoremove
 sudo apt autoclean
 sudo pip3 install ansible 
 
-Comment: Current ansible version
+# Current ansible version
 /usr/local/bin/ansible --version
 ansible [core 2.11.1] 
   config file = None
