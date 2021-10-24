@@ -240,7 +240,7 @@ sudo crontab -l
 
 # View current nginx conf files (use spacebar to advance for 'more')
 ls -ltra /opt/bitnami/nginx/conf/server_blocks/
-more /opt/bitnami/nginx/conf/server_blocks/&#42
+more /opt/bitnami/nginx/conf/server_blocks/*
 
 # Check nginx config to see if it's syntax is correct
 sudo /opt/bitnami/nginx/sbin/nginx -t
