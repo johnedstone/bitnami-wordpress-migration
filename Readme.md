@@ -63,7 +63,7 @@ sudo apt autoremove
 sudo apt autoclean
 sudo pip3 install ansible 
 
-#Current ansible version
+Comment: Current ansible version
 /usr/local/bin/ansible --version
 ansible [core 2.11.1] 
   config file = None
@@ -96,13 +96,13 @@ See `sample_private_vars_yaml` in this repository.
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --flush-cache -i inventory.ini playbook.yaml
 
-#Or, to look more closely at dir and file permissions ...
+Comment: Or, to look more closely at dir and file permissions ...
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 
-#Or, for more verbosity
+Comment: Or, for more verbosity
 /usr/local/bin/ansible-playbook --check --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
-# Or, to look at all but dir and file permissions ....
+Comment: Or, to look at all but dir and file permissions ....
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
 
@@ -112,13 +112,13 @@ __If the above checks runs as expected, then ...__
 ```
 /usr/local/bin/ansible-playbook --diff --flush-cache -i inventory.ini playbook.yaml
 
-# Or, just do the dir and file permissions:
+Comment: Or, just do the dir and file permissions:
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml | egrep msg
 
-# Or, for more verbosity
+Comment: Or, for more verbosity
 /usr/local/bin/ansible-playbook --tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 
-# Or, do all but the dir and file permissions:
+Comment: Or, do all but the dir and file permissions:
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
 
@@ -160,9 +160,9 @@ it is not necessary to continue to check and update file permissions.
 Wordpress is constantly changing permissions and owner while it is running, so we can skip cheking permissions.
 Therefore, one can run ansible as described below, and skip checking the file permissions
 ```
-# This is how to skip checking and updating the file permissions,
-# after you've checked/updated them the first time (see above)
-# This will be your most common ansible-playbook command after the file permissions are checked and updated.
+Comment: This is how to skip checking and updating the file permissions,
+Comment: after you've checked/updated them the first time (see above)
+Comment: This will be your most common ansible-playbook command after the file permissions are checked and updated.
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
@@ -190,16 +190,16 @@ you can use the tag `--skip-tags app_perms` as shown below
 ```
 mkdir /opt/bitnami/apps/<your_app>/custom_nginx_conf
 
-# Add your custom configuration with the editor of your choice
+Comment: Add your custom configuration with the editor of your choice
 vim /opt/bitnami/apps/<your_app>/custom_nginx_conf/custom.conf
 
-# And, update your private_vars.yaml variable custom_nginx_conf
-# with the path to your file
+Comment: And, update your private_vars.yaml variable custom_nginx_conf
+Comment: with the path to your file
 
-# In this custom.conf file you might have a path
-# to Jet Pack's nginx.conf file such as this
+Comment: In this custom.conf file you might have a path
+Comment: to Jet Pack's nginx.conf file such as this
 include "/opt/bitnami/apps/<your_app>/nginx.conf";
-# Note: JetPack will also ask you to update wp-conf.php with a define('...') statement
+Comment: Note: JetPack will also ask you to update wp-conf.php with a define('...') statement
 
 ```
 
@@ -214,9 +214,9 @@ include "/opt/bitnami/apps/<your_app>/nginx.conf";
 ```
 sudo /opt/bitnami/apps/letsencrypt/lego --path /opt/bitnami/apps/letsencrypt --http --http.webroot /opt/bitnami/apps/acme_validation --domains "www.xyz.net"  --email 'johndoe@johndoe.com' run
 
-# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' and rerun playbook
-# This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
-# Use these commands
+Comment: After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' and rerun playbook
+Comment: This will restart bitnami.service. Check playbook output to confirm the certs are configured correctly
+Comment: Use these commands
 cd /home/bitnami/bitnami-wordpress-migration/playbooks
 /usr/local/bin/ansible-playbook --check --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
 /usr/local/bin/ansible-playbook --diff --skip-tags app_perms --flush-cache -i inventory.ini playbook.yaml
@@ -229,37 +229,37 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 ### Sanity Checks
 
 ```
-#  Besides the playbook, one can manually verify the certs as follows:
+Comment:  Besides the playbook, one can manually verify the certs as follows:
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null
 openssl s_client -connect localhost:443 -servername www.xyz.net < /dev/null 2>/dev/null | openssl x509 -noout -dates
 
-# Check cronjobs
+Comment: Check cronjobs
 crontab -l
 sudo crontab -l
 
-# View current nginx conf files (use spacebar to advance for 'more')
+Comment: View current nginx conf files (use spacebar to advance for 'more')
 ls -ltra /opt/bitnami/nginx/conf/server_blocks/
-more /opt/bitnami/nginx/conf/server_blocks/*
+more /opt/bitnami/nginx/conf/server_blocks/&#42
 
-# Check nginx config to see if it's syntax is correct
+Comment: Check nginx config to see if it's syntax is correct
 sudo /opt/bitnami/nginx/sbin/nginx -t
 sudo /opt/bitnami/nginx/sbin/nginx -T
 
-# List Wordpress directories, i.e. not redirects
+Comment: List Wordpress directories, i.e. not redirects
 ls -ltra /opt/bitnami/apps/
 
-# List certs (either of these works)
+Comment: List certs (either of these works)
 sudo ls -ltra /opt/bitnami/letsencrypt/certificates/
 sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt list
 
-# Force ansible playbook to restart bitnami:
-#  add a meaningless line to conf file which will be removed
-#  and rerun ansible playbook to "fix" this which will restart bitnami.service
-#  which will recheck the urls by the handlers
-#  Note: replace the phrase below <your-server.conf> file with an existing file
+Comment: Force ansible playbook to restart bitnami:
+Comment:  add a meaningless line to conf file which will be removed
+Comment:  and rerun ansible playbook to "fix" this which will restart bitnami.service
+Comment:  which will recheck the urls by the handlers
+Comment:  Note: replace the phrase below <your-server.conf> file with an existing file
 sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/<your-server.conf>
 
-# Manually removing an unneeded nginx config file
+Comment: Manually removing an unneeded nginx config file
 sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>
 
 ```
