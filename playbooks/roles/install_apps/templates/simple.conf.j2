@@ -66,6 +66,29 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
+    # WP hardening from JM first ec2 instance Deny access to any files with a 
+    # .php extension in the uploads directory
+    location ~* /(?:uploads|files)/.*\.php$ {
+      deny all;
+    }
+
+    #Documented here:
+    # https://codex.wordpress.org/Hardening_WordPress#WP-Includes This group
+    # is suspect, use with caution
+    location ~* wp-admin/includes { deny all; } location ~*
+    wp-includes/theme-compat/ { deny all; } location ~*
+    wp-includes/js/tinymce/langs/.*.php { deny all; }
+
+    # Deny access to uploads that aren’t images, videos, music, etc.
+    location ~* ^/wp-content/uploads/.*.(html|htm|shtml|php|js|swf)$ {
+        deny all;
+    }
+
+    # Deny public access to wp-config.php
+    location ~* wp-config.php {
+        deny all;
+    }
+
     {% if item.value.client_max_body_size is defined and item.value.client_max_body_size|length %}client_max_body_size {{ item.value.client_max_body_size }};{% endif %}
 
     include "/opt/bitnami/apps/{{ item.key }}/custom_nginx_conf/custom.conf";
