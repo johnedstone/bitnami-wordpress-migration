@@ -3,8 +3,7 @@ server {
     listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}80{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
 
     server_name {{ item.key }};
-    access_log off;
-
+    {% if item.value.redirect_access_log is defined and item.value.redirect_access_log is sameas true %}#access_log off{% else %}access_log off{% endif %};
 
     listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}443 ssl{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
 

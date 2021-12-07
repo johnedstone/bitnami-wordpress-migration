@@ -35,6 +35,7 @@ APPs:
       enable: yes 
       default_server: no
       redirect_elsewhere: yes 
+      redirect_access_log: yes # optional, define and set to yes to see 301 redirects in logs
       redirect_path: 'https://elsewhere.net'
       redirect_permanent: no
       use_lets_encrypt: no
