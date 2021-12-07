@@ -42,7 +42,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and not item.value.redirect_elsewhere
+  when: item.value.enable and not item.value.redirect_elsewhere and not item.value.using_gunicorn is defined
   notify:
     - Restart bitnami apps
 
@@ -59,7 +59,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and not item.value.redirect_elsewhere
+  when: item.value.enable and not item.value.redirect_elsewhere and not item.value.using_gunicorn is defined
 
 - name: does a index.php file exist
   ansible.builtin.stat:
@@ -110,7 +110,7 @@
     group: daemon
     mode: '0664'
   loop: "{{ APPs | dict2items }}"
-  when: not item.value.redirect_elsewhere and item.value.enable
+  when: not item.value.redirect_elsewhere and item.value.enable and not item.value.using_gunicorn is defined
   notify:
     - Restart bitnami apps
 
@@ -124,6 +124,19 @@
     mode: '0664'
   loop: "{{ APPs | dict2items }}"
   when: item.value.redirect_elsewhere and item.value.enable
+  notify:
+    - Restart bitnami apps
+
+- name: create gunicorn nginx config
+  become: yes
+  template:
+    src: templates/gunicorn.conf.j2
+    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
   notify:
     - Restart bitnami apps
 

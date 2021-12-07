@@ -71,6 +71,27 @@ APPs:
       db_backup_cron_day: '1-31/2' # every on other odd day of the month
       db_backup_cron_weekday: '*'
       db_backup_cron_disable: no
+  my-gunicorn.johnedstone.net: # using gunicorn and nginx
+      enable: yes
+      default_server: no
+      using_gunicorn: yes  # optional - no need for this variable if not using gunicorn
+      redirect_elsewhere: no
+      use_lets_encrypt: yes
+      lego_cron_install: yes
+      lego_cron_disable: yes
+      lego_cron_hour: 6
+      lego_cron_min: 30
+      lego_cron_weekday: 4
+      lego_email: 'someemail@somewhere.com'
+      wp_cron_install: no
+      database_name: somename
+      database_user: someuser
+      database_password: somepassword
+      db_backup_cron_hour: 6
+      db_backup_cron_min: 30
+      db_backup_cron_day: '1-31/2' # every on other odd day of the month
+      db_backup_cron_weekday: '*'
+      db_backup_cron_disable: no
 
 configure_2nd_ip: no
 #secondary_ip_cidr: '172.xx.xx.xx/20'
