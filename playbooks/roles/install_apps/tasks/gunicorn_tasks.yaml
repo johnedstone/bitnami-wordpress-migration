@@ -52,9 +52,9 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
   notify:
-    - restart gunicorn service
-    - restart gunicorn socket
-    - restart bitnami apps
+    - Restart gunicorn service
+    - Restart gunicorn socket
+    - Restart bitnami apps
 
 - name: create systemd gunicorn socket file
   become: yes
@@ -64,9 +64,9 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
   notify:
-    - restart gunicorn service
-    - restart gunicorn socket
-    - restart bitnami apps
+    - Restart gunicorn service
+    - Restart gunicorn socket
+    - Restart bitnami apps
 
 - name: create systemd gunicorn service file
   become: yes
@@ -76,9 +76,9 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
   notify:
-    - restart gunicorn service
-    - restart gunicorn socket
-    - restart bitnami apps
+    - Restart gunicorn service
+    - Restart gunicorn socket
+    - Restart bitnami apps
 
 - name: gunicorn enable & start
   become: yes

@@ -68,17 +68,21 @@
   loop: "{{ curl_app_https_status.results }}"
 
 - name: restart gunicorn socket
+  become: yes
+  listen: "Restart gunicorn socket"
   service:
-    name: "gunicorn_{{ item.key }}_socket"
+    name: "gunicorn_{{ item.key }}.socket"
     state: restarted
   loop: "{{ APPs | dict2items }}"
-  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn and not ansible_check_mode
 
 - name: restart gunicorn service
+  become: yes
+  listen: "Restart gunicorn service"
   service:
-    name: "gunicorn_{{ item.key }}_service"
+    name: "gunicorn_{{ item.key }}.service"
     state: restarted
   loop: "{{ APPs | dict2items }}"
-  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn and not ansible_check_mode
 
 # vim: ai et ts=2 sw=2 sts=2 nu
