@@ -32,9 +32,10 @@ install_lego: yes
 
 APPs:
   domain.org:
-      enable: yes 
+      enable: yes
+      avoid_check_app_perm: no # avoids tasks from check_apps_permission role - useful after app in prod
       default_server: no
-      redirect_elsewhere: yes 
+      redirect_elsewhere: yes
       redirect_access_log: yes # optional, define and set to yes to see 301 redirects in logs
       redirect_path: 'https://elsewhere.net'
       redirect_permanent: no
@@ -47,9 +48,10 @@ APPs:
       lego_email: 'someemail@somewhere.com'
       # listen_IP: 172.x.x.x # experimental, use internal IP
   www.domain.org:
-      enable: yes 
+      enable: yes
+      avoid_check_app_perm: no # avoids tasks from check_apps_permission role - useful after app in prod
       default_server: no
-      redirect_elsewhere: no 
+      redirect_elsewhere: no
       use_lets_encrypt: no
       lego_cron_install: yes
       lego_cron_disable: no
@@ -74,8 +76,9 @@ APPs:
   my-gunicorn.johnedstone.net: # using gunicorn and nginx
       enable: yes
       default_server: no
+      avoid_check_app_perm: yes # avoids tasks from check_apps_permission role - useful after app in prod
       redirect_elsewhere: no
-      using_gunicorn: yes  # optional - no need for this variable if not using gunicorn
+      using_gunicorn: yes  # optional: no need for this variable if not using gunicorn
       which_python: python3.7 # Example
       whereis_virtualenv: /usr/bin/virtualenv # Example
       gunicorn_binary: 'venv/bin/gunicorn' # relative to app directory

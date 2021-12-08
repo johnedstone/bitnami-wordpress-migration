@@ -89,4 +89,6 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
 
+# https://bitbucket.org/johnedstone-for-sure/nas-home-dir-oidc/src/master/rest_api/playbooks/nas_home_dir_restapi/roles/nginx_rest_api/templates/prod_settings.py.j2
+
 # vim: ai et ts=2 sw=2 sts=2 nu

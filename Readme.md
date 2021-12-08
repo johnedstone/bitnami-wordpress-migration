@@ -156,7 +156,7 @@ cd /home/bitnami/bitnami-wordpress-migration/playbooks
 
 
 ### Running the ansible-playbook after the initial copy of the Wordpress files from their previous source
-Assuming that you've checked and updated the file permissions after copying the Wordpress files, then
+* Assuming that you've checked and updated the file permissions after copying the Wordpress files, then
 it is not necessary to continue to check and update file permissions.
 Wordpress is constantly changing permissions and owner while it is running, so we can skip cheking permissions.
 Therefore, one can run ansible as described below, and skip checking the file permissions
@@ -166,6 +166,11 @@ Therefore, one can run ansible as described below, and skip checking the file pe
 # This will be your most common ansible-playbook command after the file permissions are checked and updated.
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
+```
+* Another approach is to use the (new, required) `avoid_check_app_perm` variable in the `private_vars.yaml` file.
+This now, is a variable in every app block in `private_vars.yaml`.
+```
+      avoid_check_app_perm: yes # avoids tasks from check_apps_permission role useful after app in prod
 ```
 
 ### Running the ansible playbook on just one domain, one app
