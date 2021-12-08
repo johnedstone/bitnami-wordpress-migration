@@ -21,7 +21,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: need_chown_updating
   check_mode: no
 
@@ -43,7 +43,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: actual_chown_updating
 
 - name: Display actual owner,group app dir and files chown updates
@@ -64,7 +64,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: dir_need_chmod_updating
   check_mode: no
 
@@ -86,7 +86,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: actual_dir_chmod_updating
 
 - name: Display actual app dir chmod updates
@@ -107,7 +107,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: file_need_chmod_updating
   check_mode: no
 
@@ -129,7 +129,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: actual_file_chmod_updating
 
 - name: Display actual file dir chmod updates
@@ -150,7 +150,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: need_wp_config_chmod_updating
   check_mode: no
 
@@ -172,7 +172,7 @@
   loop: "{{ APPs | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg')
+  when: item.value.enable and item.key in existing_app_dir_basename.results|map(attribute='msg') and not item.value.avoid_check_apps_perms
   register: wp_config_chmod_changed
 
 - name: Display actual wp-config.php chmod updates
