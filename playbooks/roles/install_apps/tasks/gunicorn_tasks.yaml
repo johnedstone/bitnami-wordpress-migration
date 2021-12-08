@@ -33,4 +33,39 @@
   notify:
     - Restart bitnami apps
 
+- name: Configure gunicorn sysconfig
+  template:
+    src: systemd/gunicorn_sysconfig.j2
+    dest: "/etc/sysconfig/gunicorn_{{ item.key }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  #notify:
+  #  - restart gunicorn service
+  #  - restart gunicorn socket
+  #  - restart bitnami apps
+
+- name: create systemd gunicorn socket file
+  become: yes
+  template:
+    src: templates/systemd/gunicorn_socket.j2
+    dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.socket"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  #notify:
+  #  - restart gunicorn service
+  #  - restart gunicorn socket
+  #  - restart bitnami apps
+
+- name: create systemd gunicorn service file
+  become: yes
+  template:
+    src: templates/systemd/gunicorn_service.j2
+    dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.service"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  #notify:
+  #  - restart gunicorn service
+  #  - restart gunicorn socket
+  #  - restart bitnami apps
+
 # vim: ai et ts=2 sw=2 sts=2 nu

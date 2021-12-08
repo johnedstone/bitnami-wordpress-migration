@@ -1,0 +1,31 @@
+[Unit]
+Description=gunicorn {{ item.key }} daemon
+Requires=gunicorn_{{ item.key }}.socket
+After=network.target
+
+[Service]
+PIDFile=/var/run/gunicorn_{{ item.key }}/pid
+User=bitnami
+Group=daemon
+EnvironmentFile=-/etc/sysconfig/gunicorn_{{ item.key }}
+
+# Run ExecStartPre with root-permissions
+PermissionsStartOnly=true
+ExecStartPre=-/usr/bin/mkdir /var/run/gunicorn_{{ item.key }}
+ExecStartPre=/usr/bin/chown bitnami:daemon /var/run/gunicorn_{{ item.key }}
+ExecStartPre=/usr/bin/chmod 0755 /var/run/gunicorn_{{ item.key }}
+
+ExecStart=/bin/bash -c "${GUNICORN_BIN} --pid /var/run/gunicorn_{{ item.key }}/pid \
+    --chdir ${GUNICORN_WORKDIR} \
+    --access-logfile /var/log/gunicorn_{{ item.key }}/access --error-logfile /var/log/gunicorn_{{ item.key }}/error \
+    ${GUNICORN_APP}"
+
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
+# vim: ai et ts=4 sw=4 sts=4 nu

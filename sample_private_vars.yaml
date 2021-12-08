@@ -78,6 +78,8 @@ APPs:
       using_gunicorn: yes  # optional - no need for this variable if not using gunicorn
       which_python: python3.7 # Example
       whereis_virtualenv: /usr/bin/virtualenv # Example
+      gunicorn_binary: 'venv/bin/gunicorn' # relative to app directory
+      gunicorn_app: 'hello_world:app' # used before production app is ready
       use_lets_encrypt: yes
       lego_cron_install: yes
       lego_cron_disable: yes

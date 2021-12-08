@@ -67,5 +67,18 @@
   when: not ansible_check_mode and item.cmd is defined
   loop: "{{ curl_app_https_status.results }}"
 
+- name: restart gunicorn socket
+  service:
+    name: "{{ item.key }}_socket"
+    state: restarted
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+
+- name: restart gunicorn service
+  service:
+    name: "{{ item.key }}_service"
+    state: restarted
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
 
 # vim: ai et ts=2 sw=2 sts=2 nu
