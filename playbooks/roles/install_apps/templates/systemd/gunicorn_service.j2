@@ -4,18 +4,11 @@ Requires=gunicorn_{{ item.key }}.socket
 After=network.target
 
 [Service]
-PIDFile=/var/run/gunicorn_{{ item.key }}/pid
 User=bitnami
 Group=daemon
-EnvironmentFile=-/etc/sysconfig/gunicorn_{{ item.key }}
+EnvironmentFile=-/etc/default/gunicorn_{{ item.key }}
 
-# Run ExecStartPre with root-permissions
-PermissionsStartOnly=true
-ExecStartPre=-/usr/bin/mkdir /var/run/gunicorn_{{ item.key }}
-ExecStartPre=/usr/bin/chown bitnami:daemon /var/run/gunicorn_{{ item.key }}
-ExecStartPre=/usr/bin/chmod 0755 /var/run/gunicorn_{{ item.key }}
-
-ExecStart=/bin/bash -c "${GUNICORN_BIN} --pid /var/run/gunicorn_{{ item.key }}/pid \
+ExecStart=/bin/bash -c "${GUNICORN_BIN} \
     --chdir ${GUNICORN_WORKDIR} \
     --access-logfile /var/log/gunicorn_{{ item.key }}/access --error-logfile /var/log/gunicorn_{{ item.key }}/error \
     ${GUNICORN_APP}"

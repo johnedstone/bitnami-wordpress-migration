@@ -69,14 +69,14 @@
 
 - name: restart gunicorn socket
   service:
-    name: "{{ item.key }}_socket"
+    name: "gunicorn_{{ item.key }}_socket"
     state: restarted
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
 
 - name: restart gunicorn service
   service:
-    name: "{{ item.key }}_service"
+    name: "gunicorn_{{ item.key }}_service"
     state: restarted
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn

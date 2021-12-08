@@ -33,16 +33,28 @@
   notify:
     - Restart bitnami apps
 
-- name: Configure gunicorn sysconfig
-  template:
-    src: systemd/gunicorn_sysconfig.j2
-    dest: "/etc/sysconfig/gunicorn_{{ item.key }}"
+- name: Create gunicorn logging directories
+  become: yes
+  file:
+    path: /var/log/gunicorn_{{ item.key }}
+    owner: bitnami
+    group: daemon
+    mode: 0775
+    state: directory
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-  #notify:
-  #  - restart gunicorn service
-  #  - restart gunicorn socket
-  #  - restart bitnami apps
+
+- name: Configure gunicorn sysconfig
+  become: yes
+  template:
+    src: systemd/gunicorn_sysconfig.j2
+    dest: "/etc/default/gunicorn_{{ item.key }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  notify:
+    - restart gunicorn service
+    - restart gunicorn socket
+    - restart bitnami apps
 
 - name: create systemd gunicorn socket file
   become: yes
@@ -51,10 +63,10 @@
     dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.socket"
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-  #notify:
-  #  - restart gunicorn service
-  #  - restart gunicorn socket
-  #  - restart bitnami apps
+  notify:
+    - restart gunicorn service
+    - restart gunicorn socket
+    - restart bitnami apps
 
 - name: create systemd gunicorn service file
   become: yes
@@ -63,9 +75,18 @@
     dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.service"
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-  #notify:
-  #  - restart gunicorn service
-  #  - restart gunicorn socket
-  #  - restart bitnami apps
+  notify:
+    - restart gunicorn service
+    - restart gunicorn socket
+    - restart bitnami apps
+
+- name: gunicorn enable & start
+  become: yes
+  service:
+    name: "gunicorn_{{ item.key }}"
+    enabled: yes
+    state: started
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
 
 # vim: ai et ts=2 sw=2 sts=2 nu
