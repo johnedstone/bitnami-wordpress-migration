@@ -167,10 +167,10 @@ Therefore, one can run ansible as described below, and skip checking the file pe
 /usr/local/bin/ansible-playbook --check --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 /usr/local/bin/ansible-playbook --skip-tags app_perms --flush-cache -i inventory.ini --diff playbook.yaml
 ```
-* Another approach is to use the (new, required) `avoid_check_app_perm` variable in the `private_vars.yaml` file.
+* Another approach is to use the (new, required) `avoid_check_apps_perms` variable in the `private_vars.yaml` file.
 This now, is a variable in every app block in `private_vars.yaml`.
 ```
-      avoid_check_app_perm: yes # avoids tasks from check_apps_permission role useful after app in prod
+      avoid_check_apps_perms: yes # avoids tasks from check_apps_permission role useful after app in prod
 ```
 
 ### Running the ansible playbook on just one domain, one app
