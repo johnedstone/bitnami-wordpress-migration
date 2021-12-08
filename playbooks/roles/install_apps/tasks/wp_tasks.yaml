@@ -1,0 +1,288 @@
+---
+#- name: display private_vars.yaml
+#  debug:
+#    msg: "{{ APPs }}"
+
+- name: create app directories
+  become: yes
+  file:
+    state: directory
+    path: "/opt/bitnami/apps/{{ item.key }}"
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere
+
+- name: create custom_nginx_conf directories
+  become: yes
+  file:
+    state: directory
+    path: "/opt/bitnami/apps/{{ item.key }}/custom_nginx_conf"
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere
+
+- name: Verify include line exists in nginx custom.conf file
+  become: yes
+  blockinfile:
+    path: "/opt/bitnami/apps/{{ item.key }}/custom_nginx_conf/custom.conf"
+    block: 'include "/opt/bitnami/apps/{{ item.key }}/nginx.conf";'
+    mode: '0664'
+    owner: bitnami
+    group: daemon
+    create: yes
+    marker: "# {mark} W3TC Browser Cache file ANSIBLE MANAGED BLOCK"
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere and not item.value.using_gunicorn is defined
+  notify:
+    - Restart bitnami apps
+
+- name: Verify W3 Total Cache nginx.conf file exists, if needed
+  become: yes
+  blockinfile:
+    path: "/opt/bitnami/apps/{{ item.key }}/nginx.conf"
+    block: "# File created for W3T Cache to write nginx configurations"
+    mode: '0664'
+    owner: bitnami
+    group: daemon
+    create: yes
+    insertbefore: 'BOF'
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere and not item.value.using_gunicorn is defined
+
+- name: does a index.php file exist
+  ansible.builtin.stat:
+    path: "/opt/bitnami/apps/{{ item.key }}/index.php"
+  register: index_php_stat
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere
+
+- name: Create and Add items to dictionary
+  set_fact: 
+      index_php_present: "{{ index_php_present | default({}) | combine ({ item.item.key : item.stat.exists }) }}"
+  loop: "{{ index_php_stat.results }}"
+  when: item.stat is defined
+
+#- name: Display the Dictionary
+#    debug: var=index_php_present
+
+- name: touch index.html unless index.php exists, so user can safely remove index.html
+  become: yes
+  changed_when: False
+  file:
+    state: touch
+    path: "/opt/bitnami/apps/{{ item.key }}/index.html"
+    mode: '0664'
+    owner: bitnami
+    group: daemon
+  loop: "{{ APPs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.enable and not item.value.redirect_elsewhere and not index_php_present[item.key] and not item.value.using_gunicorn is defined
+
+#- name: debug index_php_present var
+#  debug:
+#    msg: "{{ item.key }} - {{ index_php_present[item.key] }}"
+#  loop: "{{ APPs | dict2items }}"
+#  loop_control:
+#    label: "{{ item.key }}"
+#  when: item.value.enable and index_php_present[item.key] is defined
+
+- name: create simple nginx config
+  become: yes
+  template:
+    src: templates/simple.conf.j2
+    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  loop: "{{ APPs | dict2items }}"
+  when: not item.value.redirect_elsewhere and item.value.enable and not item.value.using_gunicorn is defined
+  notify:
+    - Restart bitnami apps
+
+- name: create redirect nginx config
+  become: yes
+  template:
+    src: templates/redirect.conf.j2
+    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.redirect_elsewhere and item.value.enable
+  notify:
+    - Restart bitnami apps
+
+- name: set cron shell
+  cron:
+    name: SHELL
+    env: yes
+    value: /usr/bin/bash
+
+- name: install lego cron renew
+  cron:
+    name: "{{ item.key }} lego renew"
+    hour: "{{ item.value.lego_cron_hour }}"
+    minute: "{{ item.value.lego_cron_min }}"
+    weekday: "{{ item.value.lego_cron_weekday }}"
+    job: "sudo /opt/bitnami/apps/letsencrypt/lego --path /opt/bitnami/apps/letsencrypt --http --http.webroot /opt/bitnami/apps/acme_validation --domains {{ item.key }}  --email '{{ item.value.lego_email }}' renew --renew-hook '/opt/bitnami/nginx/sbin/nginx -s reload' >/dev/null 2>&1"
+    state: present
+    disabled: "{{ item.value.lego_cron_disable }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.lego_cron_install is defined and item.value.lego_cron_install
+
+- name: install wp_cron 
+  become: yes
+  cron:
+    name: "{{ item.key }} wp_cron"
+    minute: "{{ item.value.wp_cron_min }}"
+    job: 'su daemon -s /bin/sh -c "cd /opt/bitnami/apps/{{ item.key }}; /opt/bitnami/php/bin/php -q wp-cron.php"'
+    state: present
+    disabled: "{{ item.value.wp_cron_disable }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.wp_cron_install is defined and item.value.wp_cron_install
+
+- name: create letsencrypt directory
+  become: yes
+  file:
+    state: directory
+    path: "/opt/bitnami/apps/letsencrypt"
+    mode: "0750"
+    owner: root
+    group: root
+  when: install_lego
+
+- name: confirm certs directory permissions
+  become: yes
+  file:
+    state: directory
+    path: /opt/bitnami/nginx/conf/bitnami/certs
+    mode: "0600"
+    owner: root
+    group: root
+
+- name: find exisitng lego crt and key file
+  become: yes
+  register: cert_files
+  find:
+    file_type: file
+    path: /opt/bitnami/apps/letsencrypt/certificates
+    patterns: '*.crt,*.key'
+    excludes: '*issuer*'
+
+#- name: display cert files
+#  debug:
+#    var: cert_files
+
+- name: Create symlinks to /opt/bitnami/apps/letsencrypt/certificates
+  become: yes
+  file:
+    src: "{{ item.path }}"
+    path: "/opt/bitnami/nginx/conf/bitnami/certs/{{ item.path | basename }}"
+    state: link
+  with_items: "{{ cert_files.files }}"
+
+- name: remove tmp lego glob files
+  become: yes
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_fileglob:
+    - '/tmp/lego*'
+  when: install_lego
+
+- name: install lego binary if it does not exist
+  become: yes
+  script: scripts/install_lego.sh
+  args:
+    creates: /opt/bitnami/apps/letsencrypt/lego
+  when: install_lego
+
+- name: update php.ini with tz for zabbix
+  become: yes
+  lineinfile:
+    path: /opt/bitnami/php/etc/php.ini
+    regexp: '^date.timezone ='
+    line: 'date.timezone = America/New_York'
+  notify:
+    - Restart bitnami apps
+  when: install_zabbix is defined and install_zabbix
+
+- name: create databases for ea app
+  mysql_db:
+    config_file: /opt/bitnami/mariadb/conf/my.cnf
+    state: present
+    name: "{{ item.value.database_name }}"
+    collation: utf8_bin
+    encoding: utf8
+    login_password: "{{ MariaDB_Root_Password }}"
+    login_user: root
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_name is defined
+
+- name: Create user with password, all database privileges and WITH GRANT OPTION for each app
+  community.mysql.mysql_user:
+    login_password: "{{ MariaDB_Root_Password }}"
+    login_user: root
+    state: present
+    name: "{{ item.value.database_user }}"
+    password: "{{ item.value.database_password }}"
+    priv: "{{ item.value.database_name }}.*:ALL,GRANT"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
+
+- name: create cronjobs to backup database
+  cron:
+    name: "{{ item.key }} database backup"
+    hour: "{{ item.value.db_backup_cron_hour }}"
+    minute: "{{ item.value.db_backup_cron_min }}"
+    weekday: "{{ item.value.db_backup_cron_weekday }}"
+    day: "{{ item.value.db_backup_cron_day }}"
+    job: "/opt/bitnami/mariadb/bin/mysqldump -u '{{ item.value.database_user | regex_replace('%', '\\%') }}'  --password='{{ item.value.database_password | regex_replace('%', '\\%') }}' '{{ item.value.database_name | regex_replace('%', '\\%') }}'  > /opt/bitnami/apps/db_backups/{{ item.value.database_name | regex_replace('%', '_') }}.backup.$(date +\\%d).sql 2>/dev/null"
+    state: present
+    disabled: "{{ item.value.db_backup_cron_disable }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
+
+- name: Update post_max_size php.ini
+  become: yes
+  notify:
+    - Restart bitnami apps
+  lineinfile:
+    path: /opt/bitnami/php/etc/php.ini
+    regexp: '^post_max_size ='
+    line: "post_max_size = {{ post_max_size | default('80M') }}"
+    owner: bitnami
+    group: root
+    mode: '0664'
+    backup: yes
+
+- name: Update upload_max_filesize php.ini
+  become: yes
+  notify:
+    - Restart bitnami apps
+  lineinfile:
+    path: /opt/bitnami/php/etc/php.ini
+    regexp: '^upload_max_filesize ='
+    line: "upload_max_filesize = {{ upload_max_filesize | default('80M') }}"
+    owner: bitnami
+    group: root
+    mode: '0664'
+    backup: yes
+
+
+# vim: ai et ts=2 sw=2 sts=2 nu

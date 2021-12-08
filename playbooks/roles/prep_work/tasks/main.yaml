@@ -21,7 +21,6 @@
     path: /etc/localtime
     state: link
 
-
 # https://www.cyberciti.biz/faq/ansible-apt-update-all-packages-on-ubuntu-debian-linux/
 - name: Update apt repo and cache on all Debian/Ubuntu boxes
   become: yes
@@ -50,7 +49,7 @@
 - name: install apt packages
   become: yes
   apt:
-    name: ["rsync", "nmap", "htop"]
+    name: ["rsync", "nmap", "htop", "virtualenv"]
     state: present
     update-cache: yes
  

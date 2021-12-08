@@ -1,0 +1,36 @@
+---
+# Directory created in wp_tasks.yaml.  Could be moved here :)
+- name: create gunicorn nginx config
+  become: yes
+  template:
+    src: templates/gunicorn.conf.j2
+    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+    owner: bitnami
+    group: daemon
+    mode: '0664'
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  notify:
+    - Restart bitnami apps
+
+- name: install gunicorn
+  pip:
+    name: gunicorn
+    virtualenv_python: "{{ item.value.which_python }}"
+    virtualenv_command: "{{ item.value.whereis_virtualenv }}"
+    virtualenv: "/opt/bitnami/apps/{{ item.key }}/venv"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  notify:
+    - Restart bitnami apps
+
+- name: install gunicorn hello_world
+  copy:
+    src: files/gunicorn/hello_world.py
+    dest: "/opt/bitnami/apps/{{ item.key }}/hello_world.py"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+  notify:
+    - Restart bitnami apps
+
+# vim: ai et ts=2 sw=2 sts=2 nu

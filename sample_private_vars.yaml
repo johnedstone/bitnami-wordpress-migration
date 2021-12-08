@@ -74,8 +74,10 @@ APPs:
   my-gunicorn.johnedstone.net: # using gunicorn and nginx
       enable: yes
       default_server: no
-      using_gunicorn: yes  # optional - no need for this variable if not using gunicorn
       redirect_elsewhere: no
+      using_gunicorn: yes  # optional - no need for this variable if not using gunicorn
+      which_python: python3.7 # Example
+      whereis_virtualenv: /usr/bin/virtualenv # Example
       use_lets_encrypt: yes
       lego_cron_install: yes
       lego_cron_disable: yes
