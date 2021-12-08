@@ -1,0 +1,32 @@
+server {
+    server_name {{ item.key }};
+    root /opt/bitnami/apps/{{ item.key }};
+
+    listen 80;
+
+    location ^~ /.well-known {
+        allow all;
+        root /opt/bitnami/apps/acme_validation;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+server {
+    server_name {{ item.key }};
+    root /opt/bitnami/apps/{{ item.key }};
+
+    listen 443 ssl;
+
+    ssl_certificate      bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.crt;
+    ssl_certificate_key  bitnami/certs/{% if item.value.use_lets_encrypt is defined and item.value.use_lets_encrypt is sameas true %}{{ item.key }}{% else %}server{% endif %}.key;
+
+    location = /favicon.ico {
+        log_not_found off;
+        access_log off;
+    }
+
+}
+
+# vim: ai et ts=4 sw=4 sts=4 nu
