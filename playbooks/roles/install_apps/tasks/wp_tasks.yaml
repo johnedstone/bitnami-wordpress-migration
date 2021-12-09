@@ -245,6 +245,18 @@
   loop: "{{ APPs | dict2items }}"
   when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
 
+- name: Create user (127.0.0.1) with password, all database privileges and WITH GRANT OPTION for each app
+  community.mysql.mysql_user:
+    login_password: "{{ MariaDB_Root_Password }}"
+    login_user: root
+    state: present
+    name: "{{ item.value.database_user }}"
+    password: "{{ item.value.database_password }}"
+    priv: "{{ item.value.database_name }}.*:ALL,GRANT"
+    host: "{{ item.value.force_db_host }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined and item.value.force_db_host is defined
+
 - name: create cronjobs to backup database
   cron:
     name: "{{ item.key }} database backup"

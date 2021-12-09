@@ -96,8 +96,9 @@ APPs:
       database_name: somename
       database_user: someuser
       database_password: somepassword
-      database_host: 'localhost' # optional
+      database_host: '127.0.0.1' # optional
       database_port: '3306' # optional
+      force_db_host: '127.0.0.1' # creates user @ 127.0.0.1 (django bug)
       db_backup_cron_hour: 6
       db_backup_cron_min: 30
       db_backup_cron_day: '1-31/2' # every on other odd day of the month
