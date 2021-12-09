@@ -73,7 +73,7 @@ APPs:
       db_backup_cron_day: '1-31/2' # every on other odd day of the month
       db_backup_cron_weekday: '*'
       db_backup_cron_disable: no
-  my-gunicorn.johnedstone.net: # using gunicorn and nginx
+  my-gunicorn.domain.org: # using gunicorn and nginx
       enable: yes
       default_server: no
       avoid_check_apps_perms: yes # avoids tasks from check_apps_permissions role - useful after app in prod
@@ -83,6 +83,8 @@ APPs:
       whereis_virtualenv: /usr/bin/virtualenv # Example
       gunicorn_binary: 'venv/bin/gunicorn' # relative to app directory
       gunicorn_app: 'hello_world:app' # used before production app is ready
+      django_secret_key: 'some key' # generate: https://humberto.io/blog/tldr-generate-django-secret-key/ 
+      django_environment: 'production' ## production or 'anything'
       use_lets_encrypt: yes
       lego_cron_install: yes
       lego_cron_disable: yes
