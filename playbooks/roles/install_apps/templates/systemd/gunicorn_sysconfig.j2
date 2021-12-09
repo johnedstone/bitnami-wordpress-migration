@@ -1,10 +1,11 @@
 GUNICORN_BIN=/opt/bitnami/apps/{{ item.key }}/{{ item.value.gunicorn_binary }}
 GUNICORN_WORKDIR=/opt/bitnami/apps/{{ item.key }}
 GUNICORN_APP={{ item.value.gunicorn_app }}
-DJANGO_ENVIRONMENT={{ item.value.django_environment }}
-DJANGO_SECRET_KEY="{{ item.value.django_secret_key }}"
-DJANGO_DB_NAME="{{ item.value.database_name }}"
-DJANGO_DB_USER="{{ item.value.database_user }}"
-DJANGO_DB_PASSWORD="{{ item.value.database_password }}"
-DJANGO_DB_HOST={{ item.value.database_host }}
-DJANGO_DB_PORT={{ item.value.database_port }}
+# exporting these so that can be sourced for migrating db
+export DJANGO_ENVIRONMENT={{ item.value.django_environment }}
+export DJANGO_SECRET_KEY="{{ item.value.django_secret_key }}"
+export DJANGO_DB_NAME="{{ item.value.database_name }}"
+export DJANGO_DB_USER="{{ item.value.database_user }}"
+export DJANGO_DB_PASSWORD="{{ item.value.database_password }}"
+export DJANGO_DB_HOST={{ item.value.database_host }}
+export DJANGO_DB_PORT={{ item.value.database_port }}
