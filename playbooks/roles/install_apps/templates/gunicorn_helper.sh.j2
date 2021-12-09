@@ -1,0 +1,12 @@
+# Ansible: {{ item.key }} (installed by Ansible)
+# Use like this for the first migration after entering the virtualenv:
+# source config/helper.sh && python manage.py dbshell
+# or 
+# source config/helper.sh && python manage.py migrate
+export DJANGO_ENVIRONMENT={{ item.value.django_environment }}
+export DJANGO_SECRET_KEY="{{ item.value.django_secret_key }}"
+export DJANGO_DB_NAME="{{ item.value.database_name }}"
+export DJANGO_DB_USER="{{ item.value.database_user }}"
+export DJANGO_DB_PASSWORD="{{ item.value.database_password }}"
+export DJANGO_DB_HOST={{ item.value.database_host }}
+export DJANGO_DB_PORT={{ item.value.database_port }}

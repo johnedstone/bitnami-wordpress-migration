@@ -56,6 +56,17 @@
     - Restart gunicorn socket
     - Restart bitnami apps
 
+- name: install gunicorn helper.sh for first migration
+  become: yes
+  template:
+    src: gunicorn_helper.sh.j2
+    dest: "/opt/bitnami/apps/{{ item.key }}/config/helper.sh"
+    owner: bitnami
+    group: bitnami
+    mode: 0440
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+
 - name: create systemd gunicorn socket file
   become: yes
   template:
