@@ -254,8 +254,8 @@ sudo /opt/bitnami/nginx/sbin/nginx -T
 ls -ltra /opt/bitnami/apps/
 
 # List certs (either of these works)
-sudo ls -ltra /opt/bitnami/letsencrypt/certificates/
-sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt list
+sudo ls -ltra /opt/bitnami/apps/letsencrypt/certificates/
+sudo /opt/bitnami/apps/letsencrypt/lego --path /opt/bitnami/apps/letsencrypt list
 
 # Force ansible playbook to restart bitnami:
 #  add a meaningless line to conf file which will be removed
@@ -265,7 +265,7 @@ sudo /opt/bitnami/letsencrypt/lego --path /opt/bitnami/letsencrypt list
 sudo echo "# comment line" >> /opt/bitnami/nginx/conf/server_blocks/<your-server.conf>
 
 # Manually removing an unneeded nginx config file
-sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>
+sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>.conf
 
 ```
 
