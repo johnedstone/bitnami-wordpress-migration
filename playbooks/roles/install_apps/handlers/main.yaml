@@ -73,6 +73,7 @@
   service:
     name: "gunicorn_{{ item.key }}.socket"
     state: restarted
+    daemon_reload: yes
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn and not ansible_check_mode
 
@@ -82,6 +83,7 @@
   service:
     name: "gunicorn_{{ item.key }}.service"
     state: restarted
+    daemon_reload: yes
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn and not ansible_check_mode
 

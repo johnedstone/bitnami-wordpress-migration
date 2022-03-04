@@ -9,9 +9,37 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
-    location / {
-        return 301 https://$host$request_uri;
+# Let's let django do the redirection
+#    location / {
+#        return 301 https://$host$request_uri;
+#    }
+
+# if we are going to let django deal with port 80, in some cases
+# then we need this, following ...
+
+    location = /favicon.ico {
+        log_not_found off;
+        access_log off;
     }
+
+    # https://docs.gunicorn.org/en/latest/deploy.html
+    keepalive_timeout 5;
+
+    location / {
+      # checks for static file, if not found proxy to app
+      try_files $uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      # we don't want nginx trying to do something clever with
+      # redirects, we set the Host: header above already.
+      proxy_redirect off;
+      proxy_pass http://unix:/var/run/gunicorn_{{ item.key }}/socket;
+    }
+
 }
 server {
     server_name {{ item.key }};
