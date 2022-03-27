@@ -1,14 +1,15 @@
-## Migrating Wordpress to the latest Bitnami 13-May-2021
+## Migrating Wordpress to the latest Bitnami
 
 ###
-  Before you begin, pull in the new changes by running this command
+  Before you begin, pull in the new changes by running the following two commands
   ```
   cd ~/bitnami-wordpress migration # which in some cases may be different, depending on how you install the git repository
-  git pull
+
+  git pull # new changes to this repository will be pulled into your directory
   ```
 
 ### Latest Changes
-For the latest changes to this playbook see [Changes.md]()
+For the latest changes to this playbook see [Changes.md](https://github.com/johnedstone/bitnami-wordpress-migration/blob/main/Changes.md)
 
 ### Attaching a second disk (optional)
 If a second disk has been added mount it before creating the app directory below
@@ -119,14 +120,14 @@ PLAY RECAP *********************************************************************
 127.0.0.1                  : ok=7    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
 ```
 
-This is an indication that the underlying systems have packages to update. Run the following commands which reboot your server, and the begin again, i.e. run `ansible-playbook --check ... `
+This is an indication that the underlying system has packages to update. Run the following commands, answering yes to the prompts. The last command reboots the server, and then begin again, i.e. run `ansible-playbook --check ... `
 
 ```
-cd # puts you in your home directory
+cd # changes the current directory to the home directory
 sudo apt update #  updates the catalog of system packages indicating what needs to be updated
-sudo apt full-upgrade # updates all of your packages
-sudo apt autoclean    # cleans up your packages
-sudo apt autoremove   # cleans up your packages
+sudo apt full-upgrade # updates all of the packages
+sudo apt autoclean    # cleans up the packages
+sudo apt autoremove   # cleans up the packages
 sudo shutdown -r now  # reboots your server
 ```
 
