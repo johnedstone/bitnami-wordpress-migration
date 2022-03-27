@@ -1,8 +1,8 @@
 ### List of changes
-* 27-Mar-2022: Added note about `--dry-run` error when running Ansible in --check mode to Readme.md to the Ansible error section
-* 27-Mar-2022: Added not about `git pull` near the top of the Readme.md
-* 04-Mar-2022: updated the initial Lets Encrypt command with the  `--preferred-chain "ISRG Root X1"` option, in order to eliminate the "DST Root CA X3" expired root chain in both the initial installation command
-* 04-Mar-2022: Updated the ansible playbook to update the crontab entries to include the `--preferred-chain` parameter 
+* 27-Mar-2022: Added note about `--dry-run` error when running Ansible with the `--check` parameter to Readme.md in the Ansible error section
+* 27-Mar-2022: Added note about the reminder to run `git pull` when you are beginning,  near the top of the Readme.md
+* 04-Mar-2022: Updated the initial Lets Encrypt command with the  `--preferred-chain "ISRG Root X1"` parameter, in order to eliminate the "DST Root CA X3" expired root chain in the initial installation command
+* 04-Mar-2022: Updated the ansible playbook, which now will update the crontab entries to include the  `--preferred-chain "ISRG Root X1"` parameter 
 * Sep 23, 2021: adding command to check W3TC nginx.conf file - *note that app07 is different*
 ```
 sha256sum /opt/bitnami/apps/*/nginx.conf
