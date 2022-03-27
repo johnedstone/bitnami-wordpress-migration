@@ -1,37 +1,14 @@
 ## Migrating Wordpress to the latest Bitnami 13-May-2021
 
-### Updates
-* Sep 21, 2021: added files and paths so that W3TC plugin can write to the appropriate file.
-To use W3TC, before installing the plugin, add the `define('...');` line
-(as you will be prompted to by W3TC) to wp-config.php, then add the plugin and
-restart the server: `sudo systemctl restart bitnami.service`
-* Sep 21, 2021: whitelisted JetPack's IPs for xmlrpc.php
-* Sep 23, 2021: adding command to check W3TC nginx.conf file - *note that app07 is different*
-```
-sha256sum /opt/bitnami/apps/*/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app01/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app02/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app03/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app04/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app05/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app06/nginx.conf
-874886350842768ef3df08f19ddf89997297813d5aae09e9553e85b98e896080  /opt/bitnami/apps/app07/nginx.conf
-c8d463dcc6fb12a728833712c83fcff06306fe9684e7cce415da53b4c0e211bd  /opt/bitnami/apps/app08/nginx.conf
+###
+  Before you begin, pull in the new changes by running this command
+  ```
+  cd ~/bitnami-wordpress migration # which in some cases may be different, depending on how you install the git repository
+  git pull
+  ```
 
-```
-
-#### References and Notes
-* https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
-* https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
-* https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
-* https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
-* [Let's encyrpt - nginx - *Avoid with bitnami as it tried to install nginx*](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
-
-Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
-
-* ![bitnami images](screenshots/nginx_bitnami_2.png) 
-
-*Note: vim is used below.  Feel free to use nano, etc*
+### Latest Changes
+For the latest changes to this playbook see [Changes.md]()
 
 ### Attaching a second disk (optional)
 If a second disk has been added mount it before creating the app directory below
@@ -128,17 +105,30 @@ After successful initial installation, __reboot__ in order to correctly set the 
 sudo shutdown -r now
 ```
 
-### Rebooting the ec2 instance
-If the ansible playbook says something like ...
+### Ansible errors
+Running the ansible playbook with `--check` may result in the following error:
+
 ```
-failed ... rebooting the server would shutdown the server
+TASK [prep_work : Reboot server if kernel updated] **********************************************************************************************************
+fatal: [127.0.0.1]: FAILED! => changed=false
+  elapsed: 0
+  msg: Running reboot with local connection would reboot the control node.
+  rebooted: false
+
+PLAY RECAP **************************************************************************************************************************************************
+127.0.0.1                  : ok=7    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
 ```
-then, this means that the ansible playbook has updated the server and you know
-need to run the command:
+
+This is an indication that the underlying systems have packages to update. Run the following commands which reboot your server, and the begin again, i.e. run `ansible-playbook --check ... `
+
 ```
-sudo shutdown -r now
+cd # puts you in your home directory
+sudo apt update #  updates the catalog of system packages indicating what needs to be updated
+sudo apt full-upgrade # updates all of your packages
+sudo apt autoclean    # cleans up your packages
+sudo apt autoremove   # cleans up your packages
+sudo shutdown -r now  # reboots your server
 ```
-This will reboot the server and you can continue to run the ansible playbook
 
 ### Wordpress files
 * Note: for this ansible playbook, it assumes that each database has a unique user and password
@@ -278,6 +268,19 @@ sudo rm -i /opt/bitnami/nginx/conf/server_blocks/<www.your-unneeded-domain.org>.
 
 * After transfering the above files to the new server, then, on the new
 server: `for db in <space separated list of db names>;do mysql -u root -p $db < ${db}.sql;`
+
+### References and Notes
+* https://docs.bitnami.com/aws/how-to/install-wordpress-nginx/
+* https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
+* https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach
+* https://docs.bitnami.com/installer/infrastructure/lamp/administration/secure-server/
+* [Let's encyrpt - nginx - *Avoid with bitnami as it tried to install nginx*](https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/)
+
+Using the Wordpress with Nginx and SSL Certified by Bitnami 5.7.1-3r05 on Debian 10 AMI
+
+* ![bitnami images](screenshots/nginx_bitnami_2.png) 
+
+*Note: vim is used below.  Feel free to use nano, etc*
 
 <!--
 # vim: ai et ts=4 sw=4 sts=4 nu
