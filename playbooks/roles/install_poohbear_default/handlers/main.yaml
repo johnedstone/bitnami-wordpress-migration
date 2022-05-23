@@ -19,9 +19,10 @@
     - systemctl is-active bitnami.service
     - systemctl status bitnami.service
     - /opt/bitnami/ctlscript.sh status
-    - curl --head http://{{ listen_poohbear_IP | default("0.0.0.0", true) }}
-    - curl --head -k https://{{ listen_poohbear_IP | default("0.0.0.0", true) }}
-    - curl -k https://{{ listen_poohbear_IP | default("0.0.0.0", true) }}
+      # Since we are returning 444 (drop) then nothing to check
+      #- curl --head http://{{ listen_poohbear_IP | default("0.0.0.0", true) }}
+      #- curl --head -k https://{{ listen_poohbear_IP | default("0.0.0.0", true) }}
+      #- curl -k https://{{ listen_poohbear_IP | default("0.0.0.0", true) }}
   when: not ansible_check_mode
 
 - name: output bitnami status
@@ -32,8 +33,9 @@
     - bitnami_status['results'][0]['stdout']
     - bitnami_status['results'][1]['stdout_lines']
     - bitnami_status['results'][2]['stdout_lines']
-    - bitnami_status['results'][3]['stdout_lines']
-    - bitnami_status['results'][4]['stdout_lines']
-    - bitnami_status['results'][5]['stdout_lines']
+      #- bitnami_status['results'][3]['stdout_lines']
+      #- bitnami_status['results'][4]['stdout_lines']
+      #- bitnami_status['results'][5]['stdout_lines']
   when: not ansible_check_mode
+
 # vim: ai et ts=2 sw=2 sts=2 nu

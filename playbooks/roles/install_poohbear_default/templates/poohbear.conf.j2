@@ -13,6 +13,7 @@ server {
     ssl_certificate      bitnami/certs/server.crt;
     ssl_certificate_key  bitnami/certs/server.key;
 
+    return 444; # Nginx drop
 
     if ($scheme != "https") {
         return 301 https://$host$request_uri;

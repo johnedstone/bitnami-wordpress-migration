@@ -62,4 +62,26 @@
   notify:
     - Restart bitnami apps
 
+#Doesn't seem to effect logging - hold for now
+#- name: log_not_found present
+#  become: yes
+#  lineinfile:
+#    path: /opt/bitnami/nginx/conf/nginx.conf
+#    insertafter: 'server_tokens off;'
+#    state: present
+#    line: '    log_not_found off;  # inserted by Ansible'
+#    backup: yes
+#  notify:
+#    - Restart bitnami apps
+#
+#- name: log_not_found absent
+#  become: yes
+#  lineinfile:
+#    path: /opt/bitnami/nginx/conf/nginx.conf
+#    state: absent
+#    line: '    log_not_found on;  # inserted by Ansible'
+#    backup: yes
+#  notify:
+#    - Restart bitnami apps
+
 # vim: ai et ts=2 sw=2 sts=2 nu

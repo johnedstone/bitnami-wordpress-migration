@@ -8,9 +8,11 @@
   connection: local
   roles:
     - prep_work
-    - pre_app_nginx_configuration
+    - role: pre_app_nginx_configuration
+      tags: [pre_app_nginx]
     - setup_db
-    - install_poohbear_default
+    - role: install_poohbear_default
+      tags: [install_poohbear]
     - install_apps
     - role: check_apps_permissions
       tags: [app_perms]
