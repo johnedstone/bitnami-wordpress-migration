@@ -7,15 +7,19 @@
     - /opt/bitnami/apps/configuration/private_vars.yaml
   connection: local
   roles:
-    - prep_work
+    - role: prep_work
+      tags: [prep_work]
     - role: pre_app_nginx_configuration
       tags: [pre_app_nginx]
-    - setup_db
+    - role: setup_db
+      tags: [setup_db]
     - role: install_poohbear_default
       tags: [install_poohbear]
-    - install_apps
+    - role: install_apps
+      tags: [install_apps]
     - role: check_apps_permissions
       tags: [app_perms]
-    - check_nginx_conf_permissions
+    - role: check_nginx_conf_permissions
+      tags: [check_nginx_conf]
 
 # vim: ai et ts=2 sw=2 sts=2 nu
