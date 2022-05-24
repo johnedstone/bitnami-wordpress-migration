@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>&nbsp;</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--# if expr="$status = 502" -->
+      <meta http-equiv="refresh" content="2">
+    <!--# endif -->
+  </head>
+<body>
+    <div style="padding: 0; margin: 5em; font-size:1.2em; font-family: Tahoma,Verdana,sans-serif;color: #06c;">
+
+        <!--# if expr="$status = 502" -->
+
+        We are updating our website!<br>
+        <span style="font-style: italic;">
+            You will be redirected in a moment ...</span>
+
+        <!--# else -->
+  
+        <p style="font-style: italic"><!--# echo var="status" default="" --> <!--# echo var="status_text" default="Something is amiss, yikes!" --></p>
+  <!--# endif -->
+
+    </div>
+</body>
+</html>
+
+<!---
+Ref: https://blog.adriaan.io/one-nginx-error-page-to-rule-them-all.html
+# vim: ai et ts=4 sw=4 sts=4 nu
+-->

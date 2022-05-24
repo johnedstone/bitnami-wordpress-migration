@@ -11,6 +11,7 @@
     - /opt/bitnami/nginx/conf/server_blocks
     - /opt/bitnami/apps
     - /opt/bitnami/apps/acme_validation/.well-known/acme-challenge
+    - /opt/bitnami/apps/50x
 
 - name: remove original wordpress directory
   become: yes
@@ -35,22 +36,12 @@
     - /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf
     - /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf
 
-- name: Give index.php preference over index.html
-  become: yes
-  lineinfile:
-    path: /opt/bitnami/nginx/conf/bitnami/php-fpm.conf
-    regexp: '^index '
-    line: 'index index.php index.html index.htm;'
-    owner: root
-    group: root
-    mode: '0644'
-    backup: yes
-
 - name: set php-fpm.conf to tcp/ip not unix_sock
   become: yes
   template:
     src: php-fpm.conf.j2
     dest: /opt/bitnami/nginx/conf/bitnami/php-fpm.conf
+    backup: yes
   notify:
     - Restart bitnami apps
 
@@ -61,6 +52,16 @@
     dest: /opt/bitnami/php/etc/php-fpm.d/www.conf
   notify:
     - Restart bitnami apps
+
+- name: add 50x html page
+  become: yes
+  copy:
+    src: 50x.html
+    dest: /opt/bitnami/apps/50x
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+  when: not ansible_check_mode
 
 #Doesn't seem to effect logging - hold for now
 #- name: log_not_found present

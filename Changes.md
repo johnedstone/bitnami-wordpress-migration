@@ -3,6 +3,9 @@
     * return 404 on php-fpm file missing
     * set default poohbear to return 444
     * added tags to playbook
+    * removed duplicate task in pre_app_nginx_configuration role
+    * added custom 50x.html that should refresh if it is 502
+
 * 27-Mar-2022: Added note about `--dry-run` error when running Ansible with the `--check` parameter to Readme.md in the Ansible error section
 * 27-Mar-2022: Added note about the reminder to run `git pull` when you are beginning,  near the top of the Readme.md
 * 04-Mar-2022: Updated the initial Lets Encrypt command with the  `--preferred-chain "ISRG Root X1"` parameter, in order to eliminate the "DST Root CA X3" expired root chain in the initial installation command

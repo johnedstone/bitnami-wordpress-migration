@@ -22,6 +22,15 @@ server {
         return 301 https://$host$request_uri;
     }
 
+    # https://blog.adriaan.io/one-nginx-error-page-to-rule-them-all.html
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        ssi on;
+        internal;
+        auth_basic off;
+        root /opt/bitnami/apps/50x;
+    }
+
     # BEGIN WordPress
     # https://wordpress.org/support/article/nginx/#general-wordpress-rules
     location = /favicon.ico {
