@@ -3,6 +3,7 @@
     * added 404.html page to beautify 404 if WP doesn't catch it
     * changed 50x to 502 error_log, to limit scope to only 502
     * added "Server Maintenance" to 502 title tag
+    * fixed 404 slipping through on redirects
 * 23-May-2022: Reducing unnecessary error logging
     * return 404 on php-fpm file missing
     * set default poohbear to return 444

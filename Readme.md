@@ -10,7 +10,7 @@
 
 ### Latest Changes
 * For the latest changes to this playbook see [Changes.md](https://github.com/johnedstone/bitnami-wordpress-migration/blob/main/Changes.md)
-* To do ... fix redirect so there is a redirect before there is a 404, i.e. catch it earlier
+* To do ... *up-to-date*
 
 ### Attaching a second disk (optional)
 If a second disk has been added mount it before creating the app directory below

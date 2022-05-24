@@ -122,6 +122,7 @@
     owner: bitnami
     group: daemon
     mode: '0664'
+    backup: yes
   loop: "{{ APPs | dict2items }}"
   when: item.value.redirect_elsewhere and item.value.enable
   notify:
