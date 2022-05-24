@@ -23,12 +23,12 @@ server {
     }
 
     # https://blog.adriaan.io/one-nginx-error-page-to-rule-them-all.html
-    error_page 500 502 503 504 /50x.html;
-    location = /50x.html {
+    error_page 502 /502.html;
+    location = /502.html {
         ssi on;
         internal;
         auth_basic off;
-        root /opt/bitnami/apps/50x;
+        root /opt/bitnami/apps/502;
     }
 
     # BEGIN WordPress

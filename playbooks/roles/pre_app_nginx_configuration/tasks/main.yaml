@@ -11,7 +11,7 @@
     - /opt/bitnami/nginx/conf/server_blocks
     - /opt/bitnami/apps
     - /opt/bitnami/apps/acme_validation/.well-known/acme-challenge
-    - /opt/bitnami/apps/50x
+    - /opt/bitnami/apps/502
 
 - name: remove original wordpress directory
   become: yes
@@ -53,11 +53,11 @@
   notify:
     - Restart bitnami apps
 
-- name: add 50x html page
+- name: add 502 html page
   become: yes
   copy:
-    src: 50x.html
-    dest: /opt/bitnami/apps/50x
+    src: 502.html
+    dest: /opt/bitnami/apps/502
     mode: '0775'
     owner: bitnami
     group: daemon

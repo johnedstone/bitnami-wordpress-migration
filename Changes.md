@@ -1,4 +1,8 @@
 ### List of changes
+* 24-May-2022:
+    * removed "reduced unneccessary error logging", as it did return an uglier 404 error
+    * changed 50x to 502 error_log, to limit scope to only 502
+    * added "Server Maintenance" to 502 title tag
 * 23-May-2022: Reducing unnecessary error logging
     * return 404 on php-fpm file missing
     * set default poohbear to return 444
