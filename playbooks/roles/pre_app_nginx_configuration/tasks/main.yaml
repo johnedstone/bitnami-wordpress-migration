@@ -12,6 +12,7 @@
     - /opt/bitnami/apps
     - /opt/bitnami/apps/acme_validation/.well-known/acme-challenge
     - /opt/bitnami/apps/502
+    - /opt/bitnami/apps/404
 
 - name: remove original wordpress directory
   become: yes
@@ -63,26 +64,14 @@
     group: daemon
   when: not ansible_check_mode
 
-#Doesn't seem to effect logging - hold for now
-#- name: log_not_found present
-#  become: yes
-#  lineinfile:
-#    path: /opt/bitnami/nginx/conf/nginx.conf
-#    insertafter: 'server_tokens off;'
-#    state: present
-#    line: '    log_not_found off;  # inserted by Ansible'
-#    backup: yes
-#  notify:
-#    - Restart bitnami apps
-#
-#- name: log_not_found absent
-#  become: yes
-#  lineinfile:
-#    path: /opt/bitnami/nginx/conf/nginx.conf
-#    state: absent
-#    line: '    log_not_found on;  # inserted by Ansible'
-#    backup: yes
-#  notify:
-#    - Restart bitnami apps
+- name: add 404 html page
+  become: yes
+  copy:
+    src: 404.html
+    dest: /opt/bitnami/apps/404
+    mode: '0775'
+    owner: bitnami
+    group: daemon
+  when: not ansible_check_mode
 
 # vim: ai et ts=2 sw=2 sts=2 nu

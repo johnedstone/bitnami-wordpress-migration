@@ -31,6 +31,11 @@ server {
         root /opt/bitnami/apps/502;
     }
 
+    error_page 404 /404.html;
+    location = /404.html {
+        root /opt/bitnami/apps/404;
+    }
+
     # BEGIN WordPress
     # https://wordpress.org/support/article/nginx/#general-wordpress-rules
     location = /favicon.ico {
