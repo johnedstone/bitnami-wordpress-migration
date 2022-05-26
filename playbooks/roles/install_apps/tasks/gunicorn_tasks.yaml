@@ -39,7 +39,7 @@
     path: /var/log/gunicorn_{{ item.key }}
     owner: bitnami
     group: daemon
-    mode: 0775
+    mode: 0755
     state: directory
   loop: "{{ APPs | dict2items }}"
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
@@ -101,5 +101,15 @@
   when: item.value.using_gunicorn is defined and item.value.using_gunicorn
 
 # https://bitbucket.org/johnedstone-for-sure/nas-home-dir-oidc/src/master/rest_api/playbooks/nas_home_dir_restapi/roles/nginx_rest_api/templates/prod_settings.py.j2
+
+- name: Enable logrotate gunicorn apps
+  become: yes
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/gunicorn_{{ item.key }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+
+
 
 # vim: ai et ts=2 sw=2 sts=2 nu

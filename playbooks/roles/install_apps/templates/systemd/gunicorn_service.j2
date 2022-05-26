@@ -10,7 +10,7 @@ EnvironmentFile=-/etc/default/gunicorn_{{ item.key }}
 
 ExecStart=/bin/bash -c "${GUNICORN_BIN} \
     --chdir ${GUNICORN_WORKDIR} \
-    --access-logfile /var/log/gunicorn_{{ item.key }}/access --error-logfile /var/log/gunicorn_{{ item.key }}/error \
+    --access-logfile /var/log/gunicorn_{{ item.key }}/access.log --error-logfile /var/log/gunicorn_{{ item.key }}/error.log \
     ${GUNICORN_APP}"
 
 ExecReload=/bin/kill -s HUP $MAINPID
