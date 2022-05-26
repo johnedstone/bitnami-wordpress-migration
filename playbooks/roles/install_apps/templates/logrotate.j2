@@ -1,0 +1,13 @@
+/var/log/gunicorn_{{ item.key }}/*.log {
+    weekly
+    missingok
+    rotate 5
+    compress
+    notifempty
+    create 0660 bitnami bitnami
+    sharedscripts
+    postrotate
+       /usr/bin/systemctl restart gunicorn_{{ item.key }}.service
+       /usr/bin/systemctl restart gunicorn_{{ item.key }}.socket
+endscript
+}
