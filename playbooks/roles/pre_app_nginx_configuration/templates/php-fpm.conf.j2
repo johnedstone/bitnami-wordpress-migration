@@ -12,6 +12,12 @@ location ~ \.php$ {
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME $request_filename;
     include        fastcgi_params;
+
+    # Added 12-Jun-2022
+    # https://markshust.com/2020/01/02/resolving-upstream-sent-too-big-header-error-nginx/
+    # https://gist.github.com/ikennaokpala/5792a71cfae6818035eedc8abd9ae7b4
+    fastcgi_buffers 16 16k;
+    fastcgi_buffer_size 32k;
 }
 {#
 # vim: ai et ts=4 sts=4 sw=4 nu
