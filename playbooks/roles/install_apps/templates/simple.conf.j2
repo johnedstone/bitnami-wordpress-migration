@@ -46,6 +46,11 @@ server {
         root /opt/bitnami/apps/404;
     }
 
+    location ^~ /.well-known {
+        allow all;
+        root /opt/bitnami/apps/acme_validation;
+    }
+
     # BEGIN WordPress
     # https://wordpress.org/support/article/nginx/#general-wordpress-rules
     location = /favicon.ico {
