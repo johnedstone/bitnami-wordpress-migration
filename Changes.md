@@ -1,4 +1,6 @@
 ### List of changes
+* 30-Jun-2022:
+    * changed how Let's Encyrpt acme-challenge directory is done.  Not sure how it's worked in the past ;)
 * 24-May-2022:
     * added 404.html page to beautify 404 if WP doesn't catch it
     * changed 50x to 502 error_log, to limit scope to only 502

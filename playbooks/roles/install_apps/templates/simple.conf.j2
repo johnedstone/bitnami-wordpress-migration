@@ -1,11 +1,25 @@
 server {
+    server_name {{ item.key }};
+    root /opt/bitnami/apps/{{ item.key }};
+    listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}80{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
+
+    location ^~ /.well-known {
+        allow all;
+        root /opt/bitnami/apps/acme_validation;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+
+}
+
+server {
     # Simplest configuration
     {# https://www.shellhacks.com/jinja2-check-if-variable-empty-exists-defined-true/ #}
 
-    listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}80{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
-
-    root /opt/bitnami/apps/{{ item.key }};
     server_name {{ item.key }};
+    root /opt/bitnami/apps/{{ item.key }};
 
     listen {% if item.value.listen_IP is defined and item.value.listen_IP|length %}{{ item.value.listen_IP }}:{% endif %}443 ssl{% if item.value.default_server is defined and item.value.default_server is sameas true %} default_server{% endif %};
 
@@ -17,10 +31,6 @@ server {
     # https://github.com/bitnami/bitnami-docker-wordpress-nginx/issues/43
     rewrite ^/bitnami/wordpress(/.*) $1 last;
     # END Fix for WordPress plugins and themes
-
-    if ($scheme != "https") {
-        return 301 https://$host$request_uri;
-    }
 
     # https://blog.adriaan.io/one-nginx-error-page-to-rule-them-all.html
     error_page 502 /502.html;
@@ -74,11 +84,6 @@ server {
         return 444;
     }
     # END Prevent hacks
-    
-    location ^~ /.well-known {
-        allow all;    
-        root /opt/bitnami/apps/acme_validation;
-    }
 
     # WP hardening from JM first ec2 instance Deny access to any files with a 
     # .php extension in the uploads directory
