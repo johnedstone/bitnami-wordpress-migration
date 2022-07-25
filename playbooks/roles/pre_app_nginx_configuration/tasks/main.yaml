@@ -33,9 +33,17 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - /opt/bitnami/nginx/conf/server_blocks/default-https-server-block.conf
     - /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf
     - /opt/bitnami/nginx/conf/server_blocks/wordpress-https-server-block.conf
+
+- name: put back default-https-server-block
+  become: yes
+  ansible.builtin.copy:
+    src: default-https-server-block.conf
+    dest: /opt/bitnami/nginx/conf/server_blocks/default-https-server-block.conf
+    #owner: bitnami
+    #group: daemon
+    #mode: '0664'
 
 - name: set php-fpm.conf to tcp/ip not unix_sock
   become: yes
@@ -73,5 +81,12 @@
     owner: bitnami
     group: daemon
   when: not ansible_check_mode
+
+- name: change 403 to 444 for remote phpmyadmin access
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /opt/bitnami/nginx/conf/bitnami/phpmyadmin.conf
+    insertbefore: ' *return 403'
+    line: '        return 444; # Drop'
 
 # vim: ai et ts=2 sw=2 sts=2 nu

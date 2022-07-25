@@ -8,6 +8,8 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
+    include "/opt/bitnami/nginx/conf/bitnami/*.conf";
+
     location / {
         return 301 https://$host$request_uri;
     }

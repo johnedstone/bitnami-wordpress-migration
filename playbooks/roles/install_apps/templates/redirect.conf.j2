@@ -16,6 +16,8 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
+    include "/opt/bitnami/nginx/conf/bitnami/*.conf";
+
     location / {
         # https://www.nginx.com/blog/creating-nginx-rewrite-rules/
         return {% if item.value.redirect_permanent is defined and item.value.redirect_permanent is sameas true %}301{% else %}302{% endif %} {{ item.value.redirect_path }}$request_uri;

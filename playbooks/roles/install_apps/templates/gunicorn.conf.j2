@@ -25,6 +25,9 @@ server {
     # https://docs.gunicorn.org/en/latest/deploy.html
     keepalive_timeout 5;
 
+    # Concession on bitnami to get phpmyadmin to work
+    include "/opt/bitnami/nginx/conf/bitnami/*.conf";
+
     location / {
       # checks for static file, if not found proxy to app
       try_files $uri @proxy_to_app;
@@ -59,6 +62,9 @@ server {
 
     # https://docs.gunicorn.org/en/latest/deploy.html
     keepalive_timeout 5;
+
+    # Concession on bitnami to get phpmyadmin to work
+    include "/opt/bitnami/nginx/conf/bitnami/*.conf";
 
     location / {
       # checks for static file, if not found proxy to app
