@@ -1,4 +1,7 @@
 ### List of changes
+* 24-Jul-2022:
+    * Fixed phpmyadmin that was responding with 444 (no response, drop).  Caused by earlier (30-Jun-2022) changes for Let's Encrypt.
+      Checked SSL cert renewal afterwards: OK
 * 30-Jun-2022:
     * changed how Let's Encyrpt acme-challenge directory is done.  Not sure how it's worked in the past ;)
 * 24-May-2022:
