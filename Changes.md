@@ -1,4 +1,6 @@
 ### List of changes
+* 06-Aug-2022:
+    *Moved blocking xmlrpc.php up in the nginx file because it wasn't being read soon enough
 * 24-Jul-2022:
     * Fixed phpmyadmin that was responding with 444 (no response, drop).  Caused by earlier (30-Jun-2022) changes for Let's Encrypt.
       Checked SSL cert renewal afterwards: OK

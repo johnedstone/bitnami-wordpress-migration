@@ -16,6 +16,19 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
+    # START Prevent hacks except for JetPack's IPs
+    location ~* /.*xmlrpc\.php {
+        allow 122.248.245.244/32;
+        allow 54.217.201.243/32;
+        allow 54.232.116.4/32;
+        allow 192.0.80.0/20;
+        allow 192.0.96.0/20;
+        allow 192.0.112.0/20;
+        allow 195.234.108.0/22;
+        return 444;
+        #deny all; # this is 403
+    }
+
     include "/opt/bitnami/nginx/conf/bitnami/*.conf";
 
     location / {

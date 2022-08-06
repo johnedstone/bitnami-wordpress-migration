@@ -8,6 +8,19 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
+    # START Prevent hacks except for JetPack's IPs
+    location ~* /.*xmlrpc\.php {
+        allow 122.248.245.244/32;
+        allow 54.217.201.243/32;
+        allow 54.232.116.4/32;
+        allow 192.0.80.0/20;
+        allow 192.0.96.0/20;
+        allow 192.0.112.0/20;
+        allow 195.234.108.0/22;
+        return 444; # this is drop
+        # deny all; # this is 403
+    }
+
     include "/opt/bitnami/nginx/conf/bitnami/*.conf";
 
     location / {
@@ -53,6 +66,19 @@ server {
         root /opt/bitnami/apps/acme_validation;
     }
 
+    # START Prevent hacks except for JetPack's IPs
+    location ~* /.*xmlrpc\.php {
+        allow 122.248.245.244/32;
+        allow 54.217.201.243/32;
+        allow 54.232.116.4/32;
+        allow 192.0.80.0/20;
+        allow 192.0.96.0/20;
+        allow 192.0.112.0/20;
+        allow 195.234.108.0/22;
+        return 444; # this is drop
+        # deny all; # this is 403
+    }
+
     # BEGIN WordPress
     # https://wordpress.org/support/article/nginx/#general-wordpress-rules
     location = /favicon.ico {
@@ -72,19 +98,6 @@ server {
         log_not_found off;
     }
     # END WordPress
-
-    # START Prevent hacks except for JetPack's IPs
-    location ~* /.*xmlrpc\.php {
-        allow 122.248.245.244/32;
-        allow 54.217.201.243/32;
-        allow 54.232.116.4/32;
-        allow 192.0.80.0/20;
-        allow 192.0.96.0/20;
-        allow 192.0.112.0/20;
-        allow 195.234.108.0/22;
-        deny all;
-        ##return 444;
-    }
 
     location ~* /wpad\.dat {
         #deny all;
