@@ -9,6 +9,7 @@ server {
     }
 
     # START Prevent hacks except for JetPack's IPs
+    # https://jetpack.com/support/how-to-add-jetpack-ips-allowlist/
     location ~* /.*xmlrpc\.php {
         allow 122.248.245.244/32;
         allow 54.217.201.243/32;
