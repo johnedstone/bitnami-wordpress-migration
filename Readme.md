@@ -3,7 +3,7 @@
 ###
   Before you begin, pull in the new changes by running the following two commands
   ```
-  cd ~/bitnami-wordpress migration # which in some cases may be different, depending on how you install the git repository
+  cd ~/bitnami-wordpress-migration # which in some cases may be different, depending on how you install the git repository
 
   git pull # new changes to this repository will be pulled into your directory
   ```
