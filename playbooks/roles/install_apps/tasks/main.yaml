@@ -1,3 +1,12 @@
 ---
 - include_tasks: roles/install_apps/tasks/wp_tasks.yaml
+
+- include_tasks:
+    file: roles/install_apps/tasks/create_db_and_user.yaml
+    apply:
+      tags:
+      - create_db_and_user
+  tags:
+    - create_db_and_user
+
 - include_tasks: roles/install_apps/tasks/gunicorn_tasks.yaml

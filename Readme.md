@@ -107,6 +107,12 @@ After successful initial installation, __reboot__ in order to correctly set the 
 sudo shutdown -r now
 ```
 
+### Just creating a database and username
+This command, with `--check`, or remove `--check`:
+
+```
+/usr/local/bin/ansible-playbook --check --flush-cache --diff -i inventory.ini --tags create_db_and_user playbook.yaml
+``
 ### Ansible errors
 Running the ansible playbook with `--check` may result in the following error:
 

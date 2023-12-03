@@ -1,0 +1,50 @@
+---
+- name: create databases for ea app
+  mysql_db:
+    config_file: /opt/bitnami/mariadb/conf/my.cnf
+    state: present
+    name: "{{ item.value.database_name }}"
+    collation: utf8_bin
+    encoding: utf8
+    login_password: "{{ MariaDB_Root_Password }}"
+    login_user: root
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_name is defined
+
+- name: Create user with password, all database privileges and WITH GRANT OPTION for each app
+  community.mysql.mysql_user:
+    login_password: "{{ MariaDB_Root_Password }}"
+    login_user: root
+    state: present
+    name: "{{ item.value.database_user }}"
+    password: "{{ item.value.database_password }}"
+    priv: "{{ item.value.database_name }}.*:ALL,GRANT"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
+
+- name: Create user (127.0.0.1) with password, all database privileges and WITH GRANT OPTION for each app
+  community.mysql.mysql_user:
+    login_password: "{{ MariaDB_Root_Password }}"
+    login_user: root
+    state: present
+    name: "{{ item.value.database_user }}"
+    password: "{{ item.value.database_password }}"
+    priv: "{{ item.value.database_name }}.*:ALL,GRANT"
+    host: "{{ item.value.force_db_host }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined and item.value.force_db_host is defined
+
+- name: create cronjobs to backup database
+  cron:
+    name: "{{ item.key }} database backup"
+    hour: "{{ item.value.db_backup_cron_hour }}"
+    minute: "{{ item.value.db_backup_cron_min }}"
+    weekday: "{{ item.value.db_backup_cron_weekday }}"
+    day: "{{ item.value.db_backup_cron_day }}"
+    job: "/opt/bitnami/mariadb/bin/mysqldump -u '{{ item.value.database_user | regex_replace('%', '\\%') }}'  --password='{{ item.value.database_password | regex_replace('%', '\\%') }}' '{{ item.value.database_name | regex_replace('%', '\\%') }}'  > /opt/bitnami/apps/db_backups/{{ item.value.database_name | regex_replace('%', '_') }}.backup.$(date +\\%d).sql 2>/dev/null"
+    state: present
+    disabled: "{{ item.value.db_backup_cron_disable }}"
+  loop: "{{ APPs | dict2items }}"
+  when: item.value.enable and item.value.database_user is defined and item.value.database_password is defined
+
+# vim: ai et ts=2 sw=2 sts=2 nu
