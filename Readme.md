@@ -209,7 +209,7 @@ include "/opt/bitnami/apps/<your_app>/nginx.conf";
 ### Lets Encyrpt
 * Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
 * This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
-* To update lego, simply remove `/opt/bitnami/letsencrypt/lego` and rerun the playbook.
+* To update lego, simply remove `/opt/bitnami/apps/letsencrypt/lego` and rerun the playbook.
 * `private_vars.yaml` allows one to use the server certs or Let's Encrypt certs
 * This may be a good time to set `wp_cron_disable: no` in private_vars.yaml
 * The Let's Encrypt certs must be manually installed the first time for each domain as described below:
